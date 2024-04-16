@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Hangfire.AspNetCore" Version="1.8.12" />
+      <PackageReference Include="Hangfire.Core" Version="1.8.12" />
+      <PackageReference Include="Hangfire.Mongo" Version="1.10.5" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+    </ItemGroup>
+
+</Project>

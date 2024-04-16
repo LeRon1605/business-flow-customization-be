@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.18" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks.Infrastructure.Cloudinary\BuildingBlocks.Infrastructure.Cloudinary.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks.Infrastructure.EfCore\BuildingBlocks.Infrastructure.EfCore.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks.Infrastructure.HangFire\BuildingBlocks.Infrastructure.HangFire.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks.Infrastructure.Redis\BuildingBlocks.Infrastructure.Redis.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks.Infrastructure.Serilog\BuildingBlocks.Infrastructure.Serilog.csproj" />
+      <ProjectReference Include="..\..\EventBus\BuildingBlocks.EventBus.RabbitMQ\BuildingBlocks.EventBus.RabbitMQ.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BuildingBlocks.Infrastructure.Cloudinary\BuildingBlocks.Infrastructure.Cloudinary.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BuildingBlocks.Infrastructure.EfCore\BuildingBlocks.Infrastructure.EfCore.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BuildingBlocks.Infrastructure.HangFire\BuildingBlocks.Infrastructure.HangFire.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BuildingBlocks.Infrastructure.Redis\BuildingBlocks.Infrastructure.Redis.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BuildingBlocks.Infrastructure.Serilog\BuildingBlocks.Infrastructure.Serilog.csproj" />
+      <ProjectReference Include="..\..\Shared\BuildingBlocks.Shared\BuildingBlocks.Shared.csproj" />
+    </ItemGroup>
+
+    
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore">
+        <HintPath>..\..\..\..\..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.9\Microsoft.AspNetCore.dll</HintPath>
+      </Reference>
+    
+
+    </ItemGroup>
+
+
+
+
+</Project>

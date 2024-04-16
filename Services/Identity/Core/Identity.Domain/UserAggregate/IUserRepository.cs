@@ -1,0 +1,15 @@
+﻿using BuildingBlocks.Domain.Repositories;
+using ApplicationUser = Identity.Domain.UserAggregate.Entities.ApplicationUser;
+
+namespace Identity.Domain.UserAggregate;
+
+public interface IUserRepository : IRepository<ApplicationUser, string>
+{
+    Task<ApplicationUser?> FindByUserNameOrEmailAsync(string username, string email);
+
+    Task<ApplicationUser?> FindByUserNameOrEmailAndRoles(string username, string email, IEnumerable<string> roles);
+    
+    Task<ApplicationUser?> FindByRefreshTokenAsync(string refreshToken);
+
+    Task<IList<string>> GetRolesAsync(string id, int tenantId);
+}

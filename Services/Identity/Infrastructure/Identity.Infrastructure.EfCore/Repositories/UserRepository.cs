@@ -1,0 +1,55 @@
+﻿using BuildingBlocks.Infrastructure.EfCore;
+using BuildingBlocks.Infrastructure.EfCore.Repositories;
+using Identity.Domain.RoleAggregate.Entities;
+using Identity.Domain.UserAggregate;
+using Identity.Domain.UserAggregate.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Identity.Infrastructure.EfCore.Repositories;
+
+public class UserRepository : EfCoreRepository<ApplicationUser, string>, IUserRepository
+{
+    public UserRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    {
+        AddInclude(x => x.RefreshToken);
+        AddInclude(x => x.Tenants);
+        AddInclude(x => x.Roles);
+        AddInclude("Roles.Role");
+    }
+
+    public Task<ApplicationUser?> FindByUserNameOrEmailAsync(string username, string email)
+    {
+        return GetQueryable().FirstOrDefaultAsync(x => x.UserName == username || x.Email == email);
+    }
+
+    public Task<ApplicationUser?> FindByUserNameOrEmailAndRoles(string username, string email, IEnumerable<string> roles)
+    {
+        var rolesQueryable = DbContext.Set<ApplicationRole>().Where(x => roles.Any(r => r == x.Name));
+        var userRolesQueryable = DbContext.Set<ApplicationUserInRole>().Where(x => rolesQueryable.Any(r => r.Id == x.RoleId));
+
+        return GetQueryable().FirstOrDefaultAsync(x => (x.UserName == username || x.Email == email) && userRolesQueryable.Any(r => r.UserId == x.Id));
+    }
+
+    public async Task<ApplicationUser?> FindByRefreshTokenAsync(string refreshToken)
+    {
+        return (await DbContext.Set<RefreshToken>()
+            .Include(x => x.User)
+                .ThenInclude(x => x.Tenants)
+           .Include(x => x.User)
+                .ThenInclude(x => x.Roles)
+                .ThenInclude(x => x.Role)
+           .Include(x => x.User)
+                .ThenInclude(x => x.RefreshToken)
+           .FirstOrDefaultAsync(x => x.Value == refreshToken))?.User;
+    }
+
+    public async Task<IList<string>> GetRolesAsync(string id, int tenantId)
+    {
+        return await DbContext.Database.SqlQueryRaw<string>(
+                @"
+                    SELECT Name From AspNetRoles
+                    WHERE Id IN (SELECT RoleId FROM AspNetUserRoles WHERE TenantId = {0} AND UserId = {1})
+                ", tenantId.ToString(), id)
+            .ToListAsync();
+    }
+}

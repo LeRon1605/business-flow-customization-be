@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit" Version="8.2.1-develop.1720" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\BuildingBlocks.Kernel\BuildingBlocks.Kernel.csproj" />
+    </ItemGroup>
+    
+
+
+
+
+
+
+
+</Project>

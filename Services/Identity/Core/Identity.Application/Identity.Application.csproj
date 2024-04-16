@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+      <ProjectReference Include="..\..\..\Shared\Application\Application.csproj" />
+      <ProjectReference Include="..\..\..\Shared\IntegrationEvents\IntegrationEvents.csproj" />
+      <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
+    </ItemGroup>
+
+
+
+
+    <ItemGroup>
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
+    </ItemGroup>
+
+
+
+
+
+
+
+
+    <ItemGroup>
+      <Folder Include="UseCases\" />
+      <Folder Include="UseCases\Tenants\Dtos\" />
+    </ItemGroup>
+
+</Project>
