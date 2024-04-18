@@ -18,10 +18,18 @@ public class AuthController : ControllerBase
 
     [HttpPost("sign-in")]
     [ProducesResponseType(typeof(AuthCredentialDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> AdminPortalSignInAsync(SignInDto dto)
+    public async Task<IActionResult> SignInAsync(SignInDto dto)
     {
         var authCredential = await _mediator.Send(new SignInCommand(dto.UserNameOrEmail, dto.Password));
         return Ok(authCredential);
+    }
+    
+    [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> RegisterAsync(RegisterDto dto)
+    {
+        await _mediator.Send(new RegisterCommand(dto.Email, dto.FullName, dto.TenantName, dto.Password));
+        return Ok();
     }
     
     [HttpPost("forget-password")]
