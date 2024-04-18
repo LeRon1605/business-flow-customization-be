@@ -31,6 +31,8 @@ if (!app.Environment.IsProduction())
 
 app.UseRouting();
 
+app.UseCors("BusinessFlow");
+
 #pragma warning disable ASP0014
 app.UseEndpoints(endpoints =>
 {

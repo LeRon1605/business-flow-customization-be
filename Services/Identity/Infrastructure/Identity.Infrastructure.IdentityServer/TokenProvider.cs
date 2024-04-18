@@ -34,7 +34,7 @@ public class TokenProvider : ITokenProvider
 
     public async Task<AccessToken> GenerateAccessTokenAsync(ApplicationUser user, int? tenantId)
     {
-        var claims = await _claimGenerator.GenerateAsync(user);
+        var claims = await _claimGenerator.GenerateAsync(user, tenantId);
 
         var client = Config.Clients().First(x => x.ClientId == nameof(InternalApis.Identity));
         

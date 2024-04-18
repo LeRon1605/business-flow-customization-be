@@ -30,7 +30,7 @@ public class CloudinaryFileUploader : IFileUploader
             UseFilename = true,
             UniqueFilename = false,
             Overwrite = false,
-            Folder = "ServeSync"
+            Folder = "BusinessFLow"
         };
 
         var policy = Policy.Handle<Exception>()

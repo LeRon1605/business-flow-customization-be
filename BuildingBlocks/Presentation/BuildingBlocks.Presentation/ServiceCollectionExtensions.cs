@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
     
     public static WebApplicationBuilder AddPresentationServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddNewtonsoftJson();
         builder.Services.AddSwagger();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddApplicationCors();
@@ -57,7 +57,7 @@ public static class ServiceCollectionExtensions
     public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddMediatr();
-        builder.Services.AddAutoMapper(typeof(MappingProfile));
+        builder.Services.AddApplicationMapper();
         builder.Services.AddDataSeeder();
         
         return builder;

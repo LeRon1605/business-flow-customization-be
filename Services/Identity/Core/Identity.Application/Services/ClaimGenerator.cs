@@ -36,9 +36,7 @@ public class ClaimGenerator : IClaimGenerator
             if (tenant != null)
             {
                 claims.Add(new Claim(AppClaim.TenantId, tenant.TenantId.ToString()));
-            }    
-            
-            claims.Add(new Claim(AppClaim.TenantId, "0"));
+            }
         }
 
         return claims.ToList();

@@ -52,7 +52,7 @@ public static class ApplicationBuilderExtensions
             app.Logger.LogInformation("No pending migration!");
         }
         
-        // await app.SeedDataAsync();
+        await app.SeedDataAsync();
     }
 
     public static WebApplication RegisterCommonPipelines(this WebApplication app)
@@ -64,6 +64,8 @@ public static class ApplicationBuilderExtensions
             app.UseSwagger();
             app.UseSwaggerUI();   
         }
+
+        app.UseCors("BusinessFlow");
         
         app.UseAuthentication();
         app.UseAuthorization();

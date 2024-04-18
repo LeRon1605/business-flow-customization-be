@@ -11,16 +11,15 @@ public class EmailTemplateGenerator : IEmailTemplateGenerator
         _env = env;
     }
     
-    public string GenerateEmailBody(string templateName, dynamic model)
+    public string GenerateEmailBody(string templateName, Dictionary<string, string> model)
     {
         var template = GetTemplate(templateName);
-        var properties = model.GetType().GetProperties();
-        foreach (var property in properties)
+        foreach (var key in model.Keys)
         {
-            var name=property.Name;
-            var value = model.GetType().GetProperty(property.Name).GetValue(model, null);
+            var name = key;
+            var value = model[key];
 
-            template = template.Replace($"{{{name}}}", value?.ToString() ?? string.Empty);
+            template = template.Replace("{{" + name + "}}", value);
         }
 
         return template;

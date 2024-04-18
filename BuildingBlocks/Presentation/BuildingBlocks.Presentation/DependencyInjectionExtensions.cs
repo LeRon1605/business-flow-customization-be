@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.Application;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Mappers;
 using BuildingBlocks.Shared.Extensions;
 using BuildingBlocks.Shared.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -92,6 +93,17 @@ public static class DependencyInjectionExtensions
         foreach (var assembly in assemblies)
         {
             services.AddImplementationAsMatchingInterface<IDataSeeder>(assembly);   
+        }
+        
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationMapper(this IServiceCollection services)
+    {
+        var assemblies = AssemblyHelper.GetReferencedAssembliesByType(typeof(MappingProfile));
+        foreach (var assembly in assemblies)
+        {
+            services.AddAutoMapper(assembly);
         }
         
         return services;

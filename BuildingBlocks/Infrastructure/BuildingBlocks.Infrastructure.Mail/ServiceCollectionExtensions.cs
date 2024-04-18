@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddEmailSender(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptionSetting<EmailSetting>(configuration, nameof(EmailMessage));
+        services.AddOptionSetting<EmailSetting>(configuration, nameof(EmailSetting));
         services.AddScoped<IEmailTemplateGenerator, EmailTemplateGenerator>();
         services.AddScoped<IEmailSender, EmailSender>();
 

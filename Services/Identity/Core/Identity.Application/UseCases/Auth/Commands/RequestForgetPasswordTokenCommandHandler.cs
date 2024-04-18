@@ -34,10 +34,10 @@ public class RequestForgetPasswordTokenCommandHandler : ICommandHandler<RequestF
     
     public async Task Handle(RequestForgetPasswordTokenCommand request, CancellationToken cancellationToken)
     {
-        // if (!_forgetPasswordSetting.AllowedClients.Contains(request.CallBackUrl))
-        // {
-        //     throw new ResourceInvalidOperationException("CallBackUrl is not allowed!");
-        // }
+        if (!_forgetPasswordSetting.AllowedClients.Contains(request.CallBackUrl))
+        {
+            throw new ResourceInvalidOperationException("CallBackUrl is not allowed!");
+        }
         
         var user = await _userRepository.FindByUserNameOrEmailAsync(request.UserNameOrEmail, request.UserNameOrEmail);
         if (user == null)

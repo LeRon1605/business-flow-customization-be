@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Application.Data;
+using Domain;
 using Identity.Application.Services.Interfaces;
 using Identity.Domain.RoleAggregate.Entities;
 using Identity.Domain.UserAggregate.Entities;
@@ -57,14 +58,12 @@ public class IdentityDataSeeder : IDataSeeder
             "admin@gmail.com",
             "admin123");
 
-        // if (user.IsSuccess)
-        // {
-        //     await _tenantService.AddUserToTenantAsync(
-        //         user.Data!.Id, 
-        //         "ServeSync",
-        //         "https://res.cloudinary.com/dboijruhe/image/upload/v1700832514/Assets/ddxrzqclm5ysut4o9qie.png", true,
-        //         AppTenant.Default);
-        //     await _identityService.GrantToRoleAsync(user.Data!.Id, AppRole.Admin, AppTenant.Default);    
-        // }
+        if (user.IsSuccess)
+        {
+            await _tenantService.AddUserToTenantAsync(user.Data!.Id
+                , true
+                , AppTenant.Default);
+            await _identityService.GrantToRoleAsync(user.Data.Id, AppRole.Admin, AppTenant.Default);    
+        }
     }
 }

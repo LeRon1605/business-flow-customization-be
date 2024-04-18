@@ -49,7 +49,9 @@ public class SignInCommandHandler : ICommandHandler<SignInCommand, AuthCredentia
                 RefreshToken = _tokenProvider.GenerateRefreshToken()
             };
             
-            user.AddRefreshToken(accessToken.Id, credential.RefreshToken, DateTime.UtcNow.AddDays(_jwtSetting.RefreshTokenExpiresInDay));
+            user.AddRefreshToken(accessToken.Id
+                , credential.RefreshToken
+                , DateTime.UtcNow.AddDays(_jwtSetting.RefreshTokenExpiresInDay));
             
             _userRepository.Update(user);
             await _unitOfWork.CommitAsync();
