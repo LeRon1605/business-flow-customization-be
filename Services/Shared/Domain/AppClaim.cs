@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.Application.Identity;
+﻿namespace Domain;
 
 public static class AppClaim
 {

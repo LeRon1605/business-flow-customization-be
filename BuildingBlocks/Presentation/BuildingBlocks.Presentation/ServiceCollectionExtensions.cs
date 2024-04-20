@@ -7,9 +7,11 @@ using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.HangFire;
 using BuildingBlocks.Infrastructure.Redis;
 using BuildingBlocks.Infrastructure.Serilog;
+using BuildingBlocks.Presentation.Authorization;
 using BuildingBlocks.Shared.Extensions;
 using BuildingBlocks.Shared.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -83,6 +85,14 @@ public static class ServiceCollectionExtensions
 
     public static WebApplicationBuilder AddAssemblyMarker(this WebApplicationBuilder builder, params Type[] types)
     {
+        return builder;
+    }
+
+    public static WebApplicationBuilder AddAuthorization(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        builder.Services.AddSingleton<IAuthorizationPolicyProvider, ApplicationAuthorizationPolicyProvider>();
+        
         return builder;
     }
 }

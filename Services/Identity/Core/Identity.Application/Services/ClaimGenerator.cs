@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using BuildingBlocks.Application.Identity;
+using Domain;
 using Identity.Application.Services.Interfaces;
 using Identity.Domain.UserAggregate.Entities;
 using Identity.Domain.UserAggregate.Exceptions;
