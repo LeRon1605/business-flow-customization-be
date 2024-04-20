@@ -1,5 +1,7 @@
 ﻿using Application.Dtos;
 using BuildingBlocks.Application.Dtos;
+using BuildingBlocks.Presentation.Authorization;
+using Domain.Permissions;
 using Identity.Application.UseCases.Permissions.Dtos;
 using Identity.Application.UseCases.Permissions.Queries;
 using Identity.Application.UseCases.Users.Commands;
@@ -22,7 +24,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}/permissions")]
-    // [HasPermission(AppPermissions.Users.ViewPermissions)]
+    [HasPermission(AppPermission.Users.ViewPermissions)]
     [ProducesResponseType(typeof(IEnumerable<PermissionDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPermissionsForUserAsync(string id, [FromQuery] int tenantId)
     {
@@ -31,7 +33,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("{id}/tenants/{tenantId}/roles")]
-    // [HasPermission(AppPermissions.Users.ViewRoles)]
+    [HasPermission(AppPermission.Users.ViewRoles)]
     [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetRolesForUserAsync(string id, int tenantId)
     {
@@ -40,7 +42,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut("{id}/tenants/{tenantId}/roles")]
-    // [HasPermission(AppPermissions.Users.EditRoles)]
+    [HasPermission(AppPermission.Users.EditRoles)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateRolesForUserAsync(string id, int tenantId, [FromBody] IEnumerable<string> roleIds)
     {
@@ -49,7 +51,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet]
-    // [HasPermission(AppPermissions.Users.Management)]
+    [HasPermission(AppPermission.Users.Management)]
     [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllUsersAsync([FromQuery] UserRequestDto dto)
     {
@@ -60,7 +62,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    // [HasPermission(AppPermissions.Users.View)]
+    [HasPermission(AppPermission.Users.View)]
     [ProducesResponseType(typeof(UserDetailDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserByIdAsync(string id)
     {

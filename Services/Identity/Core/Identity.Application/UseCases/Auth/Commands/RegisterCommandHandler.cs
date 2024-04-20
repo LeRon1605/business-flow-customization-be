@@ -2,6 +2,8 @@
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Domain.Exceptions.Resources;
 using Domain;
+using Domain.Identities;
+using Domain.Roles;
 using Identity.Application.Services.Interfaces;
 
 namespace Identity.Application.UseCases.Auth.Commands;
@@ -34,12 +36,22 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand>
                 AppUser.DefaultAvatar,
                 request.Email,
                 request.Password);
+            
+            
 
             if (!tenant.IsSuccess || !user.IsSuccess)
             {
                 var error = user.ErrorCode ?? tenant.ErrorCode;
                 var message = user.Error ?? tenant.Error;
                 throw new ResourceInvalidOperationException(message!, error!);
+            }
+            
+            var grantRoleResult = await _identityService.GrantToRoleAsync(user.Data!.Id
+                , AppRole.Admin
+                , tenant.Data!.Id);
+            if (!grantRoleResult.IsSuccess)
+            {
+                throw new ResourceInvalidOperationException(grantRoleResult.Error!, grantRoleResult.ErrorCode!);
             }
             
             await _tenantService.AddUserToTenantAsync(user.Data!.Id, true, tenant.Data!.Id);

@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Roles;
 using Identity.Domain.RoleAggregate.DomainEvents;
 using Identity.Domain.RoleAggregate.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,14 @@ public partial class ApplicationRole : IdentityRole
         }
         
         Permissions = new List<RolePermission>();
+    }
+    
+    public static List<ApplicationRole> GetDefaultRoles()
+    {
+        return AppRole.All.Select(x => new ApplicationRole()
+        {
+            Name = x
+        }).ToList();
     }
 
     private ApplicationRole()

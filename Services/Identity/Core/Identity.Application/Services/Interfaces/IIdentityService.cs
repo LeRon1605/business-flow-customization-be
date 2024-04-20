@@ -23,7 +23,7 @@ public interface IIdentityService : IScopedService
 
     Task<bool> HasPermissionAsync(string userId, int tenantId, string permission);
     
-    Task<IdentityResult<bool>> UpdateAsync(string userId, string fullname, string email, string avatarUrl);
+    Task<IdentityResult<bool>> UpdateAsync(string userId, string fullname, string avatarUrl);
     
     Task<IdentityResult<bool>> UpdateUserNameAsync(string userId, string username);
     

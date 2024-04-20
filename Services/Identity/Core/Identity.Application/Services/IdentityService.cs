@@ -3,6 +3,7 @@ using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Application.Identity.Dtos;
 using BuildingBlocks.Domain.Exceptions;
 using Domain;
+using Domain.Roles;
 using Identity.Application.Services.Interfaces;
 using Identity.Application.UseCases.Permissions.Queries;
 using Identity.Application.UseCases.Roles.Queries;
@@ -91,7 +92,7 @@ public class IdentityService : IIdentityService
         return IdentityResult<IdentityUserDto>.Failed(error.Code, error.Description);
     }
 
-    public async Task<IdentityResult<bool>> UpdateAsync(string userId, string fullname, string email, string avatarUrl)
+    public async Task<IdentityResult<bool>> UpdateAsync(string userId, string fullname, string avatarUrl)
     {
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
@@ -101,7 +102,6 @@ public class IdentityService : IIdentityService
         
         user.UpdateFullName(fullname);
         user.SetAvatar(avatarUrl);
-        user.Email = email;
         
         var result = await _userManager.UpdateAsync(user);
         if (result.Succeeded)

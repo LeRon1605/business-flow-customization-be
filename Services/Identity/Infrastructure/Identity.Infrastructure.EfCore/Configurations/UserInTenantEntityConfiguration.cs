@@ -15,7 +15,7 @@ public class UserInTenantEntityConfiguration : IEntityTypeConfiguration<UserInTe
                .HasForeignKey(x => x.UserId);
 
         builder.HasOne(x => x.Tenant)
-               .WithMany()
+               .WithMany(x => x.Users)
                .HasForeignKey(x => x.TenantId);
     }
 }

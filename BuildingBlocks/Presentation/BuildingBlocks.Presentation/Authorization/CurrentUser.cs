@@ -2,6 +2,7 @@
 using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Exceptions.Resources;
 using Domain;
+using Domain.Claims;
 using Microsoft.AspNetCore.Http;
 
 namespace BuildingBlocks.Presentation.Authorization;

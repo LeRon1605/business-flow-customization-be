@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 

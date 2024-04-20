@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
 using Domain;
+using Domain.Roles;
 using Identity.Domain.RoleAggregate;
 using Identity.Domain.RoleAggregate.Entities;
 using Identity.Domain.RoleAggregate.Exceptions;

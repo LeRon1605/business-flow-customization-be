@@ -1,7 +1,10 @@
 ﻿using BuildingBlocks.Application.Data;
 using Domain;
+using Domain.Identities;
+using Domain.Roles;
 using Identity.Application.Services.Interfaces;
 using Identity.Domain.RoleAggregate.Entities;
+using Identity.Domain.TenantAggregate;
 using Identity.Domain.UserAggregate.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +16,21 @@ public class IdentityDataSeeder : IDataSeeder
 {
     private readonly IIdentityService _identityService;
     private readonly ITenantService _tenantService;
+    private readonly ITenantRepository _tenantRepository;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ILogger<IdentityDataSeeder> _logger;
 
     public IdentityDataSeeder(IIdentityService identityService
         , ITenantService tenantService
+        , ITenantRepository tenantRepository
         , UserManager<ApplicationUser> userManager
         , RoleManager<ApplicationRole> roleManager
         , ILogger<IdentityDataSeeder> logger)
     {
         _identityService = identityService;
         _tenantService = tenantService;
+        _tenantRepository = tenantRepository;
         _userManager = userManager;
         _roleManager = roleManager;
         _logger = logger;
@@ -35,11 +41,10 @@ public class IdentityDataSeeder : IDataSeeder
         try
         {
             _logger.LogInformation("Begin seeding identity data...");
-            
-            if (!await _userManager.Users.AnyAsync())
-            {
-                await SeedDefaultAdminAccountAsync();
-            }
+
+            await SeedDefaultRoleAsync();
+            await SeedDefaultTenantAsync();
+            await SeedDefaultAdminAccountAsync();
             
             _logger.LogInformation("Seed identity data successfully!");
         }
@@ -51,6 +56,11 @@ public class IdentityDataSeeder : IDataSeeder
 
     private async Task SeedDefaultAdminAccountAsync()
     {
+        if (await _userManager.Users.AnyAsync())
+        {
+            return;
+        }
+        
         var user = await _identityService.CreateUserAsync(
             "ServeSync",
             "admin",
@@ -65,5 +75,29 @@ public class IdentityDataSeeder : IDataSeeder
                 , AppTenant.Default);
             await _identityService.GrantToRoleAsync(user.Data.Id, AppRole.Admin, AppTenant.Default);    
         }
+    }
+
+    private async Task SeedDefaultRoleAsync()
+    {
+        if (await _roleManager.Roles.AnyAsync())
+        {
+            return;
+        }
+
+        var defaultRoles = ApplicationRole.GetDefaultRoles();
+        foreach (var role in defaultRoles)
+        {
+            await _roleManager.CreateAsync(role);
+        }
+    }
+    
+    private async Task SeedDefaultTenantAsync()
+    {
+        if (await _tenantRepository.AnyAsync())
+        {
+            return;
+        }
+
+        await _tenantService.CreateAsync("Business Flow Executor", AppTenant.DefaultAvatar);
     }
 }

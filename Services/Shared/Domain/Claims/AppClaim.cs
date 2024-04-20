@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Claims;
 
 public static class AppClaim
 {
