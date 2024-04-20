@@ -2,6 +2,8 @@
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Application.Identity;
+using Domain;
+using Domain.Claims;
 using Identity.Application.Services.Dtos;
 using Identity.Application.Services.Interfaces;
 using Identity.Application.UseCases.Auth.Dtos;

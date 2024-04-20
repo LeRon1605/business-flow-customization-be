@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Domain;
+using Domain.Roles;
 
 namespace Identity.Application.UseCases.Roles.Dtos;
 

@@ -1,5 +1,7 @@
 ﻿using Application.Dtos;
 using BuildingBlocks.Application.Dtos;
+using BuildingBlocks.Presentation.Authorization;
+using Domain.Permissions;
 using Identity.Application.UseCases.Permissions.Commands;
 using Identity.Application.UseCases.Permissions.Dtos;
 using Identity.Application.UseCases.Permissions.Queries;
@@ -23,7 +25,7 @@ public class RoleController : ControllerBase
     }
 
     [HttpGet]
-    // [HasPermission(AppPermissions.Roles.Management)]
+    [HasPermission(AppPermission.Roles.Management)]
     [ProducesResponseType(typeof(PagedResultDto<RoleDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPagedRoleAsync([FromQuery] RoleFilterAndPagingRequestDto dto)
     {
@@ -32,7 +34,7 @@ public class RoleController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    // [HasPermission(AppPermissions.Roles.View)]
+    [HasPermission(AppPermission.Roles.View)]
     [ActionName(nameof(GetRoleByIdAsync))]
     [ProducesResponseType(typeof(RoleDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetRoleByIdAsync(string id)
@@ -42,7 +44,7 @@ public class RoleController : ControllerBase
     }
     
     [HttpPost]
-    // [HasPermission(AppPermissions.Roles.Create)]
+    [HasPermission(AppPermission.Roles.Create)]
     [ProducesResponseType(typeof(RoleDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateRoleAsync(RoleCreateDto dto)
     {
@@ -51,7 +53,7 @@ public class RoleController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    // [HasPermission(AppPermissions.Roles.Edit)]
+    [HasPermission(AppPermission.Roles.Edit)]
     [ProducesResponseType(typeof(RoleDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateRoleAsync(string id, RoleUpdateDto dto)
     {
@@ -60,7 +62,7 @@ public class RoleController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    // [HasPermission(AppPermissions.Roles.Delete)]
+    [HasPermission(AppPermission.Roles.Delete)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteRoleAsync(string id)
     {
@@ -69,7 +71,7 @@ public class RoleController : ControllerBase
     }
     
     [HttpGet("{id}/permissions")]
-    // [HasPermission(AppPermissions.Roles.ViewPermission)]
+    [HasPermission(AppPermission.Roles.ViewPermission)]
     [ProducesResponseType(typeof(IEnumerable<PermissionDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPermissionForRoleAsync(string id, [FromQuery] PermissionFilterRequestDto dto)
     {
@@ -78,7 +80,7 @@ public class RoleController : ControllerBase
     }
     
     [HttpPut("{id}/permissions")]
-    // [HasPermission(AppPermissions.Roles.UpdatePermission)]
+    [HasPermission(AppPermission.Roles.UpdatePermission)]
     [ProducesResponseType(typeof(IEnumerable<PermissionDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdatePermissionForRoleAsync(string id, IEnumerable<int> permissionIds)
     {

@@ -7,3 +7,8 @@ public interface IProjection<TEntity, TKey, TOut> where TEntity : IEntity<TKey> 
 {
     Expression<Func<TEntity, TOut>> GetProject();
 }
+
+public interface IProjection<TEntity, TOut> : IProjection<TEntity, int, TOut> where TEntity : IEntity
+{
+    
+}

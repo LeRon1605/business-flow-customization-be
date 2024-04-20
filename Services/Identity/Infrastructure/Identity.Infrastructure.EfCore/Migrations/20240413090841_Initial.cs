@@ -341,16 +341,6 @@ namespace Identity.Infrastructure.EfCore.Migrations
                 name: "IX_UserInTenant_UserId",
                 table: "UserInTenant",
                 column: "UserId");
-            
-            migrationBuilder.Sql(@"
-                INSERT INTO AspNetRoles (Id, Name, NormalizedName)
-                VALUES ('68d37338-7b29-4ece-bcfe-f6e1bdcdf9e0', 'Quản trị viên', 'QUẢN TRỊ VIÊN')
-            ");
-            
-            migrationBuilder.Sql(@"
-                INSERT INTO Tenant(Name, AvatarUrl)
-                VALUES('Business FLow Executor', 'https://e7.pngegg.com/pngimages/834/603/png-clipart-workflow-computer-icons-business-process-business-people-business.png')
-            ");
         }
 
         /// <inheritdoc />

@@ -80,12 +80,9 @@ public static class ApplicationBuilderExtensions
         var scope = app.ApplicationServices.CreateScope();
         var seeders = scope.ServiceProvider.GetRequiredService<IEnumerable<IDataSeeder>>();
 
-        var tasks = new List<Task>();
         foreach (var seeder in seeders)
         {
-            tasks.Add(seeder.SeedAsync());
+            await seeder.SeedAsync();
         }
-
-        await Task.WhenAll(tasks);
     }
 }

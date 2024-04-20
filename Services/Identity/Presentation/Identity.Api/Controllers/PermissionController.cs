@@ -1,4 +1,6 @@
 ﻿using Application.Dtos;
+using BuildingBlocks.Presentation.Authorization;
+using Domain.Permissions;
 using Identity.Application.UseCases.Permissions.Dtos;
 using Identity.Application.UseCases.Permissions.Queries;
 using MediatR;
@@ -19,8 +21,7 @@ public class PermissionController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
-    // [HasPermission(AppPermissions.PermissionManagement.View)]
+    [HasPermission(AppPermission.PermissionManagement.View)]
     [ProducesResponseType(typeof(IEnumerable<PermissionDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPagedRoleAsync([FromQuery] PermissionFilterRequestDto dto)
     {

@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.Domain.Exceptions.Resources;
 using BuildingBlocks.Domain.Models;
 using Domain;
+using Domain.Roles;
 using Identity.Domain.UserAggregate.DomainEvents;
 using Identity.Domain.UserAggregate.Exceptions;
 using Microsoft.AspNetCore.Identity;

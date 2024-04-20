@@ -81,7 +81,7 @@
       - dbdata:/var/opt/mssql
         
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.12.13-management-alpine
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -98,7 +98,7 @@
       retries: 3
       
   redis:
-    image: redis
+    image: redis:alpine3.19
     ports:
       - "6379:6379"
     restart: always

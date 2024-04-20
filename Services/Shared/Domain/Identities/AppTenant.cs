@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Identities;
 
 public static class AppTenant
 {
