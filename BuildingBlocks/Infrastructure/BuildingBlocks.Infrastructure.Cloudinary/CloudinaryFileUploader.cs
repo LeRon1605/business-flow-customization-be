@@ -22,7 +22,7 @@ public class CloudinaryFileUploader : IFileUploader
         _logger = logger;
     }
     
-    public async Task<UploaderResult> UploadAsync(string name, Stream stream)
+    public async Task<UploaderResult> UploadAsync(string name, Stream stream, string contentType)
     {
         var uploadParams = new ImageUploadParams()
         {
@@ -57,8 +57,8 @@ public class CloudinaryFileUploader : IFileUploader
         return result.IsSuccess ? result : UploaderResult.Failed(errorMessage);
     }
 
-    public void PushUpload(string name, Stream stream)
+    public void PushUpload(string name, Stream stream, string contentType)
     {
-        _backGroundJobManager.Fire(() => UploadAsync(name, stream));
+        _backGroundJobManager.Fire(() => UploadAsync(name, stream, contentType));
     }
 }

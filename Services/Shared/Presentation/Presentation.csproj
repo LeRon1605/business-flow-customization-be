@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Infrastructure\BuildingBlocks.Infrastructure.CloudflareR2\BuildingBlocks.Infrastructure.CloudflareR2.csproj" />
       <ProjectReference Include="..\..\..\BuildingBlocks\Presentation\BuildingBlocks.Presentation\BuildingBlocks.Presentation.csproj" />
       <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
