@@ -15,7 +15,9 @@ public class UploadFileCommandHandler : ICommandHandler<UploadFileCommand, strin
     
     public async Task<string> Handle(UploadFileCommand request, CancellationToken cancellationToken)
     {
-        var result = await _fileUploader.UploadAsync(request.File.FileName, request.File.OpenReadStream());
+        var result = await _fileUploader.UploadAsync(request.File.FileName
+            , request.File.OpenReadStream()
+            , request.File.ContentType);
         if (!result.IsSuccess)
         {
             throw new ResourceInvalidOperationException(result.ErrorMessage!, "UploadImageFailed");

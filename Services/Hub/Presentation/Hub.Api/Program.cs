@@ -1,5 +1,6 @@
 using Application;
 using BuildingBlocks.Application;
+using BuildingBlocks.Infrastructure.Cloudinary;
 using BuildingBlocks.Infrastructure.Mail;
 using BuildingBlocks.Presentation;
 using Hub.Application;
@@ -21,7 +22,8 @@ builder
         , typeof(SharedPresentationAssemblyMarker));
 
 builder.Services
-    .AddEmailSender(builder.Configuration);
+    .AddEmailSender(builder.Configuration)
+    .AddCloudinary(builder.Configuration);
 
 var app = builder.Build();
 

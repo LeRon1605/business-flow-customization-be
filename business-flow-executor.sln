@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Services\Sha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Services\Shared\Presentation\Presentation.csproj", "{653F79CE-2A35-4482-8A74-A6084A20E6AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Infrastructure.CloudflareR2", "BuildingBlocks\Infrastructure\BuildingBlocks.Infrastructure.CloudflareR2\BuildingBlocks.Infrastructure.CloudflareR2.csproj", "{8275367B-7520-416C-AFF3-C65C6C7F1B40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,7 @@ Global
 		{76FC758A-BFB4-4D89-960F-76076586AB9A} = {26BE2A92-8B9B-4C5F-9433-2BF6834DA717}
 		{A4CB05F7-A699-447F-BFCE-CEF0E9469132} = {4A4F277E-934B-446C-A604-104E98FDECF0}
 		{653F79CE-2A35-4482-8A74-A6084A20E6AC} = {4A4F277E-934B-446C-A604-104E98FDECF0}
+		{8275367B-7520-416C-AFF3-C65C6C7F1B40} = {19F552B6-7FCB-45BB-A87A-4E8DEC1FBF8B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5E8BE74B-FA7B-4201-8BC5-A260B72E2765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -237,5 +240,9 @@ Global
 		{653F79CE-2A35-4482-8A74-A6084A20E6AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{653F79CE-2A35-4482-8A74-A6084A20E6AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{653F79CE-2A35-4482-8A74-A6084A20E6AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8275367B-7520-416C-AFF3-C65C6C7F1B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8275367B-7520-416C-AFF3-C65C6C7F1B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8275367B-7520-416C-AFF3-C65C6C7F1B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8275367B-7520-416C-AFF3-C65C6C7F1B40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

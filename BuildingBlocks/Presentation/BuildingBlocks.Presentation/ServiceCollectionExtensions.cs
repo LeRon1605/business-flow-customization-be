@@ -70,7 +70,6 @@ public static class ServiceCollectionExtensions
         builder.Services.AddRabbitMq(builder.Configuration);
         builder.Services.AddRedisCache(builder.Configuration, "BusinessFlowExecutor");
         builder.Services.AddHangFireBackGroundJob(builder.Configuration, AssemblyHelper.GetServiceName());
-        builder.Services.AddCloudinary(builder.Configuration);
         builder.Services.AddApplicationSerilog(builder.Configuration);
         builder.Host.UseSerilog();
 
