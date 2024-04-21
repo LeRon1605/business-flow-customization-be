@@ -3,7 +3,7 @@ using Identity.Domain.UserAggregate.Entities;
 
 namespace Identity.Domain.TenantAggregate.Entities;
 
-public class Tenant : AggregateRoot
+public class Tenant : AuditableAggregateRoot
 {
     public string Name { get; set; }
     public string AvatarUrl { get; set; }

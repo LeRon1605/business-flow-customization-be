@@ -8,6 +8,7 @@ namespace Identity.Application.UseCases.Tenants.Dtos;
 public class TenantDetailDto : TenantDto, IProjection<Tenant, int, TenantDetailDto>
 {
     public int NumberOfStaff { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     public Expression<Func<Tenant, TenantDetailDto>> GetProject()
     {
@@ -16,7 +17,8 @@ public class TenantDetailDto : TenantDto, IProjection<Tenant, int, TenantDetailD
             Id = _.Id,
             Name = _.Name,
             AvatarUrl = _.AvatarUrl,
-            NumberOfStaff = _.Users.Count
+            NumberOfStaff = _.Users.Count,
+            CreatedAt = _.Created
         };
     }
 }
