@@ -91,6 +91,7 @@ public static class ServiceCollectionExtensions
     {
         builder.Services.AddOptionSetting<JwtSetting>(builder.Configuration, nameof(JwtSetting));
         builder.Services.AddOptionSetting<ForgetPasswordSetting>(builder.Configuration, nameof(ForgetPasswordSetting));
+        builder.Services.AddOptionSetting<TenantInvitationSetting>(builder.Configuration, nameof(TenantInvitationSetting));
         
         return builder;
     }

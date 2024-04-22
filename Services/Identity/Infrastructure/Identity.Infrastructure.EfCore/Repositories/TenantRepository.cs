@@ -11,6 +11,8 @@ public class TenantRepository : EfCoreRepository<Tenant, int>, ITenantRepository
 {
     public TenantRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
     {
+        AddInclude(x => x.Invitations);
+        AddInclude(x => x.Users);
     }
 
     public async Task<IList<Tenant>> FindByUserAsync(string userId)

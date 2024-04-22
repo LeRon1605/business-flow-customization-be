@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Presentation.Authorization;
+﻿using BuildingBlocks.Application.Dtos;
+using BuildingBlocks.Presentation.Authorization;
 using Domain.Permissions;
 using Identity.Application.UseCases.Tenants.Commands;
 using Identity.Application.UseCases.Tenants.Dtos;
@@ -35,5 +36,26 @@ public class TenantController : ControllerBase
     {
         await _mediator.Send(new UpdateTenantInfoCommand(dto.Name, dto.AvatarUrl));
         return NoContent();
+    }
+    
+    [HttpPost("invitations")]
+    [HasPermission(AppPermission.Tenants.InviteMember)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> InviteMemberAsync([FromBody] TenantInvitationCreateDto createDto)
+    {
+        await _mediator.Send(new InviteTenantMemberCommand(createDto.Email, createDto.RoleId));
+        return NoContent();
+    }
+    
+    [HttpGet("invitations")]
+    [HasPermission(AppPermission.Tenants.InviteMember)]
+    [ProducesResponseType(typeof(PagedResultDto<TenantInvitationDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetInvitationsAsync([FromQuery] TenantInvitationRequestDto dto)
+    {
+        var invitations = await _mediator.Send(new GetTenantInvitationQuery(dto.Page
+            , dto.Size
+            , dto.Sorting
+            , dto.Search));
+        return Ok(invitations);
     }
 }

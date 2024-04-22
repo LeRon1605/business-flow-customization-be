@@ -22,7 +22,7 @@ public interface IBasicReadOnlyRepository<TEntity, TKey> : ISpecificationReposit
 
     Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> expression, bool tracking = true, string? includeProps = null);
 
-    Task<bool> IsExistingAsync(int id);
+    Task<bool> IsExistingAsync(TKey id);
 
     Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? expression = null);
     

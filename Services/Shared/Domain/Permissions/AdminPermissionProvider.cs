@@ -22,6 +22,7 @@ public static class AdminPermissionProvider
         
         AppPermission.Tenants.Management,
         AppPermission.Tenants.View,
-        AppPermission.Tenants.Edit
+        AppPermission.Tenants.Edit,
+        AppPermission.Tenants.InviteMember,
     };
 }

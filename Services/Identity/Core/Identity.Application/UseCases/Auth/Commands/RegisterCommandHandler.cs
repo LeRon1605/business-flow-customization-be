@@ -2,7 +2,6 @@
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Exceptions.Resources;
-using Domain;
 using Domain.Identities;
 using Domain.Roles;
 using Identity.Application.Services.Interfaces;
