@@ -50,21 +50,21 @@ public class TenantController : ControllerBase
         return Ok(tenants);
     }
     
-    [HttpGet("{id}/user/{userId}")]
+    [HttpGet("user/{id}")]
     // [HasPermission(AppPermission.Tenants.View)]
     [ProducesResponseType(typeof(UserDetailDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUserInTenantByIdAsync(int id, string userId)
+    public async Task<IActionResult> GetUserInTenantByIdAsync(string id)
     {
-        var user = await _mediator.Send(new GetUserInTenantByIdQuery(id, userId));
+        var user = await _mediator.Send(new GetUserInTenantByIdQuery(id));
         return Ok(user);
     }
     
-    [HttpPut("{id}/user/{userId}/remove")]
+    [HttpPut("remove-user")]
     // [HasPermission(AppPermission.Tenants.Edit)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> RemoveUserFromTenantAsync(int id, string userId)
+    public async Task<IActionResult> RemoveUserFromTenantAsync([FromBody] string id)
     {
-        await _mediator.Send(new RemoveUserFromTenantCommand(id, userId));
+        await _mediator.Send(new RemoveUserFromTenantCommand(id));
         return NoContent();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Application.Cqrs;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Repositories;
 using Identity.Application.UseCases.Users.Dtos;
 using Identity.Domain.TenantAggregate.Entities;
@@ -10,28 +11,32 @@ namespace Identity.Application.UseCases.Users.Queries;
 
 public class GetUserInTenantByIdQueryHandler: IQueryHandler<GetUserInTenantByIdQuery, UserDetailDto>
 {
+    private readonly ICurrentUser _currentUser;
     private readonly IBasicReadOnlyRepository<Tenant, int> _tenantRepository;
     private readonly IBasicReadOnlyRepository<ApplicationUser, string> _userRepository;
     
-    public GetUserInTenantByIdQueryHandler(IBasicReadOnlyRepository<Tenant, int> tenantRepository
-        , IBasicReadOnlyRepository<ApplicationUser, string> userRepository)
+    public GetUserInTenantByIdQueryHandler(
+        ICurrentUser currentUser,
+        IBasicReadOnlyRepository<Tenant, int> tenantRepository,
+        IBasicReadOnlyRepository<ApplicationUser, string> userRepository)
     {
+        _currentUser = currentUser;
         _tenantRepository = tenantRepository;
         _userRepository = userRepository;
     }
     
     public async Task<UserDetailDto> Handle(GetUserInTenantByIdQuery request, CancellationToken cancellationToken)
     {
-        var tenant = await _tenantRepository.FindByIdAsync(request.TenantId);
+        var tenant = await _tenantRepository.FindByIdAsync(_currentUser.TenantId);
         if (tenant == null)
         {
-            throw new TenantNotFoundException(request.TenantId);
+            throw new TenantNotFoundException(_currentUser.TenantId);
         }
         
-        var user = await _userRepository.FindByIdAsync(request.UserId, new UserDetailDto());
+        var user = await _userRepository.FindByIdAsync(request.Id, new UserDetailDto());
         if (user == null)
         {
-            throw new UserNotFoundException(request.UserId);
+            throw new UserNotFoundException(request.Id);
         }
 
         return user;
