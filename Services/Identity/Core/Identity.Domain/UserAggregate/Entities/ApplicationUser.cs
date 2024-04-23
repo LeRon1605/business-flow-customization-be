@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Domain.Exceptions.Resources;
 using BuildingBlocks.Domain.Models;
+using BuildingBlocks.Domain.Models.Interfaces;
 using Domain;
 using Domain.Roles;
 using Identity.Domain.UserAggregate.DomainEvents;
