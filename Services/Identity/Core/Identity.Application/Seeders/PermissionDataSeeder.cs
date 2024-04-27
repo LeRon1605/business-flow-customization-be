@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Application.Data;
+﻿using Application.Seeders;
+using BuildingBlocks.Application.Data;
 using Domain.Permissions;
 using Domain.Roles;
 using Identity.Domain.PermissionAggregate;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Identity.Application.Seeders;
 
-public class PermissionDataSeeder : IDataSeeder
+public class PermissionDataSeeder : DataSeeder, IDataSeeder
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
@@ -27,15 +28,18 @@ public class PermissionDataSeeder : IDataSeeder
         IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
         IUnitOfWork unitOfWork,
-        ILogger<PermissionDataSeeder> logger)
+        ILogger<PermissionDataSeeder> logger,
+        IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
     }
+    
+    public override int Id => 2;
 
-    public async Task SeedAsync()
+    public override async Task SeedAsync()
     {
         await SyncPermissionAsync();
         

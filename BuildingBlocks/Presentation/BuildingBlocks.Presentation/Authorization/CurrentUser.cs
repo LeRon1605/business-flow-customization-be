@@ -9,6 +9,7 @@ namespace BuildingBlocks.Presentation.Authorization;
 public abstract class CurrentUser : ICurrentUser
 {
     private string? _id;
+    private int? _tenantId;
     
     public string Id
     {
@@ -23,11 +24,12 @@ public abstract class CurrentUser : ICurrentUser
     public string Email 
         => _httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.Email)
             ?? throw new ResourceUnauthorizedAccessException("User is not authenticated");
-    
+
     public int TenantId
-        => int.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.TenantId), out var tenantId) 
-            ? tenantId 
-            : throw new ResourceUnauthorizedAccessException("User is not authenticated");
+    {
+        get => _tenantId ?? throw new ResourceUnauthorizedAccessException("User is not authenticated");
+        set => _tenantId = value;
+    }
     
     public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
 
@@ -37,6 +39,9 @@ public abstract class CurrentUser : ICurrentUser
     {
         _httpContextAccessor = httpContextAccessor;
         _id = _httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.UserId);
+        _tenantId = int.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.TenantId), out var tenantId)
+            ? tenantId
+            : null;
     }
 
     public async Task<bool> IsInRoleAsync(string role)
@@ -45,12 +50,7 @@ public abstract class CurrentUser : ICurrentUser
         return roles.Contains(role);    
     }
 
-    public void SetId(string id)
-    {
-        Id = id;
-    }
-
-    public string GetClaim(string claimType)
+    public string? GetClaim(string claimType)
     {
         return _httpContextAccessor.HttpContext?.User?.FindFirstValue(claimType);
     }

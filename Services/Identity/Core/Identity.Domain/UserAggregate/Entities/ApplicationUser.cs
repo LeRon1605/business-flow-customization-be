@@ -2,6 +2,7 @@
 using BuildingBlocks.Domain.Models;
 using BuildingBlocks.Domain.Models.Interfaces;
 using Domain;
+using Domain.Identities;
 using Domain.Roles;
 using Identity.Domain.UserAggregate.DomainEvents;
 using Identity.Domain.UserAggregate.Exceptions;
@@ -27,6 +28,18 @@ public partial class ApplicationUser : IdentityUser<string>
         RefreshToken = new List<RefreshToken>();
         Tenants = new List<UserInTenant>();
         Roles = new List<ApplicationUserInRole>();
+    }
+
+    public static ApplicationUser Default()
+    {
+        return new ApplicationUser()
+        {
+            Id = AppUser.Id,
+            UserName = "admin@gmail.com",
+            Email = "email@gmail.com",
+            FullName = "Business Flow",
+            AvatarUrl = AppUser.DefaultAvatar,
+        };
     }
 
     public void UpdateFullName(string fullName)

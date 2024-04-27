@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Presentation.ExceptionHandlers;
 using Microsoft.AspNetCore.Builder;
@@ -78,7 +79,10 @@ public static class ApplicationBuilderExtensions
     public static async Task SeedDataAsync(this IApplicationBuilder app)
     {
         var scope = app.ApplicationServices.CreateScope();
-        var seeders = scope.ServiceProvider.GetRequiredService<IEnumerable<IDataSeeder>>();
+        
+        var seeders = scope.ServiceProvider
+            .GetRequiredService<IEnumerable<IDataSeeder>>()
+            .OrderBy(x => x.Id);
 
         foreach (var seeder in seeders)
         {
