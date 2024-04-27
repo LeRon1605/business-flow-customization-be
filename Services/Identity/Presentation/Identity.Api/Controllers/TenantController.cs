@@ -6,6 +6,9 @@ using Identity.Application.UseCases.Tenants.Dtos;
 using Identity.Application.UseCases.Tenants.Dtos.Requests;
 using Identity.Application.UseCases.Tenants.Dtos.Responses;
 using Identity.Application.UseCases.Tenants.Queries;
+using Identity.Application.UseCases.Users.Commands;
+using Identity.Application.UseCases.Users.Dtos;
+using Identity.Application.UseCases.Users.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +43,33 @@ public class TenantController : ControllerBase
         return NoContent();
     }
     
+    [HttpGet("{id}/users")]
+    // [HasPermission(AppPermission.Tenants.View)]
+    [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllUsersInTenantAsync([FromRoute] int id, [FromQuery] UserRequestDto dto)
+    {
+        var tenants = await _mediator.Send(new GetAllUsersInTenantQuery(id, dto.Search, dto.Page, dto.Size, dto.Sorting));
+        return Ok(tenants);
+    }
+    
+    [HttpGet("user/{id}")]
+    // [HasPermission(AppPermission.Tenants.View)]
+    [ProducesResponseType(typeof(UserDetailDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserInTenantByIdAsync(string id)
+    {
+        var user = await _mediator.Send(new GetUserInTenantByIdQuery(id));
+        return Ok(user);
+    }
+    
+    [HttpPut("remove-user")]
+    // [HasPermission(AppPermission.Tenants.Edit)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveUserFromTenantAsync([FromBody] string id)
+    {
+        await _mediator.Send(new RemoveUserFromTenantCommand(id));
+        return NoContent();
+    }
+
     [HttpPost("invitations")]
     [HasPermission(AppPermission.Tenants.InviteMember)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
