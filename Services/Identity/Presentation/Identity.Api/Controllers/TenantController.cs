@@ -42,33 +42,6 @@ public class TenantController : ControllerBase
         await _mediator.Send(new UpdateTenantInfoCommand(dto.Name, dto.AvatarUrl));
         return NoContent();
     }
-    
-    [HttpGet("{id}/users")]
-    // [HasPermission(AppPermission.Tenants.View)]
-    [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllUsersInTenantAsync([FromRoute] int id, [FromQuery] UserRequestDto dto)
-    {
-        var tenants = await _mediator.Send(new GetAllUsersInTenantQuery(id, dto.Search, dto.Page, dto.Size, dto.Sorting));
-        return Ok(tenants);
-    }
-    
-    [HttpGet("user/{id}")]
-    // [HasPermission(AppPermission.Tenants.View)]
-    [ProducesResponseType(typeof(UserDetailDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUserInTenantByIdAsync(string id)
-    {
-        var user = await _mediator.Send(new GetUserInTenantByIdQuery(id));
-        return Ok(user);
-    }
-    
-    [HttpPut("remove-user")]
-    // [HasPermission(AppPermission.Tenants.Edit)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> RemoveUserFromTenantAsync([FromBody] string id)
-    {
-        await _mediator.Send(new RemoveUserFromTenantCommand(id));
-        return NoContent();
-    }
 
     [HttpPost("invitations")]
     [HasPermission(AppPermission.Tenants.InviteMember)]
@@ -98,12 +71,41 @@ public class TenantController : ControllerBase
         var response = await _mediator.Send(new AcceptTenantInvitationCommand(dto.Token));
         return Ok(response);
     }
-    
+
     [HttpPost("invitations/accept/account")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> CreateInvitationAccountAsync([FromBody] CreateAccountTenantInvitationRequestDto requestDto)
+    public async Task<IActionResult> CreateInvitationAccountAsync(
+        [FromBody] CreateAccountTenantInvitationRequestDto requestDto)
     {
         await _mediator.Send(new CreateAccountTenantInvitationCommand(requestDto.FullName, requestDto.Token, requestDto.Password));
+        return NoContent();
+    }
+    
+
+    [HttpGet("{id}/users")]
+    // [HasPermission(AppPermission.Tenants.View)]
+    [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllUsersInTenantAsync([FromRoute] int id, [FromQuery] UserRequestDto dto)
+    {
+        var tenants = await _mediator.Send(new GetAllUsersInTenantQuery(id, dto.Search, dto.Page, dto.Size, dto.Sorting));
+        return Ok(tenants);
+    }
+    
+    [HttpGet("user/{id}")]
+    // [HasPermission(AppPermission.Tenants.View)]
+    [ProducesResponseType(typeof(UserDetailDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserInTenantByIdAsync(string id)
+    {
+        var user = await _mediator.Send(new GetUserInTenantByIdQuery(id));
+        return Ok(user);
+    }
+    
+    [HttpPut("remove-user")]
+    // [HasPermission(AppPermission.Tenants.Edit)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RemoveUserFromTenantAsync([FromBody] string id)
+    {
+        await _mediator.Send(new RemoveUserFromTenantCommand(id));
         return NoContent();
     }
 }
