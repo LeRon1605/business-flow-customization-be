@@ -1,5 +1,5 @@
-﻿using BuildingBlocks.Application.Data;
-using Domain;
+﻿using Application.Seeders;
+using BuildingBlocks.Application.Data;
 using Domain.Identities;
 using Domain.Roles;
 using Identity.Application.Services.Interfaces;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Identity.Application.Seeders;
 
-public class IdentityDataSeeder : IDataSeeder
+public class IdentityDataSeeder : DataSeeder, IDataSeeder
 {
     private readonly IIdentityService _identityService;
     private readonly ITenantService _tenantService;
@@ -26,7 +26,8 @@ public class IdentityDataSeeder : IDataSeeder
         , ITenantRepository tenantRepository
         , UserManager<ApplicationUser> userManager
         , RoleManager<ApplicationRole> roleManager
-        , ILogger<IdentityDataSeeder> logger)
+        , ILogger<IdentityDataSeeder> logger
+        , IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _identityService = identityService;
         _tenantService = tenantService;
@@ -36,7 +37,9 @@ public class IdentityDataSeeder : IDataSeeder
         _logger = logger;
     }
 
-    public async Task SeedAsync()
+    public override int Id => 1;
+
+    public override async Task SeedAsync()
     {
         try
         {
@@ -61,19 +64,14 @@ public class IdentityDataSeeder : IDataSeeder
             return;
         }
         
-        var user = await _identityService.CreateUserAsync(
-            "ServeSync",
-            "admin",
-            "https://res.cloudinary.com/dboijruhe/image/upload/v1700832514/Assets/ddxrzqclm5ysut4o9qie.png",
-            "admin@gmail.com",
-            "admin123");
+        var user = await _userManager.CreateAsync(ApplicationUser.Default());
 
-        if (user.IsSuccess)
+        if (user.Succeeded)
         {
-            await _tenantService.AddUserToTenantAsync(user.Data!.Id
+            await _tenantService.AddUserToTenantAsync(AppUser.Id
                 , true
                 , AppTenant.Default);
-            await _identityService.GrantToRoleAsync(user.Data.Id, AppRole.Admin, AppTenant.Default);    
+            await _identityService.GrantToRoleAsync(AppUser.Id, AppRole.Admin, AppTenant.Default);    
         }
     }
 

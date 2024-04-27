@@ -1,5 +1,7 @@
 ﻿using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Domain.Exceptions.Resources;
 using Domain.Identities;
 using Identity.Application.Services.Interfaces;
 using Identity.Domain.TenantAggregate;
@@ -12,14 +14,17 @@ public class CreateAccountTenantInvitationCommandHandler : ICommandHandler<Creat
     private readonly IIdentityService _identityService;
     private readonly ITenantRepository _tenantRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUser _currentUser;
     
     public CreateAccountTenantInvitationCommandHandler(IIdentityService identityService
         , ITenantRepository tenantRepository
-        , IUnitOfWork unitOfWork)
+        , IUnitOfWork unitOfWork
+        , ICurrentUser currentUser)
     {
         _identityService = identityService;
         _tenantRepository = tenantRepository;
         _unitOfWork = unitOfWork;
+        _currentUser = currentUser;
     }
     
     public async Task Handle(CreateAccountTenantInvitationCommand request, CancellationToken cancellationToken)
@@ -36,12 +41,17 @@ public class CreateAccountTenantInvitationCommandHandler : ICommandHandler<Creat
         {
             var invitation = tenant.Invitations.First(x => x.Token == request.Token);
             
-            await _identityService.CreateUserAsync(request.FullName
+            var result = await _identityService.CreateUserAsync(request.FullName
                 , invitation.Email
                 , AppUser.DefaultAvatar
                 , invitation.Email
                 , request.Password);
-            
+            if (!result.IsSuccess)
+            {
+                throw new ResourceInvalidOperationException(result.Error!, result.ErrorCode!);
+            }
+
+            _currentUser.Id = result.Data!.Id;
             tenant.AcceptInvitation(request.Token);
             
             await _unitOfWork.CommitTransactionAsync();

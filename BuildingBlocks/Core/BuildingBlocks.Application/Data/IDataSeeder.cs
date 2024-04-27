@@ -2,5 +2,7 @@
 
 public interface IDataSeeder
 {
+    int Id { get; }
+    
     Task SeedAsync();
 }
