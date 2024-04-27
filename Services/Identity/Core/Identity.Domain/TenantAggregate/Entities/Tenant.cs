@@ -43,6 +43,18 @@ public class Tenant : AuditableAggregateRoot
         Invitations.Add(new TenantInvitation(email, Id, roleId));
     }
     
+    public void AcceptInvitation(string token)
+    {
+        var invitation = Invitations.FirstOrDefault(x => x.Token == token 
+                                                         && x.Status == TenantInvitationStatus.Pending);
+        if (invitation == null)
+        {
+            throw new TenantInvitationNotFoundException(token);
+        }
+        
+        invitation.Accept();
+    }
+    
     private Tenant()
     {
         

@@ -6,4 +6,6 @@ namespace Identity.Domain.TenantAggregate;
 public interface ITenantRepository : IRepository<Tenant, int>
 {
     Task<IList<Tenant>> FindByUserAsync(string userId);
+    
+    Task<Tenant?> FindByInvitationTokenAsync(string token);
 }

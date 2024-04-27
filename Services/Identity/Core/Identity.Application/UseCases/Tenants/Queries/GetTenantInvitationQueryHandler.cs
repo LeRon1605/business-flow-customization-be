@@ -27,6 +27,7 @@ public class GetTenantInvitationQueryHandler : IQueryHandler<GetTenantInvitation
             , request.Sorting
             , request.Search
             , _currentUser.TenantId);
+        
         var invitations = await _tenantInvitationRepository.GetPagedListAsync(specification, new TenantInvitationDto());
         var total = await _tenantInvitationRepository.GetCountAsync(specification);
 

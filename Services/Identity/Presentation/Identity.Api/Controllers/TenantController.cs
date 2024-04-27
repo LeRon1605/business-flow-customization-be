@@ -58,4 +58,20 @@ public class TenantController : ControllerBase
             , dto.Search));
         return Ok(invitations);
     }
+    
+    [HttpPost("invitations/accept")]
+    [ProducesResponseType(typeof(TenantInvitationAcceptResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> AcceptInvitationAsync([FromBody] TenantInvitationAcceptRequestDto dto)
+    {
+        var response = await _mediator.Send(new AcceptTenantInvitationCommand(dto.Token));
+        return Ok(response);
+    }
+    
+    [HttpPost("invitations/accept/account")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> InitInvitationAsync([FromBody] InitAccountTenantInvitationDto dto)
+    {
+        await _mediator.Send(new InitAccountTenantInvitationCommand(dto.FullName, dto.Token, dto.Password));
+        return NoContent();
+    }
 }

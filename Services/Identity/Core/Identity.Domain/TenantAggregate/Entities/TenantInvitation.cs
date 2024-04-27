@@ -27,6 +27,13 @@ public class TenantInvitation : AuditableEntity
         AddDomainEvent(new UserInvitedToTenantDomainEvent(this));
     }
     
+    public void Accept()
+    {
+        Status = TenantInvitationStatus.Accepted;
+        
+        AddDomainEvent(new UserAcceptedTenantInvitationDomainEvent(this));
+    }
+    
     private TenantInvitation()
     {
         

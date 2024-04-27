@@ -10,7 +10,7 @@ public class InvitationByTenantSpecification : PagingAndSortingSpecification<Ten
     private readonly int _tenantId;
     private readonly string? _search;
     
-    public InvitationByTenantSpecification(int page, int size, string? sorting, string search, int tenantId) 
+    public InvitationByTenantSpecification(int page, int size, string? sorting, string? search, int tenantId) 
         : base(page, size, sorting)
     {
         _tenantId = tenantId;
