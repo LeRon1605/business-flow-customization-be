@@ -100,6 +100,18 @@ namespace Identity.Infrastructure.EfCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -107,6 +119,53 @@ namespace Identity.Infrastructure.EfCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tenant");
+                });
+
+            modelBuilder.Entity("Identity.Domain.TenantAggregate.Entities.TenantInvitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("TenantInvitation");
                 });
 
             modelBuilder.Entity("Identity.Domain.UserAggregate.Entities.ApplicationUser", b =>
@@ -365,6 +424,25 @@ namespace Identity.Infrastructure.EfCore.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Identity.Domain.TenantAggregate.Entities.TenantInvitation", b =>
+                {
+                    b.HasOne("Identity.Domain.RoleAggregate.Entities.ApplicationRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Identity.Domain.TenantAggregate.Entities.Tenant", "Tenant")
+                        .WithMany("Invitations")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("Identity.Domain.UserAggregate.Entities.ApplicationUserInRole", b =>
                 {
                     b.HasOne("Identity.Domain.RoleAggregate.Entities.ApplicationRole", "Role")
@@ -404,7 +482,7 @@ namespace Identity.Infrastructure.EfCore.Migrations
             modelBuilder.Entity("Identity.Domain.UserAggregate.Entities.UserInTenant", b =>
                 {
                     b.HasOne("Identity.Domain.TenantAggregate.Entities.Tenant", "Tenant")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -459,6 +537,13 @@ namespace Identity.Infrastructure.EfCore.Migrations
             modelBuilder.Entity("Identity.Domain.RoleAggregate.Entities.ApplicationRole", b =>
                 {
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Identity.Domain.TenantAggregate.Entities.Tenant", b =>
+                {
+                    b.Navigation("Invitations");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Identity.Domain.UserAggregate.Entities.ApplicationUser", b =>

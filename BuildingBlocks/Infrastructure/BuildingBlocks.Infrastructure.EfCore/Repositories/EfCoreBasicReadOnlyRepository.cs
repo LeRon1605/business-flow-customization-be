@@ -72,7 +72,7 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
         return queryable.FirstOrDefaultAsync(expression);
     }
 
-    public Task<bool> IsExistingAsync(int id)
+    public Task<bool> IsExistingAsync(TKey id)
     {
         var queryable = GetQueryable();
         return queryable.AnyAsync(x => id.Equals(x.Id));

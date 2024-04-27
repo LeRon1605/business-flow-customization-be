@@ -2,7 +2,7 @@
 
 public interface ICurrentUser
 {
-    string Id { get; }
+    string Id { get; set; }
     string Name { get; }
     string Email { get; }
     int TenantId { get; }

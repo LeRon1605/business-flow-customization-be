@@ -7,7 +7,7 @@ using Identity.Domain.TenantAggregate.Exceptions;
 
 namespace Identity.Application.UseCases.Tenants.Queries;
 
-public class GetCurrentTenantInfoQueryHandler : IQueryHandler<GetCurrentTenantInfoQuery, TenantDetailDto>
+public class GetCurrentTenantInfoQueryHandler : IQueryHandler<GetCurrentTenantInfoQuery, TenantDetailResponseDto>
 {
     private readonly IBasicReadOnlyRepository<Tenant, int> _tenantRepository;
     private readonly ICurrentUser _currentUser;
@@ -19,9 +19,9 @@ public class GetCurrentTenantInfoQueryHandler : IQueryHandler<GetCurrentTenantIn
         _currentUser = currentUser;
     }
     
-    public async Task<TenantDetailDto> Handle(GetCurrentTenantInfoQuery request, CancellationToken cancellationToken)
+    public async Task<TenantDetailResponseDto> Handle(GetCurrentTenantInfoQuery request, CancellationToken cancellationToken)
     {
-        var tenant = await _tenantRepository.FindByIdAsync(_currentUser.TenantId, new TenantDetailDto());
+        var tenant = await _tenantRepository.FindByIdAsync(_currentUser.TenantId, new TenantDetailResponseDto());
         if (tenant == null)
         {
             throw new TenantNotFoundException(_currentUser.TenantId);

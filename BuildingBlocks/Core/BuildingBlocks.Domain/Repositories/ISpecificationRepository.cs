@@ -9,6 +9,8 @@ public interface ISpecificationRepository<TEntity, TKey> : IBaseRepository
 {
     Task<IList<TEntity>> FilterAsync(ISpecification<TEntity, TKey> specification);
     
+    Task<IList<TOut>> FilterAsync<TOut>(ISpecification<TEntity, TKey> specification, IProjection<TEntity, TKey, TOut> projection);
+    
     Task<IList<TEntity>> GetPagedListAsync(int skip, int take, ISpecification<TEntity, TKey> specification, string? sorting = null);
 
     Task<IList<TEntity>> GetPagedListAsync(IPagingAndSortingSpecification<TEntity, TKey> specification);

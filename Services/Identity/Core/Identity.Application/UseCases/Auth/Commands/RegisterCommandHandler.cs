@@ -1,7 +1,7 @@
 ﻿using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Exceptions.Resources;
-using Domain;
 using Domain.Identities;
 using Domain.Roles;
 using Identity.Application.Services.Interfaces;
@@ -13,14 +13,17 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand>
     private readonly IIdentityService _identityService;
     private readonly ITenantService _tenantService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUser _currentUser;
     
     public RegisterCommandHandler(IIdentityService identityService
         , ITenantService tenantService
-        , IUnitOfWork unitOfWork)
+        , IUnitOfWork unitOfWork
+        , ICurrentUser currentUser)
     {
         _identityService = identityService;
         _tenantService = tenantService;
         _unitOfWork = unitOfWork;
+        _currentUser = currentUser;
     }
     
     public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -29,21 +32,23 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand>
 
         try
         {
-            var tenant = await _tenantService.CreateAsync(request.TenantName, AppTenant.DefaultAvatar);
             var user = await _identityService.CreateUserAsync(
                 request.FullName,
                 request.Email,
                 AppUser.DefaultAvatar,
                 request.Email,
                 request.Password);
-            
-            
-
-            if (!tenant.IsSuccess || !user.IsSuccess)
+            if (!user.IsSuccess)
             {
-                var error = user.ErrorCode ?? tenant.ErrorCode;
-                var message = user.Error ?? tenant.Error;
-                throw new ResourceInvalidOperationException(message!, error!);
+                throw new ResourceInvalidOperationException(user.Error!, user.ErrorCode!);
+            }
+
+            _currentUser.Id = user.Data!.Id;
+            
+            var tenant = await _tenantService.CreateAsync(request.TenantName, AppTenant.DefaultAvatar);
+            if (!tenant.IsSuccess)
+            {
+                throw new ResourceInvalidOperationException(tenant.Error!, tenant.ErrorCode!);
             }
             
             var grantRoleResult = await _identityService.GrantToRoleAsync(user.Data!.Id

@@ -23,6 +23,7 @@ public class PermissionProvider
         
         { AppPermission.Tenants.Management, "Quản lý doanh nghiệp" },
         { AppPermission.Tenants.View, "Xem thông tin doanh nghiệp" },
-        { AppPermission.Tenants.Edit, "Cập nhật thông tin doanh nghiệp" }
+        { AppPermission.Tenants.Edit, "Cập nhật thông tin doanh nghiệp" },
+        { AppPermission.Tenants.InviteMember, "Mời thành viên vào doanh nghiệp" }
     };
 }

@@ -5,18 +5,20 @@ using Identity.Domain.TenantAggregate.Entities;
 
 namespace Identity.Application.UseCases.Tenants.Dtos;
 
-public class TenantDetailDto : TenantDto, IProjection<Tenant, int, TenantDetailDto>
+public class TenantDetailResponseDto : TenantDto, IProjection<Tenant, int, TenantDetailResponseDto>
 {
     public int NumberOfStaff { get; set; }
+    public DateTime CreatedAt { get; set; }
     
-    public Expression<Func<Tenant, TenantDetailDto>> GetProject()
+    public Expression<Func<Tenant, TenantDetailResponseDto>> GetProject()
     {
-        return _ => new TenantDetailDto()
+        return _ => new TenantDetailResponseDto()
         {
             Id = _.Id,
             Name = _.Name,
             AvatarUrl = _.AvatarUrl,
-            NumberOfStaff = _.Users.Count
+            NumberOfStaff = _.Users.Count,
+            CreatedAt = _.Created
         };
     }
 }

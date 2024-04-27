@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Exceptions.Resources;
-using Domain;
 using Domain.Claims;
 using Microsoft.AspNetCore.Http;
 
@@ -9,10 +8,14 @@ namespace BuildingBlocks.Presentation.Authorization;
 
 public abstract class CurrentUser : ICurrentUser
 {
-    public string Id 
-        => _httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.UserId) 
-           ?? throw new ResourceUnauthorizedAccessException("User is not authenticated");
+    private string? _id;
     
+    public string Id
+    {
+        get => _id ?? throw new ResourceUnauthorizedAccessException("User is not authenticated");
+        set => _id = value;
+    }
+
     public string Name 
         => _httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.UserName)
             ?? throw new ResourceUnauthorizedAccessException("User is not authenticated");
@@ -30,9 +33,10 @@ public abstract class CurrentUser : ICurrentUser
 
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CurrentUser(IHttpContextAccessor httpContextAccessor)
+    protected CurrentUser(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
+        _id = _httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.UserId);
     }
 
     public async Task<bool> IsInRoleAsync(string role)
@@ -40,7 +44,12 @@ public abstract class CurrentUser : ICurrentUser
         var roles = await GetRolesAsync();
         return roles.Contains(role);    
     }
-    
+
+    public void SetId(string id)
+    {
+        Id = id;
+    }
+
     public string GetClaim(string claimType)
     {
         return _httpContextAccessor.HttpContext?.User?.FindFirstValue(claimType);

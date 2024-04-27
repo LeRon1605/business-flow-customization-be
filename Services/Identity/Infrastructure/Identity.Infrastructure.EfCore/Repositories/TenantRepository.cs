@@ -11,6 +11,8 @@ public class TenantRepository : EfCoreRepository<Tenant, int>, ITenantRepository
 {
     public TenantRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
     {
+        AddInclude(x => x.Invitations);
+        AddInclude(x => x.Users);
     }
 
     public async Task<IList<Tenant>> FindByUserAsync(string userId)
@@ -19,5 +21,12 @@ public class TenantRepository : EfCoreRepository<Tenant, int>, ITenantRepository
         
         return await DbSet.Where(x => userInTenantQueryable.Any(y => y.TenantId == x.Id))
                     .ToListAsync();
+    }
+
+    public Task<Tenant?> FindByInvitationTokenAsync(string token)
+    {
+        return GetQueryable()
+            .Where(x => x.Invitations.Any(i => i.Token == token))
+            .FirstOrDefaultAsync();
     }
 }

@@ -3,6 +3,8 @@ using BuildingBlocks.Presentation.Authorization;
 using Domain.Permissions;
 using Identity.Application.UseCases.Tenants.Commands;
 using Identity.Application.UseCases.Tenants.Dtos;
+using Identity.Application.UseCases.Tenants.Dtos.Requests;
+using Identity.Application.UseCases.Tenants.Dtos.Responses;
 using Identity.Application.UseCases.Tenants.Queries;
 using Identity.Application.UseCases.Users.Commands;
 using Identity.Application.UseCases.Users.Dtos;
@@ -25,7 +27,7 @@ public class TenantController : ControllerBase
 
     [HttpGet]
     [HasPermission(AppPermission.Tenants.View)]
-    [ProducesResponseType(typeof(TenantDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TenantDetailResponseDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTenantInfoAsync()
     {
         var tenant = await _mediator.Send(new GetCurrentTenantInfoQuery());
@@ -35,12 +37,51 @@ public class TenantController : ControllerBase
     [HttpPut]
     [HasPermission(AppPermission.Tenants.Edit)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UpdateTenantInfoAsync([FromBody] TenantUpdateDto dto)
+    public async Task<IActionResult> UpdateTenantInfoAsync([FromBody] UpdateTenantRequestDto dto)
     {
         await _mediator.Send(new UpdateTenantInfoCommand(dto.Name, dto.AvatarUrl));
         return NoContent();
     }
+
+    [HttpPost("invitations")]
+    [HasPermission(AppPermission.Tenants.InviteMember)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> InviteMemberAsync([FromBody] InviteTenantMemberRequestDto createRequestDto)
+    {
+        await _mediator.Send(new InviteTenantMemberCommand(createRequestDto.Email, createRequestDto.RoleId));
+        return NoContent();
+    }
     
+    [HttpGet("invitations")]
+    [HasPermission(AppPermission.Tenants.InviteMember)]
+    [ProducesResponseType(typeof(PagedResultDto<TenantInvitationResponseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetInvitationsAsync([FromQuery] FilterAndPagingTenantInvitationRequestDto dto)
+    {
+        var invitations = await _mediator.Send(new GetTenantInvitationQuery(dto.Page
+            , dto.Size
+            , dto.Sorting
+            , dto.Search));
+        return Ok(invitations);
+    }
+    
+    [HttpPost("invitations/accept")]
+    [ProducesResponseType(typeof(AcceptTenantInvitationResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> AcceptInvitationAsync([FromBody] AcceptTenantInvitationRequestDto dto)
+    {
+        var response = await _mediator.Send(new AcceptTenantInvitationCommand(dto.Token));
+        return Ok(response);
+    }
+
+    [HttpPost("invitations/accept/account")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> CreateInvitationAccountAsync(
+        [FromBody] CreateAccountTenantInvitationRequestDto requestDto)
+    {
+        await _mediator.Send(new CreateAccountTenantInvitationCommand(requestDto.FullName, requestDto.Token, requestDto.Password));
+        return NoContent();
+    }
+    
+
     [HttpGet("{id}/users")]
     // [HasPermission(AppPermission.Tenants.View)]
     [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]

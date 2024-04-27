@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using BuildingBlocks.Domain.Specifications;
+using LinqKit;
 using ApplicationUser = Identity.Domain.UserAggregate.Entities.ApplicationUser;
 
 namespace Identity.Domain.UserAggregate.Specifications;
@@ -15,8 +16,13 @@ public class FilterApplicationUserSpecification : PagingAndSortingSpecification<
     
     public override Expression<Func<ApplicationUser, bool>> ToExpression()
     {
-        return x => string.IsNullOrWhiteSpace(_search) ||
-                    x.UserName.ToLower().Contains(_search.ToLower()) ||
-                    x.Email.ToLower().Contains(_search.ToLower());
+        var predicate = PredicateBuilder.New<ApplicationUser>(x => true);
+        if (!string.IsNullOrWhiteSpace(_search))
+        {
+            predicate = predicate.And(x => x.UserName!.ToLower().Contains(_search.ToLower()) 
+                                           || x.Email!.ToLower().Contains(_search.ToLower()));
+        }
+        
+        return predicate;
     }
 }

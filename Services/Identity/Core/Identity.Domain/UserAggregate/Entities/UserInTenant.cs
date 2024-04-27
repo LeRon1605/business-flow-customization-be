@@ -9,9 +9,9 @@ public record UserInTenant : ValueObject
     public string UserId { get; set; }
     
     public bool IsOwner { get; set; }
-    
-    public ApplicationUser? User { get; set; }
-    public Tenant? Tenant { get; set; }
+
+    public ApplicationUser User { get; set; } = null!;
+    public Tenant Tenant { get; set; } = null!;
     
     public UserInTenant(int tenantId, string userId, bool isOwner)
     {

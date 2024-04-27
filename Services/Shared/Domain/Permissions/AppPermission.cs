@@ -44,6 +44,7 @@ public static class AppPermission
 
         public const string Management = $"{Group}.Management";
         public const string View = $"{Group}.View";
-        public const string Edit = $"{Group}.ViewRoles";
+        public const string Edit = $"{Group}.Edit";
+        public const string InviteMember = $"{Group}.InviteMember";
     }
 }
