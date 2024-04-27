@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Application.UseCases.Tenants.Dtos;
+namespace Identity.Application.UseCases.Tenants.Dtos.Requests;
 
-public class InitAccountTenantInvitationDto
+public class CreateAccountTenantInvitationRequestDto
 {
     [Required]
     public string FullName { get; set; } = null!;

@@ -1,10 +1,11 @@
 ﻿using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Dtos;
 using Identity.Application.UseCases.Tenants.Dtos;
+using Identity.Application.UseCases.Tenants.Dtos.Responses;
 
 namespace Identity.Application.UseCases.Tenants.Queries;
 
-public class GetTenantInvitationQuery : PagingAndSortingRequestDto, IQuery<PagedResultDto<TenantInvitationDto>>
+public class GetTenantInvitationQuery : PagingAndSortingRequestDto, IQuery<PagedResultDto<TenantInvitationResponseDto>>
 {
     public string? Search { get; set; }
     

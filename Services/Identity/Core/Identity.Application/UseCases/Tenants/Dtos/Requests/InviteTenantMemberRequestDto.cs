@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Application.UseCases.Tenants.Dtos;
+namespace Identity.Application.UseCases.Tenants.Dtos.Requests;
 
-public class TenantInvitationCreateDto
+public class InviteTenantMemberRequestDto
 {
     [Required] 
     [EmailAddress]

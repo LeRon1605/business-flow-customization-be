@@ -4,9 +4,9 @@ using Identity.Application.UseCases.Roles.Dtos;
 using Identity.Domain.TenantAggregate.Entities;
 using Identity.Domain.TenantAggregate.Enums;
 
-namespace Identity.Application.UseCases.Tenants.Dtos;
+namespace Identity.Application.UseCases.Tenants.Dtos.Responses;
 
-public class TenantInvitationDto : IProjection<TenantInvitation, int, TenantInvitationDto>
+public class TenantInvitationResponseDto : IProjection<TenantInvitation, int, TenantInvitationResponseDto>
 {
     public int Id { get; set; }
     public string Email { get; set; } = null!;
@@ -15,9 +15,9 @@ public class TenantInvitationDto : IProjection<TenantInvitation, int, TenantInvi
     public DateTime CreatedAt { get; set; }
 
 
-    public Expression<Func<TenantInvitation, TenantInvitationDto>> GetProject()
+    public Expression<Func<TenantInvitation, TenantInvitationResponseDto>> GetProject()
     {
-        return x => new TenantInvitationDto()
+        return x => new TenantInvitationResponseDto()
         {
             Id = x.Id,
             Email = x.Email,

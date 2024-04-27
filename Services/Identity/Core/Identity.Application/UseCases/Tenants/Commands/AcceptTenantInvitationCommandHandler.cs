@@ -2,6 +2,7 @@
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Domain.Repositories;
 using Identity.Application.UseCases.Tenants.Dtos;
+using Identity.Application.UseCases.Tenants.Dtos.Responses;
 using Identity.Domain.TenantAggregate;
 using Identity.Domain.TenantAggregate.Exceptions;
 using Identity.Domain.UserAggregate.Entities;
@@ -9,7 +10,7 @@ using Identity.Domain.UserAggregate.Specifications;
 
 namespace Identity.Application.UseCases.Tenants.Commands;
 
-public class AcceptTenantInvitationCommandHandler : ICommandHandler<AcceptTenantInvitationCommand, TenantInvitationAcceptResponseDto>
+public class AcceptTenantInvitationCommandHandler : ICommandHandler<AcceptTenantInvitationCommand, AcceptTenantInvitationResponseDto>
 {
     private readonly IBasicReadOnlyRepository<ApplicationUser, string> _userRepository;
     private readonly ITenantRepository _tenantRepository;
@@ -24,7 +25,7 @@ public class AcceptTenantInvitationCommandHandler : ICommandHandler<AcceptTenant
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<TenantInvitationAcceptResponseDto> Handle(AcceptTenantInvitationCommand request, CancellationToken cancellationToken)
+    public async Task<AcceptTenantInvitationResponseDto> Handle(AcceptTenantInvitationCommand request, CancellationToken cancellationToken)
     {
         var tenant = await _tenantRepository.FindByInvitationTokenAsync(request.Token);
         if (tenant == null)
@@ -36,7 +37,7 @@ public class AcceptTenantInvitationCommandHandler : ICommandHandler<AcceptTenant
         var isUserExisted = await _userRepository.AnyAsync(new UserByEmailSpecification(invitation.Email));
         if (!isUserExisted)
         {
-            return new TenantInvitationAcceptResponseDto()
+            return new AcceptTenantInvitationResponseDto()
             {
                 IsUserExisted = false
             };    
@@ -54,7 +55,7 @@ public class AcceptTenantInvitationCommandHandler : ICommandHandler<AcceptTenant
             throw;
         }
             
-        return new TenantInvitationAcceptResponseDto()
+        return new AcceptTenantInvitationResponseDto()
         {
             IsUserExisted = true
         };

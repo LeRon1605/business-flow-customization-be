@@ -16,6 +16,6 @@ public class RoleFilterAndPagingSpecification : PagingAndSortingSpecification<Ap
 
     public override Expression<Func<ApplicationRole, bool>> ToExpression()
     {
-        return x => x.Name.Contains(_name);
+        return x => x.Name!.Contains(_name);
     }
 }

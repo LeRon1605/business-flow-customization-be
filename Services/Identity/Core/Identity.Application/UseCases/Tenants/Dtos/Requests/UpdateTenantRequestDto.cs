@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Application.UseCases.Tenants.Dtos;
+namespace Identity.Application.UseCases.Tenants.Dtos.Requests;
 
-public class TenantUpdateDto
+public class UpdateTenantRequestDto
 {
     [Required] 
     public string Name { get; set; } = null!;
