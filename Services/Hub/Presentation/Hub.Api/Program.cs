@@ -14,7 +14,7 @@ builder.Configuration.AddSharedConfiguration();
 builder
     .AddCommonServices()
     .AddApplicationAuth()
-    .AddServices()
+    .AddSharedServices()
     .AddAssemblyMarker(typeof(ApplicationAssemblyMarker)
         , typeof(BuildingBlockApplicationAssemblyMarker)
         , typeof(SharedApplicationAssemblyMarker)

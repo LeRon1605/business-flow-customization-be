@@ -1,10 +1,12 @@
-﻿using BuildingBlocks.Domain.Events;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using BuildingBlocks.Domain.Events;
 using BuildingBlocks.Domain.Models.Interfaces;
 
 namespace BuildingBlocks.Domain.Models;
 
 public abstract class Entity<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public TKey Id { get; protected set; }
     
     private List<IDomainEvent>? _domainEvents;

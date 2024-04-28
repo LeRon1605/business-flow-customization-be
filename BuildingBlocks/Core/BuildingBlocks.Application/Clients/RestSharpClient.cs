@@ -28,7 +28,7 @@ public class RestSharpClient
         switch (authenticationType)
         {
             case ClientAuthenticationType.JwtForward:
-                var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+                var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
                 if (!string.IsNullOrEmpty(token))
                     return new JwtAuthenticator(token);
 

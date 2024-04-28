@@ -2,6 +2,7 @@
 using Application.Clients.Interfaces;
 using Application.Dtos;
 using Application.Identity.Interfaces;
+
 namespace Application.Identity;
 
 public class UserInfoProvider : IUserInfoProvider
