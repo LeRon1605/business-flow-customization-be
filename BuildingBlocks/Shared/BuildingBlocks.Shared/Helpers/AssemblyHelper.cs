@@ -7,7 +7,8 @@ public static class AssemblyHelper
     private static readonly Dictionary<string, string> ServiceNames = new ()
     {
         { "Identity.Api", "Identity" },
-        { "Hub.Api", "Hub" }
+        { "Hub.Api", "Hub" },
+        { "BusinessFlow.Api", "BusinessFlow" }
     };
     
     public static Assembly[] GetReferencedAssembliesByType(params Type[] type)

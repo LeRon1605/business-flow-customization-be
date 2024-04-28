@@ -49,6 +49,23 @@
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     depends_on:
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+        
+  business-flow:
+    image: business-flow
+    build:
+      context: .
+      dockerfile: Services/BusinessFLow/Presentation/BusinessFlow.Api/Dockerfile
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
       db:
         condition: service_started
       seq:
@@ -57,7 +74,8 @@
         condition: service_started
       rabbitmq:
         condition: service_healthy
-        
+    
+    
   seq:
     image: datalust/seq:latest
     ports:
