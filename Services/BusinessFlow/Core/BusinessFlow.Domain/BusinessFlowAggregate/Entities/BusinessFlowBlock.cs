@@ -22,6 +22,8 @@ public class BusinessFlowBlock : Entity
 
     public virtual List<SubmissionExecution> Executions { get; private set; } = new();
     
+    public virtual List<BusinessFlowOutCome> OutComes { get; private set; } = new();
+    
     public BusinessFlowBlock(string name, int businessFlowVersionId, BusinessFlowBlockType type)
     {
         Name = name;

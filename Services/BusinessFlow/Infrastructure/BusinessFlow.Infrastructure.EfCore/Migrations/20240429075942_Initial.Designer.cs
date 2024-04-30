@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessFlow.Infrastructure.EfCore.Migrations
 {
     [DbContext(typeof(BusinessFlowDbContext))]
-    [Migration("20240428093742_Initial")]
+    [Migration("20240429075942_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -64,12 +64,17 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Property<int>("FromBlockId")
                         .HasColumnType("int");
 
+                    b.Property<int>("OutComeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ToBlockId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FromBlockId");
+
+                    b.HasIndex("OutComeId");
 
                     b.HasIndex("ToBlockId");
 
@@ -82,6 +87,11 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BusinessFlowBlockId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -91,6 +101,8 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessFlowBlockId");
 
                     b.ToTable("BusinessFlowOutCome");
                 });
@@ -263,6 +275,12 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                         .HasForeignKey("FromBlockId")
                         .IsRequired();
 
+                    b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowOutCome", "OutCome")
+                        .WithMany("Branches")
+                        .HasForeignKey("OutComeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", "ToBlock")
                         .WithMany("ToBranches")
                         .HasForeignKey("ToBlockId")
@@ -270,18 +288,20 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
                     b.Navigation("FromBlock");
 
+                    b.Navigation("OutCome");
+
                     b.Navigation("ToBlock");
                 });
 
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowOutCome", b =>
                 {
-                    b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBranch", "Branch")
-                        .WithOne("OutCome")
-                        .HasForeignKey("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowOutCome", "Id")
+                    b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", "BusinessFlowBlock")
+                        .WithMany("OutComes")
+                        .HasForeignKey("BusinessFlowBlockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Branch");
+                    b.Navigation("BusinessFlowBlock");
                 });
 
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowVersion", b =>
@@ -337,17 +357,15 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
                     b.Navigation("FromBranches");
 
-                    b.Navigation("ToBranches");
-                });
+                    b.Navigation("OutComes");
 
-            modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBranch", b =>
-                {
-                    b.Navigation("OutCome")
-                        .IsRequired();
+                    b.Navigation("ToBranches");
                 });
 
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowOutCome", b =>
                 {
+                    b.Navigation("Branches");
+
                     b.Navigation("Executions");
                 });
 

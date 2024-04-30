@@ -2,7 +2,7 @@
 
 public enum BusinessFlowBlockType
 {
-    Start,
+    Start = 1,
     Function,
     End
 }

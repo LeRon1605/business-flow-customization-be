@@ -116,13 +116,35 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BusinessFlowOutCome",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessFlowBlockId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessFlowOutCome", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BusinessFlowOutCome_BusinessFlowBlock_BusinessFlowBlockId",
+                        column: x => x.BusinessFlowBlockId,
+                        principalTable: "BusinessFlowBlock",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BusinessFlowBranch",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FromBlockId = table.Column<int>(type: "int", nullable: false),
-                    ToBlockId = table.Column<int>(type: "int", nullable: false)
+                    ToBlockId = table.Column<int>(type: "int", nullable: false),
+                    OutComeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,23 +159,10 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                         column: x => x.ToBlockId,
                         principalTable: "BusinessFlowBlock",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BusinessFlowOutCome",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BusinessFlowOutCome", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BusinessFlowOutCome_BusinessFlowBranch_Id",
-                        column: x => x.Id,
-                        principalTable: "BusinessFlowBranch",
+                        name: "FK_BusinessFlowBranch_BusinessFlowOutCome_OutComeId",
+                        column: x => x.OutComeId,
+                        principalTable: "BusinessFlowOutCome",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -200,9 +209,19 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 column: "FromBlockId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BusinessFlowBranch_OutComeId",
+                table: "BusinessFlowBranch",
+                column: "OutComeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BusinessFlowBranch_ToBlockId",
                 table: "BusinessFlowBranch",
                 column: "ToBlockId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessFlowOutCome_BusinessFlowBlockId",
+                table: "BusinessFlowOutCome",
+                column: "BusinessFlowBlockId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessFlowVersion_SpaceId",
@@ -234,6 +253,9 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BusinessFlowBranch");
+
+            migrationBuilder.DropTable(
                 name: "SpaceMember");
 
             migrationBuilder.DropTable(
@@ -244,9 +266,6 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "BusinessFlowOutCome");
-
-            migrationBuilder.DropTable(
-                name: "BusinessFlowBranch");
 
             migrationBuilder.DropTable(
                 name: "BusinessFlowBlock");

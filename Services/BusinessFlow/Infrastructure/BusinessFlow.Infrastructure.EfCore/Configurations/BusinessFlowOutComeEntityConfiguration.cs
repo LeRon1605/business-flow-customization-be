@@ -9,5 +9,9 @@ public class BusinessFlowOutComeEntityConfiguration : IEntityTypeConfiguration<B
     public void Configure(EntityTypeBuilder<BusinessFlowOutCome> builder)
     {
         builder.HasKey(x => x.Id);
+
+        builder.HasOne(x => x.BusinessFlowBlock)
+            .WithMany(x => x.OutComes)
+            .HasForeignKey(x => x.BusinessFlowBlockId);
     }
 }

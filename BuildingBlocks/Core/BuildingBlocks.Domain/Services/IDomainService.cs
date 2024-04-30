@@ -1,6 +1,8 @@
-﻿namespace BuildingBlocks.Domain.Services;
+﻿using BuildingBlocks.Kernel.Services;
 
-public interface IDomainService
+namespace BuildingBlocks.Domain.Services;
+
+public interface IDomainService : IScopedService
 {
     
 }

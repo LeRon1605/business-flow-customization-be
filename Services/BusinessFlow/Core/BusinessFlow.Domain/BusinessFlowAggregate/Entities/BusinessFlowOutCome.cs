@@ -9,13 +9,18 @@ public class BusinessFlowOutCome : Entity
     
     public string Color { get; private set; }
     
-    public virtual BusinessFlowBranch Branch { get; private set; } = null!;
+    public int BusinessFlowBlockId { get; private set; }
+    
+    public virtual BusinessFlowBlock BusinessFlowBlock { get; private set; } = null!;
+    
+    public virtual List<BusinessFlowBranch> Branches { get; private set; } = new();
     
     public virtual List<SubmissionExecution> Executions { get; private set; } = new();
     
-    public BusinessFlowOutCome(string name, string color)
+    public BusinessFlowOutCome(string name, string color, int businessFlowBlockId)
     {
         Name = name;
         Color = color;
+        BusinessFlowBlockId = businessFlowBlockId;
     }
 }

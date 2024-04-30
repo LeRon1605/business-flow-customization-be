@@ -2,6 +2,7 @@ using Application;
 using BuildingBlocks.Application;
 using BuildingBlocks.Presentation;
 using BusinessFlow.Application;
+using BusinessFlow.Domain;
 using BusinessFlow.Infrastructure.EfCore;
 using BusinessFlow.IntegrationEventHandler;
 using Presentation;
@@ -19,7 +20,8 @@ builder
         , typeof(BuildingBlockApplicationAssemblyMarker)
         , typeof(SharedApplicationAssemblyMarker)
         , typeof(IntegrationEventAssemblyMarker)
-        , typeof(SharedPresentationAssemblyMarker));
+        , typeof(SharedPresentationAssemblyMarker)
+        , typeof(DomainAssemblyMarker));
 
 var app = builder.Build();
 

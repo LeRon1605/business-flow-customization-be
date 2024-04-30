@@ -21,7 +21,7 @@ public class BusinessFlowBranchEntityConfiguration : IEntityTypeConfiguration<Bu
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.HasOne(x => x.OutCome)
-            .WithOne(x => x.Branch)
-            .HasForeignKey<BusinessFlowOutCome>(x => x.Id);
+            .WithMany(x => x.Branches)
+            .HasForeignKey(x => x.OutComeId);
     }
 }
