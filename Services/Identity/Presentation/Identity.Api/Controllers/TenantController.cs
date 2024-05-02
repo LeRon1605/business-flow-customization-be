@@ -82,12 +82,12 @@ public class TenantController : ControllerBase
     }
     
 
-    [HttpGet("{id}/users")]
+    [HttpGet("users")]
     // [HasPermission(AppPermission.Tenants.View)]
     [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllUsersInTenantAsync([FromRoute] int id, [FromQuery] UserRequestDto dto)
+    public async Task<IActionResult> GetAllUsersInTenantAsync([FromQuery] UserRequestDto dto)
     {
-        var tenants = await _mediator.Send(new GetAllUsersInTenantQuery(id, dto.Search, dto.Page, dto.Size, dto.Sorting));
+        var tenants = await _mediator.Send(new GetAllUsersInTenantQuery(dto.Search, dto.Page, dto.Size, dto.Sorting));
         return Ok(tenants);
     }
     
