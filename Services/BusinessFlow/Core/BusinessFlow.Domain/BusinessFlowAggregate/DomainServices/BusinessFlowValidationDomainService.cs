@@ -6,10 +6,10 @@ namespace BusinessFlow.Domain.BusinessFlowAggregate.DomainServices;
 
 public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomainService
 {
-    public List<BusinessFlowBlockValidationModel<TKey>> Validate<TKey>(List<BusinessFlowBlockModel<TKey>> blocks
-        , List<BusinessFlowBranchModel<TKey>> branches) where TKey : IEquatable<TKey>
+    public List<BusinessFlowBlockValidationModel> Validate(List<BusinessFlowBlockModel> blocks
+        , List<BusinessFlowBranchModel> branches) 
     {
-        var result = new List<BusinessFlowBlockValidationModel<TKey>>();
+        var result = new List<BusinessFlowBlockValidationModel>();
         
         result.AddRange(ValidateStartBlocks(blocks, branches));
         result.AddRange(ValidateFunctionBlocks(blocks, branches));
@@ -18,10 +18,10 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
         return result;
     }
 
-    private List<BusinessFlowBlockValidationModel<TKey>> ValidateStartBlocks<TKey>(List<BusinessFlowBlockModel<TKey>> blocks
-        , List<BusinessFlowBranchModel<TKey>> branches) where TKey : IEquatable<TKey>
+    private List<BusinessFlowBlockValidationModel> ValidateStartBlocks(List<BusinessFlowBlockModel> blocks
+        , List<BusinessFlowBranchModel> branches)
     {
-        var result = new List<BusinessFlowBlockValidationModel<TKey>>();
+        var result = new List<BusinessFlowBlockValidationModel>();
         
         var startBlocks = blocks
             .Where(x => x.Type == BusinessFlowBlockType.Start)
@@ -32,11 +32,14 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
         var isExceedOneStartBlock = startBlocks.Count > 1;
         foreach (var startBlock in startBlocks)
         {
-            var validation = new BusinessFlowBlockValidationModel<TKey>()
+            var validation = new BusinessFlowBlockValidationModel()
             {
                 Id = startBlock.Id,
                 ErrorMessages = new List<string>()
             };
+            
+            if (startBlock.OutComes.Any())
+                validation.ErrorMessages.Add("Khối bắt đầu không được có kết quả.");
             
             var fromBlockBranches = branches
                 .Where(x => Equals(x.FromBlockId, startBlock.Id))
@@ -61,10 +64,10 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
         return result;
     }
 
-    private List<BusinessFlowBlockValidationModel<TKey>> ValidateEndBlocks<TKey>(List<BusinessFlowBlockModel<TKey>> blocks
-        , List<BusinessFlowBranchModel<TKey>> branches) where TKey : IEquatable<TKey>
+    private List<BusinessFlowBlockValidationModel> ValidateEndBlocks(List<BusinessFlowBlockModel> blocks
+        , List<BusinessFlowBranchModel> branches)
     {
-        var result = new List<BusinessFlowBlockValidationModel<TKey>>();
+        var result = new List<BusinessFlowBlockValidationModel>();
         
         var endBlocks = blocks
             .Where(x => x.Type == BusinessFlowBlockType.End)
@@ -74,11 +77,14 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
         
         foreach (var endBlock in endBlocks)
         {
-            var validation = new BusinessFlowBlockValidationModel<TKey>()
+            var validation = new BusinessFlowBlockValidationModel()
             {
                 Id = endBlock.Id,
                 ErrorMessages = new List<string>()
             };
+            
+            if (endBlock.OutComes.Any())
+                validation.ErrorMessages.Add("Khối kết thúc không được có kết quả.");
             
             var toBlockBranches = branches
                 .Where(x => Equals(x.ToBlockId, endBlock.Id))
@@ -98,10 +104,10 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
         return result;
     }
     
-    private List<BusinessFlowBlockValidationModel<TKey>> ValidateFunctionBlocks<TKey>(List<BusinessFlowBlockModel<TKey>> blocks
-        , List<BusinessFlowBranchModel<TKey>> branches) where TKey : IEquatable<TKey>
+    private List<BusinessFlowBlockValidationModel> ValidateFunctionBlocks(List<BusinessFlowBlockModel> blocks
+        , List<BusinessFlowBranchModel> branches)
     {
-        var result = new List<BusinessFlowBlockValidationModel<TKey>>();
+        var result = new List<BusinessFlowBlockValidationModel>();
         
         var functionBlocks = blocks
             .Where(x => x.Type == BusinessFlowBlockType.Function)
@@ -111,7 +117,7 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
         
         foreach (var functionBlock in functionBlocks)
         {
-            var validation = new BusinessFlowBlockValidationModel<TKey>()
+            var validation = new BusinessFlowBlockValidationModel()
             {
                 Id = functionBlock.Id,
                 ErrorMessages = new List<string>()

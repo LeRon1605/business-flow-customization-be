@@ -1,10 +1,10 @@
 ﻿namespace BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
-public class BusinessFlowBranchModel<TKey> where TKey : IEquatable<TKey>
+public class BusinessFlowBranchModel
 {
-    public TKey? FromBlockId { get; set; }
+    public Guid FromBlockId { get; set; }
     
-    public TKey? ToBlockId { get; set; }
+    public Guid ToBlockId { get; set; }
     
-    public TKey? OutComeId { get; set; }
+    public Guid? OutComeId { get; set; }
 }

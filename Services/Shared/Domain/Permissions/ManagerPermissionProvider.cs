@@ -14,5 +14,11 @@ public static class ManagerPermissionProvider
         AppPermission.Tenants.View,
         AppPermission.Tenants.Edit,
         AppPermission.Tenants.InviteMember,
+        
+        AppPermission.Space.Management,
+        AppPermission.Space.View,
+        AppPermission.Space.Edit,
+        AppPermission.Space.Create,
+        AppPermission.Space.Delete
     };
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore.Common;
@@ -10,13 +11,13 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
     where TEntity : class, IEntity<TKey>
     where TKey : IEquatable<TKey>
 {
-    public EfCoreBasicReadOnlyRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreBasicReadOnlyRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
     }
 
     public IQueryable<TEntity> GetQuery()
     {
-        return DbSet.AsQueryable();
+        return GetBaseQuery();
     }
 
     public async Task<IList<TEntity>> FindByIncludedIdsAsync(IEnumerable<TKey> ids)
@@ -31,6 +32,16 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
                                     .ApplySorting(sorting)
                                     .Build()
                                     .ToListAsync();
+    }
+
+    public async Task<IList<TOut>> FindAllAsync<TOut>(IProjection<TEntity, TKey, TOut> projection, Expression<Func<TEntity, bool>>? expression = null, string? sorting = null)
+    {
+        return await new AppQueryableBuilder<TEntity, TKey>(GetQueryable())
+            .ApplyFilter(expression)
+            .ApplySorting(sorting)
+            .Build()
+            .Select(projection.GetProject())
+            .ToListAsync();
     }
 
     public async Task<IList<TEntity>> GetPagedListAsync(int skip, int take, Expression<Func<TEntity, bool>> expression, string? sorting = null, bool tracking = true, string? includeProps = null)
@@ -109,14 +120,14 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
     
     protected virtual IQueryable<TEntity> GetQueryable(bool tracking = true)
     {
-        return new AppQueryableBuilder<TEntity, TKey>(DbSet, false).Build();
+        return new AppQueryableBuilder<TEntity, TKey>(GetBaseQuery(), false).Build();
     }
 }
 
 public class EfCoreBasicReadOnlyRepository<TEntity> : EfCoreBasicReadOnlyRepository<TEntity, Guid>
     where TEntity : class, IEntity<Guid>
 {
-    public EfCoreBasicReadOnlyRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreBasicReadOnlyRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
     }
 }

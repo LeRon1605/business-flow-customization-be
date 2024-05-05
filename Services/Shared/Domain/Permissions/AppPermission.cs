@@ -47,4 +47,15 @@ public static class AppPermission
         public const string Edit = $"{Group}.Edit";
         public const string InviteMember = $"{Group}.InviteMember";
     }
+    
+    public static class Space
+    {
+        public const string Group = $"{Default}.Space";
+
+        public const string Management = $"{Group}.Management";
+        public const string View = $"{Group}.View";
+        public const string Edit = $"{Group}.Edit";
+        public const string Create = $"{Group}.Create";
+        public const string Delete = $"{Group}.Delete";
+    }
 }

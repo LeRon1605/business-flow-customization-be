@@ -18,6 +18,7 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -72,13 +73,13 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 name: "SpaceMember",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    SpaceId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SpaceId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpaceMember", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_SpaceMember", x => new { x.UserId, x.SpaceId, x.RoleId });
                     table.ForeignKey(
                         name: "FK_SpaceMember_SpaceRole_RoleId",
                         column: x => x.RoleId,
@@ -97,8 +98,7 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 name: "BusinessFlowBlock",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BusinessFlowVersionId = table.Column<int>(type: "int", nullable: false),
                     FormId = table.Column<int>(type: "int", nullable: true),
@@ -119,11 +119,10 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 name: "BusinessFlowOutCome",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BusinessFlowBlockId = table.Column<int>(type: "int", nullable: false)
+                    BusinessFlowBlockId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,9 +141,9 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FromBlockId = table.Column<int>(type: "int", nullable: false),
-                    ToBlockId = table.Column<int>(type: "int", nullable: false),
-                    OutComeId = table.Column<int>(type: "int", nullable: false)
+                    FromBlockId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ToBlockId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OutComeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,8 +162,7 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                         name: "FK_BusinessFlowBranch_BusinessFlowOutCome_OutComeId",
                         column: x => x.OutComeId,
                         principalTable: "BusinessFlowOutCome",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -173,9 +171,9 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BusinessFlowBlockId = table.Column<int>(type: "int", nullable: false),
+                    BusinessFlowBlockId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubmissionId = table.Column<int>(type: "int", nullable: false),
-                    OutComeId = table.Column<int>(type: "int", nullable: true),
+                    OutComeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),

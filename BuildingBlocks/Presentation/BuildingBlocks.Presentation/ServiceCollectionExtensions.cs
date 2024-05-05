@@ -51,7 +51,8 @@ public static class ServiceCollectionExtensions
                 options.Audience = AssemblyHelper.GetServiceName();
                 options.RequireHttpsMetadata = false;
             });
-        builder.Services.AddAuthorization();
+        
+        builder.AddPermissionAuthorization();
 
         return builder;
     }
@@ -87,8 +88,9 @@ public static class ServiceCollectionExtensions
         return builder;
     }
 
-    public static WebApplicationBuilder AddAuthorization(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddPermissionAuthorization(this WebApplicationBuilder builder)
     {
+        builder.Services.AddAuthorization();
         builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
         builder.Services.AddSingleton<IAuthorizationPolicyProvider, ApplicationAuthorizationPolicyProvider>();
         

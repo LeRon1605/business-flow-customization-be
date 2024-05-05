@@ -1,8 +1,10 @@
-﻿using BuildingBlocks.Domain.Models.Interfaces;
+﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Domain.Specifications.Interfaces;
 using BuildingBlocks.Infrastructure.EfCore.Common;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace BuildingBlocks.Infrastructure.EfCore.Repositories;
 
@@ -11,11 +13,13 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
     where TKey : IEquatable<TKey>
 {
     protected readonly DbContext DbContext;
+    protected readonly ICurrentUser CurrentUser;
     protected readonly DbSet<TEntity> DbSet;
     
-    public EfCoreSpecificationRepository(DbContextFactory dbContextFactory)
+    public EfCoreSpecificationRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser)
     {
         DbContext = dbContextFactory.DbContext;
+        CurrentUser = currentUser;
         DbSet = DbContext.Set<TEntity>();
     }
 
@@ -67,19 +71,31 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
     
     protected virtual IQueryable<TEntity> GetQueryable(ISpecification<TEntity, TKey> specification)
     {
-        return SpecificationEvaluator<TEntity, TKey>.GetQuery(DbSet.AsQueryable(), specification);
+        return SpecificationEvaluator<TEntity, TKey>.GetQuery(GetBaseQuery(), specification);
     }
     
     protected virtual IQueryable<TEntity> GetQueryable(IPagingAndSortingSpecification<TEntity, TKey> specification)
     {
-        return SpecificationEvaluator<TEntity, TKey>.GetQuery(DbSet.AsQueryable(), specification);
+        return SpecificationEvaluator<TEntity, TKey>.GetQuery(GetBaseQuery(), specification);
+    }
+    
+    protected virtual IQueryable<TEntity> GetBaseQuery()
+    {
+        var queryable = DbSet.AsQueryable();
+
+        if (typeof(TEntity).IsAssignableTo(typeof(ITenantEntity<TKey>)) && CurrentUser.IsAuthenticated)
+        {
+            queryable = queryable.Where(x => ((ITenantEntity<TKey>)x).TenantId == CurrentUser.TenantId);
+        }
+        
+        return queryable;
     }
 }
 
 public class EfCoreSpecificationRepository<TEntity> : EfCoreSpecificationRepository<TEntity, int>
     where TEntity : class, IEntity
 {
-    public EfCoreSpecificationRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreSpecificationRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
-public class BusinessFlowOutComeModel<TKey> where TKey : IEquatable<TKey>
+public class BusinessFlowOutComeModel
 {
-    public TKey? Id { get; set; }
+    public Guid Id { get; set; }
     
     public string Name { get; set; } = null!;
 

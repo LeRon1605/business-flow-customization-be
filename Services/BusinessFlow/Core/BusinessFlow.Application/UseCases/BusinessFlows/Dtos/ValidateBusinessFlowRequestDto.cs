@@ -3,11 +3,11 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
 namespace BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 
-public class ValidateBusinessFlowDto
+public class ValidateBusinessFlowRequestDto
 {
     [Required] 
-    public List<BusinessFlowBlockModel<string>> Blocks { get; set; } = null!;
+    public List<BusinessFlowBlockModel> Blocks { get; set; } = null!;
 
     [Required] 
-    public List<BusinessFlowBranchModel<string>> Branches { get; set; } = null!;
+    public List<BusinessFlowBranchModel> Branches { get; set; } = null!;
 }

@@ -15,7 +15,7 @@ builder
     .AddSettings()
     .AddEfCore<AppIdentityDbContext>()
     .AddServices()
-    .AddAuthorization()
+    .AddPermissionAuthorization()
     .AddAssemblyMarker(typeof(SharedPresentationAssemblyMarker)
         , typeof(ApplicationAssemblyMarker)
         , typeof(SharedApplicationAssemblyMarker));

@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Infrastructure.EfCore;
+﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
 using Identity.Domain.TenantAggregate;
 using Identity.Domain.TenantAggregate.Entities;
@@ -9,7 +10,7 @@ namespace Identity.Infrastructure.EfCore.Repositories;
 
 public class TenantRepository : EfCoreRepository<Tenant, int>, ITenantRepository
 {
-    public TenantRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public TenantRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
         AddInclude(x => x.Invitations);
         AddInclude(x => x.Users);
@@ -19,8 +20,9 @@ public class TenantRepository : EfCoreRepository<Tenant, int>, ITenantRepository
     {
         var userInTenantQueryable = DbContext.Set<UserInTenant>().Where(x => x.UserId == userId);
         
-        return await DbSet.Where(x => userInTenantQueryable.Any(y => y.TenantId == x.Id))
-                    .ToListAsync();
+        return await GetQueryable()
+            .Where(x => userInTenantQueryable.Any(y => y.TenantId == x.Id))
+            .ToListAsync();
     }
 
     public Task<Tenant?> FindByInvitationTokenAsync(string token)

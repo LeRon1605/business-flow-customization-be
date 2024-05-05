@@ -1,10 +1,12 @@
 ﻿using BuildingBlocks.Domain.Models;
 using BusinessFlow.Domain.BusinessFlowAggregate.Enums;
+using BusinessFlow.Domain.BusinessFlowAggregate.Exceptions;
+using BusinessFlow.Domain.BusinessFlowAggregate.Models;
 using BusinessFlow.Domain.SubmissionExecutionAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
-public class BusinessFlowBlock : Entity
+public class BusinessFlowBlock : Entity<Guid>
 {
     public string Name { get; private set; }
     
@@ -24,10 +26,46 @@ public class BusinessFlowBlock : Entity
     
     public virtual List<BusinessFlowOutCome> OutComes { get; private set; } = new();
     
-    public BusinessFlowBlock(string name, int businessFlowVersionId, BusinessFlowBlockType type)
+    public BusinessFlowBlock(BusinessFlowBlockModel model)
     {
-        Name = name;
-        BusinessFlowVersionId = businessFlowVersionId;
-        Type = type;
+        Id = model.Id;
+        Name = model.Name;
+        Type = model.Type;
+        
+        AddOutComes(model.OutComes);
+    }
+    
+    public void AddOutComes(List<BusinessFlowOutComeModel> outComes)
+    {
+        foreach (var outCome in outComes)
+        {
+            OutComes.Add(new BusinessFlowOutCome(outCome));
+        }
+    }
+    
+    public void AddBranch(BusinessFlowBranch branch)
+    {
+        if (branch.FromBlockId == Id)
+        {
+            if (branch.OutComeId.HasValue)
+            {
+                var outCome = OutComes.FirstOrDefault(o => o.Id == branch.OutComeId);
+                if (outCome == null)
+                {
+                    throw new InvalidBusinessFlowBranchException();
+                }
+            }
+            FromBranches.Add(branch);
+        }
+        
+        if (branch.ToBlockId == Id)
+        {
+            ToBranches.Add(branch);
+        }
+    }
+
+    private BusinessFlowBlock()
+    {
+        
     }
 }

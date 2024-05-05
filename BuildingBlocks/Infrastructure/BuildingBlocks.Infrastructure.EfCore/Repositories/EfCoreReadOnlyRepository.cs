@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Models;
 using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Repositories;
@@ -15,7 +16,7 @@ public class EfCoreReadOnlyRepository<TAggregateRoot, TKey> : EfCoreBasicReadOnl
     private readonly List<Expression<Func<TAggregateRoot, object>>> _defaultIncludeExpressions;
     private readonly List<string> _defaultIncludeStrings;
     
-    public EfCoreReadOnlyRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreReadOnlyRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
         _defaultIncludeExpressions = new();
         _defaultIncludeStrings = new();
@@ -37,7 +38,7 @@ public class EfCoreReadOnlyRepository<TAggregateRoot, TKey> : EfCoreBasicReadOnl
 
     protected override IQueryable<TAggregateRoot> GetQueryable(bool tracking = true)
     {
-        return new AppQueryableBuilder<TAggregateRoot, TKey>(DbSet, true)
+        return new AppQueryableBuilder<TAggregateRoot, TKey>(GetBaseQuery(), true)
             .IncludeProp(_defaultIncludeExpressions)
             .IncludeProp(_defaultIncludeStrings)
             .Build();
@@ -45,7 +46,7 @@ public class EfCoreReadOnlyRepository<TAggregateRoot, TKey> : EfCoreBasicReadOnl
 
     protected override IQueryable<TAggregateRoot> GetQueryable(ISpecification<TAggregateRoot, TKey> specification)
     {
-        var specificationQueryable = SpecificationEvaluator<TAggregateRoot, TKey>.GetQuery(DbSet.AsQueryable(), specification);
+        var specificationQueryable = SpecificationEvaluator<TAggregateRoot, TKey>.GetQuery(GetBaseQuery(), specification);
         return new AppQueryableBuilder<TAggregateRoot, TKey>(specificationQueryable)
             .IncludeProp(_defaultIncludeStrings)
             .IncludeProp(_defaultIncludeExpressions)
@@ -56,7 +57,7 @@ public class EfCoreReadOnlyRepository<TAggregateRoot, TKey> : EfCoreBasicReadOnl
 public class EfCoreReadOnlyRepository<TAggregateRoot> : EfCoreReadOnlyRepository<TAggregateRoot, int>
     where TAggregateRoot : AggregateRoot
 {
-    public EfCoreReadOnlyRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreReadOnlyRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
     }
 }

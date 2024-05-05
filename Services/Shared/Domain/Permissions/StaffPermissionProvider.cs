@@ -6,5 +6,8 @@ public static class StaffPermissionProvider
     {
         AppPermission.Users.ViewProfile,
         AppPermission.Tenants.View,
+        
+        AppPermission.Space.Management,
+        AppPermission.Space.View
     };
 }

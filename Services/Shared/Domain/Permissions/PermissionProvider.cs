@@ -24,6 +24,12 @@ public class PermissionProvider
         { AppPermission.Tenants.Management, "Quản lý doanh nghiệp" },
         { AppPermission.Tenants.View, "Xem thông tin doanh nghiệp" },
         { AppPermission.Tenants.Edit, "Cập nhật thông tin doanh nghiệp" },
-        { AppPermission.Tenants.InviteMember, "Mời thành viên vào doanh nghiệp" }
+        { AppPermission.Tenants.InviteMember, "Mời thành viên vào doanh nghiệp" },
+        
+        { AppPermission.Space.Management, "Quản lý không gian" },
+        { AppPermission.Space.View, "Xem thông tin không gian" },
+        { AppPermission.Space.Edit, "Cập nhật thông tin không gian" },
+        { AppPermission.Space.Create, "Tạo không gian" },
+        { AppPermission.Space.Delete, "Xóa không gian" }
     };
 }

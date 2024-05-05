@@ -1,25 +1,31 @@
 ﻿using BuildingBlocks.Domain.Models;
+using BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
 public class BusinessFlowBranch : Entity
 {
-    public int FromBlockId { get; private set; }
+    public Guid FromBlockId { get; private set; }
     
-    public int ToBlockId { get; private set; }
+    public Guid ToBlockId { get; private set; }
     
-    public int OutComeId { get; private set; }
+    public Guid? OutComeId { get; private set; }
 
-    public virtual BusinessFlowOutCome OutCome { get; private set; } = null!;
+    public virtual BusinessFlowOutCome? OutCome { get; private set; }
     
     public virtual BusinessFlowBlock FromBlock { get; private set; } = null!;
     
     public virtual BusinessFlowBlock ToBlock { get; private set; } = null!;
-    
-    public BusinessFlowBranch(int fromBlockId, int toBlockId, int outComeId)
+
+    public BusinessFlowBranch(BusinessFlowBranchModel model)
     {
-        FromBlockId = fromBlockId;
-        ToBlockId = toBlockId;
-        OutComeId = outComeId;
+        FromBlockId = model.FromBlockId;
+        ToBlockId = model.ToBlockId;
+        OutComeId = model.OutComeId;
+    }
+
+    private BusinessFlowBranch()
+    {
+        
     }
 }

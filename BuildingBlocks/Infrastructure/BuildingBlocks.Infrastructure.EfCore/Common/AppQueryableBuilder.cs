@@ -11,9 +11,9 @@ public class AppQueryableBuilder<TEntity, TKey>
 {
     private IQueryable<TEntity> _queryable;
 
-    public AppQueryableBuilder(DbSet<TEntity> dbSet, bool tracking)
+    public AppQueryableBuilder(IQueryable<TEntity> queryable, bool tracking = true)
     {
-        _queryable = tracking ? dbSet.AsQueryable() : dbSet.AsNoTracking();
+        _queryable = tracking ? queryable.AsQueryable() : queryable.AsNoTracking();
     }
 
     public AppQueryableBuilder(IQueryable<TEntity> queryable)

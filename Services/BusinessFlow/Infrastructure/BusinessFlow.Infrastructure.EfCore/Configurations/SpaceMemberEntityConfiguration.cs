@@ -8,7 +8,7 @@ public class SpaceMemberEntityConfiguration : IEntityTypeConfiguration<SpaceMemb
 {
     public void Configure(EntityTypeBuilder<SpaceMember> builder)
     {
-        builder.HasKey(x => new { x.UserId, x.RoleId });
+        builder.HasKey(x => new { x.UserId, x.SpaceId, x.RoleId });
         
         builder.HasOne(x => x.Space)
             .WithMany(x => x.Members)

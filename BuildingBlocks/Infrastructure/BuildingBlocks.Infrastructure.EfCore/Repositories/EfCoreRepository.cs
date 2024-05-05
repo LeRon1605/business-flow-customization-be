@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Domain.Models.Interfaces;
+﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ public class EfCoreRepository<TAggregateRoot, TKey> : EfCoreReadOnlyRepository<T
     where TAggregateRoot : class, IAggregateRoot<TKey>
     where TKey : IEquatable<TKey>
 {
-    public EfCoreRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
     }
 
@@ -41,7 +42,7 @@ public class EfCoreRepository<TAggregateRoot, TKey> : EfCoreReadOnlyRepository<T
 public class EfCoreRepository<TAggregateRoot> : EfCoreRepository<TAggregateRoot, int>
     where TAggregateRoot : class, IAggregateRoot
 {
-    public EfCoreRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public EfCoreRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
-public class BusinessFlowBlockValidationModel<TKey> where TKey : IEquatable<TKey>
+public class BusinessFlowBlockValidationModel
 {
-    public TKey? Id { get; set; }
+    public Guid Id { get; set; }
 
     public List<string> ErrorMessages { get; set; } = new();
 }

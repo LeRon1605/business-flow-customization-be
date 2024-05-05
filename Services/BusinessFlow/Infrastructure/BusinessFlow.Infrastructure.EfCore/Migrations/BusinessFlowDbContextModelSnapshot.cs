@@ -24,11 +24,9 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BusinessFlowVersionId")
                         .HasColumnType("int");
@@ -58,14 +56,14 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FromBlockId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FromBlockId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("OutComeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("OutComeId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ToBlockId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ToBlockId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -80,14 +78,12 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowOutCome", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BusinessFlowBlockId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BusinessFlowBlockId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -158,6 +154,10 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -178,16 +178,16 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
             modelBuilder.Entity("BusinessFlow.Domain.SpaceAggregate.Entities.SpaceMember", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SpaceId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SpaceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "SpaceId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -221,8 +221,8 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BusinessFlowBlockId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BusinessFlowBlockId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -236,8 +236,8 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OutComeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("OutComeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SubmissionId")
                         .HasColumnType("int");
@@ -274,9 +274,7 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
                     b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowOutCome", "OutCome")
                         .WithMany("Branches")
-                        .HasForeignKey("OutComeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OutComeId");
 
                     b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", "ToBlock")
                         .WithMany("ToBranches")

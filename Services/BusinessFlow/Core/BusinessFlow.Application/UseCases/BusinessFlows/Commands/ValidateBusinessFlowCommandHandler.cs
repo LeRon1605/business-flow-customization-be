@@ -4,7 +4,7 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
 namespace BusinessFlow.Application.UseCases.BusinessFlows.Commands;
 
-public class ValidateBusinessFlowCommandHandler : ICommandHandler<ValidateBusinessFlowCommand, List<BusinessFlowBlockValidationModel<string>>>
+public class ValidateBusinessFlowCommandHandler : ICommandHandler<ValidateBusinessFlowCommand, List<BusinessFlowBlockValidationModel>>
 {
     private readonly IBusinessFlowValidationDomainService _businessFlowValidationDomainService;
     
@@ -13,7 +13,7 @@ public class ValidateBusinessFlowCommandHandler : ICommandHandler<ValidateBusine
         _businessFlowValidationDomainService = businessFlowValidationDomainService;
     }
 
-    public async Task<List<BusinessFlowBlockValidationModel<string>>> Handle(ValidateBusinessFlowCommand request, CancellationToken cancellationToken)
+    public async Task<List<BusinessFlowBlockValidationModel>> Handle(ValidateBusinessFlowCommand request, CancellationToken cancellationToken)
     {
         return _businessFlowValidationDomainService.Validate(request.Blocks, request.Branches);
     }

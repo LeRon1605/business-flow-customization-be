@@ -4,7 +4,7 @@ namespace BusinessFlow.Domain.SpaceAggregate.Entities;
 
 public record SpaceMember : ValueObject
 {
-    public int UserId { get; private set; }
+    public string UserId { get; private set; }
     
     public int SpaceId { get; private set; }
     
@@ -14,11 +14,10 @@ public record SpaceMember : ValueObject
     
     public virtual SpaceRole Role { get; private set; } = null!;
     
-    public SpaceMember(int userId, int spaceId, int roleId)
+    public SpaceMember(string userId, Enums.SpaceRole role)
     {
         UserId = userId;
-        SpaceId = spaceId;
-        RoleId = roleId;
+        RoleId = (int)role;
     }
     
     private SpaceMember()

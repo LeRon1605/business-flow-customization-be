@@ -13,8 +13,8 @@ builder.Configuration.AddSharedConfiguration();
 
 builder
     .AddCommonServices()
-    .AddApplicationAuth()
     .AddSharedServices()
+    .AddApplicationAuth()
     .AddEfCore<BusinessFlowDbContext>()
     .AddAssemblyMarker(typeof(ApplicationAssemblyMarker)
         , typeof(BuildingBlockApplicationAssemblyMarker)

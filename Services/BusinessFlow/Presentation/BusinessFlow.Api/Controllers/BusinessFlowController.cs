@@ -18,10 +18,10 @@ public class BusinessFlowController : ControllerBase
     }
     
     [HttpPost("validate")]
-    [ProducesResponseType(typeof(List<BusinessFlowBlockValidationModel<string>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ValidateBusinessFlow([FromBody] ValidateBusinessFlowDto dto)
+    [ProducesResponseType(typeof(List<BusinessFlowBlockValidationModel>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ValidateBusinessFlow([FromBody] ValidateBusinessFlowRequestDto requestDto)
     {
-        var result = await _mediator.Send(new ValidateBusinessFlowCommand(dto.Blocks, dto.Branches));
+        var result = await _mediator.Send(new ValidateBusinessFlowCommand(requestDto.Blocks, requestDto.Branches));
         return Ok(result);
     }
 }

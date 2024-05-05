@@ -2,13 +2,13 @@
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
-public class BusinessFlowBlockModel<TKey> where TKey : IEquatable<TKey>
+public class BusinessFlowBlockModel
 {
-    public TKey? Id { get; set; }
+    public Guid Id { get; set; }
     
     public string Name { get; set; } = null!;
     
     public BusinessFlowBlockType Type { get; set; }
 
-    public List<BusinessFlowOutComeModel<TKey>> OutComes { get; set; } = new();
+    public List<BusinessFlowOutComeModel> OutComes { get; set; } = new();
 }

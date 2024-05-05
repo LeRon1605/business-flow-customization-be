@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Infrastructure.EfCore;
+﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
 using Identity.Domain.RoleAggregate.Entities;
 using Identity.Domain.UserAggregate;
@@ -9,7 +10,7 @@ namespace Identity.Infrastructure.EfCore.Repositories;
 
 public class UserRepository : EfCoreRepository<ApplicationUser, string>, IUserRepository
 {
-    public UserRepository(DbContextFactory dbContextFactory) : base(dbContextFactory)
+    public UserRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
         AddInclude(x => x.RefreshToken);
         AddInclude(x => x.Tenants);
