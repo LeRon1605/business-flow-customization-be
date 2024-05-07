@@ -4,7 +4,6 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Exceptions;
 using BusinessFlow.Domain.BusinessFlowAggregate.Models;
 using BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
 using BusinessFlow.Domain.SpaceAggregate.Entities;
-using BusinessFlow.Domain.SpaceAggregate.Exceptions;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.DomainServices;
 
@@ -20,23 +19,20 @@ public class BusinessFlowDomainService : IBusinessFlowDomainService
         _businessFlowValidationDomainService = businessFlowValidationDomainService;
     }
     
-    public async Task CreateAsync(Space space, List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)
+    public async Task<BusinessFlowVersion> CreateAsync(Space space, BusinessFlowModel businessFlow)
     {
-        if (space.BusinessFlowVersions.Any())
-        {
-            throw new SpaceBusinessFlowAlreadyCreatedException(space.Id);
-        }
-        
-        var isValid = ValidateBusinessFlow(blocks, branches);
+        var isValid = ValidateBusinessFlow(businessFlow.Blocks, businessFlow.Branches);
         if (!isValid)
         {
             throw new InvalidBusinessFlowException();
         }
         
-        var businessFlowVersion = new BusinessFlowVersion(blocks, branches);
+        var businessFlowVersion = new BusinessFlowVersion(businessFlow.Blocks, businessFlow.Branches);
         space.AddBusinessFlowVersion(businessFlowVersion);
         
         await _businessFlowVersionRepository.InsertAsync(businessFlowVersion);
+
+        return businessFlowVersion;
     }
     
     private bool ValidateBusinessFlow(List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)

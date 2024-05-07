@@ -20,6 +20,7 @@ public static class ErrorCodes
 
     public const string InvalidBusinessFlowBranch = "BusinessFlow:000001";
     public const string InvalidBusinessFlow = "BusinessFlow:000002";
+    public const string BusinessFlowNotFound = "BusinessFlow:000003";
 
     #endregion
 }

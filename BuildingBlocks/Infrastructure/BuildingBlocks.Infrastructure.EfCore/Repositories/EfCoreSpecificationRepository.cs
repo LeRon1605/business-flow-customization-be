@@ -23,6 +23,11 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
         DbSet = DbContext.Set<TEntity>();
     }
 
+    public IQueryable<TEntity> GetQuery(ISpecification<TEntity, TKey> specification)
+    {
+        return GetQueryable(specification);
+    }
+    
     public async Task<IList<TEntity>> FilterAsync(ISpecification<TEntity, TKey> specification)
     {
         return await GetQueryable(specification).ToListAsync();
@@ -52,6 +57,11 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
     public Task<TEntity?> FindAsync(ISpecification<TEntity, TKey> specification)
     {
         return GetQueryable(specification).FirstOrDefaultAsync();
+    }
+
+    public Task<TOut?> FindAsync<TOut>(ISpecification<TEntity, TKey> specification, IProjection<TEntity, TKey, TOut> projection)
+    {
+        return GetQueryable(specification).Select(projection.GetProject()).FirstOrDefaultAsync();
     }
 
     public Task<int> GetCountAsync(ISpecification<TEntity, TKey> specification)

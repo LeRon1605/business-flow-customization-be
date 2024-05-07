@@ -15,6 +15,7 @@ public static class ServiceCollectionExtension
     {
         services.AddDbContext<TDbContext>(options =>
         {
+            options.EnableSensitiveDataLogging();
             options.UseSqlServer(configuration.GetConnectionString("Default"));
         });
 

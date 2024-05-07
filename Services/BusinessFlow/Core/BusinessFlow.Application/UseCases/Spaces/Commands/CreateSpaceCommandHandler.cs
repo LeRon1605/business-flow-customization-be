@@ -2,6 +2,7 @@
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Application.Identity;
 using BusinessFlow.Domain.BusinessFlowAggregate.DomainServices.Interfaces;
+using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.SpaceAggregate.DomainServices;
 using Microsoft.Extensions.Logging;
 
@@ -32,7 +33,7 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
     {
         var space = await _spaceDomainService.CreateAsync(request.Name, request.Description, request.Color, _currentUser.Id);
 
-        await _businessFlowDomainService.CreateAsync(space, request.Blocks, request.Branches);
+        await _businessFlowDomainService.CreateAsync(space, new BusinessFlowModel(request.Blocks, request.Branches));
         
         await _unitOfWork.CommitAsync();
         
