@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Domain.Services;
 using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
+using BusinessFlow.Domain.BusinessFlowAggregate.Models;
 using BusinessFlow.Domain.SpaceAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.DomainServices.Interfaces;

@@ -1,6 +1,4 @@
-﻿using BusinessFlow.Domain.BusinessFlowAggregate.Models;
-
-namespace BusinessFlow.Domain.BusinessFlowAggregate.Entities;
+﻿namespace BusinessFlow.Domain.BusinessFlowAggregate.Models;
 
 public class BusinessFlowModel
 {
