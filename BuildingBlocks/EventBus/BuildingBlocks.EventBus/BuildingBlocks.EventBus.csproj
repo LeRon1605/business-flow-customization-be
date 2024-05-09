@@ -11,6 +11,7 @@
       <PackageReference Include="MassTransit" Version="8.2.1-develop.1720" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\Core\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
       <ProjectReference Include="..\..\Core\BuildingBlocks.Kernel\BuildingBlocks.Kernel.csproj" />
     </ItemGroup>
     

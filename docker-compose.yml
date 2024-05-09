@@ -74,6 +74,25 @@
         condition: service_started
       rabbitmq:
         condition: service_healthy
+        
+  submission:
+    image: submission
+    build:
+      context: .
+      dockerfile: Services/Submission/Presentation/Submission.Api/Dockerfile
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      db:
+        condition: service_started
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     
     
   seq:

@@ -62,6 +62,7 @@ public static class ServiceCollectionExtensions
         builder.Services.AddMediatr();
         builder.Services.AddApplicationMapper();
         builder.Services.AddDataSeeder();
+        builder.Services.AddPersistedDomainEventHandlers();
         
         return builder;
     }

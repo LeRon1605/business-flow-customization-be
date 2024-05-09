@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Infrastructure\BuildingBlocks.Infrastructure.EfCore\BuildingBlocks.Infrastructure.EfCore.csproj" />
+      <ProjectReference Include="..\Core\Submission.Application\Submission.Application.csproj" />
+    </ItemGroup>
+
+
+
+</Project>

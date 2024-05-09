@@ -1,36 +1,34 @@
-﻿using BuildingBlocks.Application.MailSender;
-using BuildingBlocks.EventBus.Abstracts;
+﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Application.MailSender;
+using BuildingBlocks.EventBus;
 using Hub.Application.MailSender;
 using IntegrationEvents.Hub;
-using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace Hub.IntegrationEventHandlers.Handlers;
 
-public class EmailSenderIntegrationEventHandler : IIntegrationEventHandler<EmailSenderIntegrationEvent>
+public class EmailSenderIntegrationEventHandler : IntegrationEventHandler<EmailSenderIntegrationEvent>
 {
     private readonly IEmailSender _emailSender;
     private readonly IEmailTemplateGenerator _emailTemplateGenerator;
-    private readonly ILogger<EmailSenderIntegrationEventHandler> _logger;
 
     public EmailSenderIntegrationEventHandler(IEmailSender emailSender
         , IEmailTemplateGenerator emailTemplateGenerator
-        , ILogger<EmailSenderIntegrationEventHandler> logger)
+        , IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _emailSender = emailSender;
         _emailTemplateGenerator = emailTemplateGenerator;
-        _logger = logger;
     }
-    
-    public async Task Consume(ConsumeContext<EmailSenderIntegrationEvent> context)
+
+    public override async Task HandleAsync(EmailSenderIntegrationEvent @event)
     {
-        _logger.LogInformation("Received email sender integration event: {Event}", context.Message.Subject);
+        Logger.LogInformation("Received email sender integration event: {Event}", @event.Subject);
         
         var emailMessage = new EmailMessage
         {
-            ToAddress = context.Message.ToAddress,
-            Subject = context.Message.Subject,
-            Body = _emailTemplateGenerator.GenerateEmailBody(context.Message.TemplateName, context.Message.Data)
+            ToAddress = @event.ToAddress,
+            Subject = @event.Subject,
+            Body = _emailTemplateGenerator.GenerateEmailBody(@event.TemplateName, @event.Data)
         };
 
         await _emailSender.SendAsync(emailMessage);

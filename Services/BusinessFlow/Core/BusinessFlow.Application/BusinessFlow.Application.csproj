@@ -8,7 +8,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Application\Application.csproj" />
+      <ProjectReference Include="..\..\..\Shared\IntegrationEvents\IntegrationEvents.csproj" />
       <ProjectReference Include="..\BusinessFlow.Domain\BusinessFlow.Domain.csproj" />
+
 
 
 

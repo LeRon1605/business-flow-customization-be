@@ -1,8 +1,8 @@
-﻿using BuildingBlocks.EventBus.Abstracts;
+﻿using BuildingBlocks.EventBus;
 
 namespace IntegrationEvents.Hub;
 
-public class EmailSenderIntegrationEvent : IIntegrationEvent
+public class EmailSenderIntegrationEvent : IntegrationEvent
 {
     public string Subject { get; set; }
     public string ToAddress { get; set; }

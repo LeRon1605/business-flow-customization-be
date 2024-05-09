@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Models;
+using BusinessFlow.Domain.BusinessFlowAggregate.DomainEvents;
 using BusinessFlow.Domain.BusinessFlowAggregate.Enums;
 using BusinessFlow.Domain.BusinessFlowAggregate.Exceptions;
 using BusinessFlow.Domain.BusinessFlowAggregate.Models;
@@ -21,6 +22,8 @@ public class BusinessFlowVersion : AuditableTenantAggregateRoot
         Status = BusinessFlowStatus.Published;
         AddBlocks(blocks);
         AddBranches(branches);
+        
+        AddDomainEvent(new BusinessFlowVersionCreatedDomainEvent(this));
     }
 
     public void AddBlocks(List<BusinessFlowBlockModel> blocks)

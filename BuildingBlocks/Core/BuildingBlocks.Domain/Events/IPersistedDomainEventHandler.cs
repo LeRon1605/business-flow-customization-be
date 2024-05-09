@@ -1,8 +1,11 @@
-﻿using BuildingBlocks.Domain.Events;
+﻿namespace BuildingBlocks.Domain.Events;
 
-namespace ServeSync.Domain.SeedWorks.Events;
+public interface IPersistedDomainEventHandler
+{
+    
+}
 
-public interface IPersistedDomainEventHandler<in TEvent> where TEvent : IDomainEvent
+public interface IPersistedDomainEventHandler<in TEvent> : IPersistedDomainEventHandler where TEvent : IDomainEvent
 {
     Task Handle(TEvent @event, CancellationToken cancellationToken);
 }

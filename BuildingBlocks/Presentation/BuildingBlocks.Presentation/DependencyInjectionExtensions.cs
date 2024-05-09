@@ -2,6 +2,8 @@
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Application.Mappers;
+using BuildingBlocks.Domain.Events;
+using BuildingBlocks.Domain.Services;
 using BuildingBlocks.Shared.Extensions;
 using BuildingBlocks.Shared.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -106,6 +108,33 @@ public static class DependencyInjectionExtensions
             services.AddAutoMapper(assembly);
         }
         
+        return services;
+    }
+    
+    public static IServiceCollection AddPersistedDomainEventHandlers(this IServiceCollection services)
+    {
+        var assemblies = AssemblyHelper.GetReferencedAssembliesByType(typeof(IDomainEvent));
+        var handlerAssemblies = AssemblyHelper.GetReferencedAssembliesByType(typeof(IPersistedDomainEventHandler));
+        
+        var domainEventTypes = assemblies.SelectMany(x => x.GetTypes())
+            .Where(x => typeof(IDomainEvent).IsAssignableFrom(x))
+            .ToList();
+        
+        foreach (var domainEventType in domainEventTypes)
+        {
+            var handlerType = typeof(IPersistedDomainEventHandler<>).MakeGenericType(domainEventType);
+            var handlers = handlerAssemblies
+                .SelectMany(x => x.GetTypes())
+                .Where(x => !x.IsInterface
+                            && !x.IsAbstract 
+                            && handlerType.IsAssignableFrom(x));
+
+            foreach (var handler in handlers)
+            {
+                services.AddScoped(handlerType, handler);
+            }
+        }
+
         return services;
     }
 }
