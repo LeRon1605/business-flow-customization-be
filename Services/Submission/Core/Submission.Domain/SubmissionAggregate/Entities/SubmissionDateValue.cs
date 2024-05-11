@@ -1,21 +1,25 @@
 ﻿using BuildingBlocks.Domain.Models;
+using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
 
-public class SubmissionDateValue : AuditableEntity
+public class SubmissionDateValue : AuditableEntity, ISubmissionField
 {
-    public int SubmissionId { get; private set; }
+    public int SubmissionId { get; set; }
     
-    public int ElementId { get; private set; }
+    public int ElementId { get; set; }
     
-    public DateTime Value { get; private set; }
+    public DateTime? Value { get; private set; }
 
     public virtual FormSubmission Submission { get; private set; } = null!;
     
-    public SubmissionDateValue(int submissionId, int elementId, DateTime value)
+    public SubmissionDateValue(int elementId)
     {
-        SubmissionId = submissionId;
         ElementId = elementId;
+    }
+    
+    public SubmissionDateValue(int elementId, DateTime value) : this(elementId)
+    {
         Value = value;
     }
 

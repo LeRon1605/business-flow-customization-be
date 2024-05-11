@@ -1,22 +1,40 @@
 ﻿using BuildingBlocks.Domain.Models;
+using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
 
-public class SubmissionOptionField : AuditableEntity
+public class SubmissionOptionField : AuditableEntity, ISubmissionField
 {
-    public int SubmissionId { get; private set; }
+    public int SubmissionId { get; set; }
     
-    public int ElementId { get; private set; }
+    public int ElementId { get; set; }
     
     public virtual FormSubmission Submission { get; private set; } = null!;
     
     public virtual List<SubmissionOptionFieldValue> Values { get; private set; } = new();
-
-    public SubmissionOptionField(int submissionId, int elementId)
+    
+    public SubmissionOptionField(int elementId)
     {
-        SubmissionId = submissionId;
         ElementId = elementId;
     }
+
+    public SubmissionOptionField(int elementId, int[] optionIds) : this(elementId)
+    {
+        AddSelectedOptions(optionIds);
+    }
+    
+    public void AddSelectedOptions(int[] optionIds)
+    {
+        foreach (var optionId in optionIds)
+        {
+            var isExisted = Values.Any(x => x.OptionId == optionId);
+            if (isExisted)
+                continue;
+            
+            Values.Add(new SubmissionOptionFieldValue(optionId));
+        }
+    }
+
 
     private SubmissionOptionField()
     {

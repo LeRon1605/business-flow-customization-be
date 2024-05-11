@@ -8,13 +8,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Domain\Domain.csproj" />
+
+
+
+
     </ItemGroup>
 
 
 
 
-    <ItemGroup>
-      <Folder Include="SubmissionAggregate\DomainServices\" />
-    </ItemGroup>
+
 
 </Project>

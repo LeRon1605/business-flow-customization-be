@@ -12,9 +12,8 @@ public class SubmissionAttachmentValue : Entity
     
     public virtual SubmissionAttachmentField Field { get; private set; } = null!;
     
-    public SubmissionAttachmentValue(int submissionFieldId, string fileName, string fileUrl)
+    public SubmissionAttachmentValue(string fileName, string fileUrl)
     {
-        SubmissionFieldId = submissionFieldId;
         FileName = fileName;
         FileUrl = fileUrl;
     }

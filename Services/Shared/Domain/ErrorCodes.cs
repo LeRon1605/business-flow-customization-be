@@ -23,4 +23,10 @@ public static class ErrorCodes
     public const string BusinessFlowNotFound = "BusinessFlow:000003";
 
     #endregion
+
+    #region Submission
+
+    public const string InvalidSubmissionFieldValue = "Submission:000001";
+
+    #endregion
 }

@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Models;
+using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
 
@@ -25,6 +26,32 @@ public class FormSubmission : AuditableTenantAggregateRoot
         Name = name;
         FormVersionId = formVersionId;
         BusinessFlowVersionId = businessFlowVersionId;
+    }
+    
+    public void AddField(ISubmissionField field)
+    {
+        switch (field)
+        {
+            case SubmissionNumberValue numberField:
+                NumberFields.Add(numberField);
+                break;
+            
+            case SubmissionTextValue textField:
+                TextFields.Add(textField);
+                break;
+            
+            case SubmissionOptionField optionField:
+                OptionFields.Add(optionField);
+                break;
+            
+            case SubmissionDateValue dateField:
+                DateFields.Add(dateField);
+                break;
+            
+            case SubmissionAttachmentField attachmentField:
+                AttachmentFields.Add(attachmentField);
+                break;
+        }
     }
 
     private FormSubmission()

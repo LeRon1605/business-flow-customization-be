@@ -10,9 +10,8 @@ public class SubmissionOptionFieldValue : Entity
 
     public virtual SubmissionOptionField Field { get; private set; } = null!;
     
-    public SubmissionOptionFieldValue(int submissionFieldId, int optionId)
+    public SubmissionOptionFieldValue(int optionId)
     {
-        SubmissionFieldId = submissionFieldId;
         OptionId = optionId;
     }
     
