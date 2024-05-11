@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.Extensions.DependencyInjection;
-using Submission.Domain.FormElementAggregate.Enums;
+using Submission.Domain.FormAggregate.Enums;
 using Submission.Domain.SubmissionAggregate.DomainServices.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.DomainServices;

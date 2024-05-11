@@ -1,4 +1,4 @@
-﻿namespace Submission.Domain.FormElementAggregate.Enums;
+﻿namespace Submission.Domain.FormAggregate.Enums;
 
 public enum FormElementType
 {
