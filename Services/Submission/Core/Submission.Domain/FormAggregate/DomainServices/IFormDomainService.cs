@@ -7,4 +7,6 @@ namespace Submission.Domain.FormAggregate.DomainServices;
 public interface IFormDomainService : IDomainService
 {
     Task<Form> CreateAsync(int spaceId, FormModel formModel);
+    
+    Task<FormVersion> UpdateAsync(Form form, FormModel formModel);
 }

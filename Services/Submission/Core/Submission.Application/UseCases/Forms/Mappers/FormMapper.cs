@@ -8,9 +8,9 @@ public class FormMapper : MappingProfile
 {
     public FormMapper()
     {
-        CreateMap<CreateFormRequestDto, FormModel>();
+        CreateMap<FormRequestDto, FormModel>();
         CreateMap<FormElementRequestDto, FormElementModel>();
-        CreateMap<FormElementSettingDto, FormElementSettingModel>();
-        CreateMap<OptionFormElementSettingDto, OptionFormElementSettingModel>();
+        CreateMap<FormElementSettingRequestDto, FormElementSettingModel>();
+        CreateMap<OptionFormElementSettingRequestDto, OptionFormElementSettingModel>();
     }
 }

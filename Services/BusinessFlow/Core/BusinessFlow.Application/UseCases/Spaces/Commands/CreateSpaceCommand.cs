@@ -11,14 +11,14 @@ public class CreateSpaceCommand : ICommand<int>
     public string Color { get; set; }
     public List<BusinessFlowBlockModel> Blocks { get; set; }
     public List<BusinessFlowBranchModel> Branches { get; set; }
-    public CreateFormRequestDto Form { get; set; }
+    public FormRequestDto Form { get; set; }
     
     public CreateSpaceCommand(string name
         , string description
         , string color
         , List<BusinessFlowBlockModel> blocks
         , List<BusinessFlowBranchModel> branches
-        , CreateFormRequestDto form)
+        , FormRequestDto form)
     {
         Name = name;
         Description = description;

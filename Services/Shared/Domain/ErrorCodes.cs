@@ -34,6 +34,8 @@ public static class ErrorCodes
 
     public const string SpaceFormAlreadyExisted = "Form:000001";
     public const string InvalidFormElementSetting = "Form:000002";
+    public const string FormNotFound = "Form:000003";
+    public const string FormVersionNotFound = "Form:000004";
 
     #endregion
 }

@@ -5,5 +5,5 @@ namespace BusinessFlow.Application.Clients.Abstracts;
 
 public interface ISubmissionClient : IRestSharpClient
 {
-    Task CreateFormAsync(int spaceId, CreateFormRequestDto createFormDto);
+    Task CreateFormAsync(int spaceId, FormRequestDto formDto);
 }

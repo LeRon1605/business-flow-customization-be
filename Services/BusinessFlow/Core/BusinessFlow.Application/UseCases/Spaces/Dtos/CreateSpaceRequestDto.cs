@@ -19,5 +19,5 @@ public class CreateSpaceRequestDto
     public CreateBusinessFlowRequestDto BusinessFlow { get; set; } = null!;
     
     [Required]
-    public CreateFormRequestDto Form { get; set; } = null!;
+    public FormRequestDto Form { get; set; } = null!;
 }

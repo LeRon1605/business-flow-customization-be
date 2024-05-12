@@ -8,8 +8,7 @@ public class FormElementRequestDto
     [Required]
     public string Name { get; set; } = null!;
     
-    [Required]
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; }
     
     [Required]
     public FormElementType Type { get; set; }
@@ -17,12 +16,12 @@ public class FormElementRequestDto
     [Required]
     public double Index { get; set; }
     
-    public List<FormElementSettingDto> Settings { get; set; } = new();
+    public List<FormElementSettingRequestDto> Settings { get; set; } = new();
     
-    public List<OptionFormElementSettingDto> Options { get; set; } = new();
+    public List<OptionFormElementSettingRequestDto> Options { get; set; } = new();
 }
 
-public class FormElementSettingDto
+public class FormElementSettingRequestDto
 {
     [Required]
     public FormElementSettingType Type { get; set; }
@@ -31,7 +30,7 @@ public class FormElementSettingDto
     public string Value { get; set; } = null!;
 }
 
-public class OptionFormElementSettingDto
+public class OptionFormElementSettingRequestDto
 {
     [Required]
     public string Name { get; set; } = null!;

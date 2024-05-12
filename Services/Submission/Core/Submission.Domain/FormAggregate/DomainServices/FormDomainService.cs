@@ -32,4 +32,16 @@ public class FormDomainService : IFormDomainService
         
         return form;
     }
+
+    public async Task<FormVersion> UpdateAsync(Form form, FormModel formModel)
+    {
+        form.Update(formModel.Name, formModel.CoverImageUrl);
+        
+        var formVersion = new FormVersion(formModel.Elements);
+        form.AddVersion(formVersion);
+        
+        _formRepository.Update(form);
+        
+        return formVersion;
+    }
 }

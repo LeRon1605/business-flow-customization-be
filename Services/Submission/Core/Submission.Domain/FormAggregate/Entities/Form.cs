@@ -24,6 +24,12 @@ public class Form : AuditableTenantAggregateRoot
         Versions.Add(formVersion);
     }
     
+    public void Update(string name, string coverImageUrl)
+    {
+        Name = name;
+        CoverImageUrl = coverImageUrl;
+    }
+    
     private Form()
     {
     }

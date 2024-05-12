@@ -12,10 +12,10 @@ public class SubmissionClient : RestSharpClient, ISubmissionClient
     {
     }
     
-    public async Task CreateFormAsync(int spaceId, CreateFormRequestDto createFormDto)
+    public async Task CreateFormAsync(int spaceId, FormRequestDto formDto)
     {
         var request = new RestRequest($"spaces/{spaceId}/forms", Method.Post);
-        request.AddJsonBody(createFormDto);
+        request.AddJsonBody(formDto);
         
         await PostAsync(request);
     }

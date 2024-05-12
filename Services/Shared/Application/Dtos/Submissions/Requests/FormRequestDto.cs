@@ -2,7 +2,7 @@
 
 namespace Application.Dtos.Submissions.Requests;
 
-public class CreateFormRequestDto
+public class FormRequestDto
 {
     [Required]
     public string Name { get; set; } = null!;
