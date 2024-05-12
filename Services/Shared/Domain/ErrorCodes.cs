@@ -29,4 +29,11 @@ public static class ErrorCodes
     public const string InvalidSubmissionFieldValue = "Submission:000001";
 
     #endregion
+
+    #region Form
+
+    public const string SpaceFormAlreadyExisted = "Form:000001";
+    public const string InvalidFormElementSetting = "Form:000002";
+
+    #endregion
 }

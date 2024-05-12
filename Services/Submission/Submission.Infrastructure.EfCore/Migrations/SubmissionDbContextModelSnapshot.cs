@@ -50,6 +50,9 @@ namespace Submission.Infrastructure.EfCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SpaceId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
 
@@ -140,9 +143,6 @@ namespace Submission.Infrastructure.EfCore.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SpaceId")
-                        .HasColumnType("int");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");

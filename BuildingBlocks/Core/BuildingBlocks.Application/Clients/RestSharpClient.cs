@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BuildingBlocks.Application.Dtos;
+using BuildingBlocks.Domain.Exceptions.Resources;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -40,7 +43,22 @@ public class RestSharpClient
             default:
                 return null;
         }
-        
-        
+    }
+
+    protected async Task PostAsync(RestRequest request)
+    {
+        var response = await Client.ExecuteAsync(request);
+        if (!response.IsSuccessStatusCode && !string.IsNullOrEmpty(response.Content))
+        {
+            var message = JsonConvert.DeserializeObject<ErrorResponseDto>(response.Content!);
+            if (message is not null)
+            {
+                throw new ResourceInvalidOperationException(message.Message!, message.Code);   
+            }
+            else
+            {
+                throw new Exception("Internal call error.");
+            }
+        }
     }
 }

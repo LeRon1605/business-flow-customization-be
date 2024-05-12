@@ -9,6 +9,8 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Application\Application.csproj" />
       <ProjectReference Include="..\Submission.Domain\Submission.Domain.csproj" />
+
+
     </ItemGroup>
 
 

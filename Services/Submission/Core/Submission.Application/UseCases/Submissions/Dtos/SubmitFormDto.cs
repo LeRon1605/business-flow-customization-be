@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Submission.Domain.SubmissionAggregate.Models;
 
 namespace Submission.Application.UseCases.Submissions.Dtos;
 
@@ -12,5 +11,13 @@ public class SubmitFormDto
     public int FormVersionId { get; set; }
     
     [Required]
-    public List<SubmissionFieldModel> Fields { get; set; } = null!;
+    public List<SubmissionFieldDto> Fields { get; set; } = null!;
+}
+
+public class SubmissionFieldDto
+{
+    [Required]
+    public int ElementId { get; set; }
+    
+    public string? Value { get; set; }
 }

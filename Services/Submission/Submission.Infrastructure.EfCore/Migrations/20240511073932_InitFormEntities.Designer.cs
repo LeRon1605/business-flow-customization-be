@@ -12,8 +12,8 @@ using Submission.Infrastructure.EfCore;
 namespace Submission.Infrastructure.EfCore.Migrations
 {
     [DbContext(typeof(SubmissionDbContext))]
-    [Migration("20240511073053_InitForm")]
-    partial class InitForm
+    [Migration("20240511073932_InitFormEntities")]
+    partial class InitFormEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,9 @@ namespace Submission.Infrastructure.EfCore.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SpaceId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -143,9 +146,6 @@ namespace Submission.Infrastructure.EfCore.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SpaceId")
-                        .HasColumnType("int");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");

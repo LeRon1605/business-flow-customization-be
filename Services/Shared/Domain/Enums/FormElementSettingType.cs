@@ -1,4 +1,4 @@
-﻿namespace Submission.Domain.FormAggregate.Enums;
+﻿namespace Domain.Enums;
 
 public enum FormElementSettingType
 {

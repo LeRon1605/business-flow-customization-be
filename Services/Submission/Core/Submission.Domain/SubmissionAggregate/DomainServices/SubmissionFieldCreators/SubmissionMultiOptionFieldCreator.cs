@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Submission.Domain.FormAggregate.Enums;
+﻿using Domain.Enums;
+using Newtonsoft.Json;
 using Submission.Domain.SubmissionAggregate.Abstracts;
 using Submission.Domain.SubmissionAggregate.DomainServices.Abstracts;
 using Submission.Domain.SubmissionAggregate.Entities;

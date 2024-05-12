@@ -9,5 +9,6 @@ public class SubmissionMapper : MappingProfile
     public SubmissionMapper()
     {
         CreateMap<SubmitFormDto, SubmissionModel>();
+        CreateMap<SubmissionFieldDto, SubmissionFieldModel>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Dtos;
+using Application.Dtos.Submissions.Identity;
 using BuildingBlocks.Domain.Repositories;
 using ApplicationUser = Identity.Domain.UserAggregate.Entities.ApplicationUser;
 

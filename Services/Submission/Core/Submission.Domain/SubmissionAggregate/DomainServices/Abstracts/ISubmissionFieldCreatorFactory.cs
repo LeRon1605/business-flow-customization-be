@@ -1,5 +1,5 @@
 ﻿using BuildingBlocks.Domain.Services;
-using Submission.Domain.FormAggregate.Enums;
+using Domain.Enums;
 
 namespace Submission.Domain.SubmissionAggregate.DomainServices.Abstracts;
 

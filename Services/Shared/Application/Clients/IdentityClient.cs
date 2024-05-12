@@ -1,5 +1,6 @@
 ﻿using Application.Clients.Interfaces;
 using Application.Dtos;
+using Application.Dtos.Submissions.Identity;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Clients;
 using RestSharp;

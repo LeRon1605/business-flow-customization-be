@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Dtos.Submissions.Identity;
 using BuildingBlocks.Application.Cqrs;
 
 namespace Identity.Application.UseCases.Permissions.Queries;

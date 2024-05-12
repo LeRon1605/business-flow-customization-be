@@ -1,4 +1,4 @@
-﻿using Submission.Domain.FormAggregate.Enums;
+﻿using Domain.Enums;
 using Submission.Domain.SubmissionAggregate.Abstracts;
 using Submission.Domain.SubmissionAggregate.Models;
 

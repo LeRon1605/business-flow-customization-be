@@ -50,7 +50,8 @@ public class SpaceController : ControllerBase
             , dto.Description
             , dto.Color
             , dto.BusinessFlow.Blocks
-            , dto.BusinessFlow.Branches));
+            , dto.BusinessFlow.Branches
+            , dto.Form));
         return Ok(SimpleIdResponse<int>.Create(spaceId));
     }
 

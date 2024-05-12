@@ -1,5 +1,7 @@
 ﻿using BuildingBlocks.Domain.Models;
-using Submission.Domain.FormAggregate.Enums;
+using Domain.Enums;
+using Submission.Domain.FormAggregate.Exceptions;
+using Submission.Domain.FormAggregate.Models;
 
 namespace Submission.Domain.FormAggregate.Entities;
 
@@ -21,12 +23,54 @@ public class FormElement : TenantEntity
     
     public virtual List<OptionFormElementSetting> Options { get; private set; } = new();
     
-    public FormElement(string name, string description, FormElementType type, double index)
+    public FormElement(FormElementModel elementModel)
     {
-        Name = name;
-        Description = description;
-        Type = type;
-        Index = index;
+        Name = elementModel.Name;
+        Description = elementModel.Description;
+        Type = elementModel.Type;
+        Index = elementModel.Index;
+        SetElementSetting(elementModel);
+    }
+
+    private void SetElementSetting(FormElementModel elementModel)
+    {
+        ApplyCommonSetting(elementModel.Settings);
+
+        switch (elementModel.Type)
+        {
+            case FormElementType.SingleOption:
+            case FormElementType.MultiOption:
+                ApplyOptionSetting(elementModel.Options);
+                break;
+        }
+    }
+    
+    private void ApplyCommonSetting(List<FormElementSettingModel> settings)
+    {
+        foreach (var setting in settings)
+        {
+            var isExisted = Settings.Any(x => x.Type == setting.Type);
+            if (isExisted)
+            {
+                throw new InvalidFormElementSettingException();
+            }
+            
+            Settings.Add(new FormElementSetting(setting));
+        }
+    }
+
+    private void ApplyOptionSetting(List<OptionFormElementSettingModel> options)
+    {
+        foreach (var option in options)
+        {
+            var isExisted = Options.Any(x => x.Name == option.Name);
+            if (isExisted)
+            {
+                throw new InvalidFormElementSettingException();
+            }
+            
+            Options.Add(new OptionFormElementSetting(option.Name));
+        }
     }
     
     private FormElement()

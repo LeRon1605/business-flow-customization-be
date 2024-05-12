@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Domain.Models;
-using Submission.Domain.FormAggregate.Enums;
+using Domain.Enums;
+using Submission.Domain.FormAggregate.Models;
 
 namespace Submission.Domain.FormAggregate.Entities;
 
@@ -13,10 +14,10 @@ public class FormElementSetting : Entity
     
     public virtual FormElement FormElement { get; private set; } = null!;
     
-    public FormElementSetting(FormElementSettingType type, string value)
+    public FormElementSetting(FormElementSettingModel settingModel)
     {
-        Type = type;
-        Value = value;
+        Type = settingModel.Type;
+        Value = settingModel.Value;
     }
     
     private FormElementSetting()

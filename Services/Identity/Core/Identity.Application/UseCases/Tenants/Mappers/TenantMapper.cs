@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.Application.Mappers;
 using Identity.Domain.TenantAggregate.Entities;
-using TenantDto = Application.Dtos.TenantDto;
+using TenantDto = Application.Dtos.Submissions.Identity.TenantDto;
 
 namespace Identity.Application.UseCases.Tenants.Mappers;
 

@@ -1,6 +1,8 @@
-﻿using BuildingBlocks.Application.Dtos;
+﻿using Application.Dtos.Submissions.Requests;
+using BuildingBlocks.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Submission.Application.UseCases.Forms.Commands;
 using Submission.Application.UseCases.Submissions.Commands;
 using Submission.Application.UseCases.Submissions.Dtos;
 
@@ -23,5 +25,13 @@ public class SpaceController : ControllerBase
     {
         var submitId = await _mediator.Send(new SubmitFormCommand(spaceId, data));
         return Ok(SimpleIdResponse<int>.Create(submitId));
+    }
+    
+    [HttpPost("{spaceId}/forms")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateForm(int spaceId, [FromBody] CreateFormRequestDto data)
+    {
+        await _mediator.Send(new CreateFormCommand(spaceId, data));
+        return Ok();
     }
 }
