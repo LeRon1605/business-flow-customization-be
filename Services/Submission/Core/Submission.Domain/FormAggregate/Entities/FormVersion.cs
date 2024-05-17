@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Domain.Models;
 using Submission.Domain.FormAggregate.Models;
+using Submission.Domain.SubmissionAggregate.Entities;
 
 namespace Submission.Domain.FormAggregate.Entities;
 
@@ -10,6 +11,8 @@ public class FormVersion : AuditableTenantAggregateRoot
     public virtual Form Form { get; set; } = null!;
     
     public virtual List<FormElement> Elements { get; set; } = new();
+    
+    public virtual List<FormSubmission> Submissions { get; set; } = new();
     
     public FormVersion(List<FormElementModel> elements)
     {

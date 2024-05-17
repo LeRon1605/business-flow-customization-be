@@ -3,6 +3,7 @@ using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore.Common;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 namespace BuildingBlocks.Infrastructure.EfCore.Repositories;
@@ -40,7 +41,7 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
             .ApplyFilter(expression)
             .ApplySorting(sorting)
             .Build()
-            .Select(projection.GetProject())
+            .Select(projection.GetProject().Expand())
             .ToListAsync();
     }
 
@@ -70,7 +71,7 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
             .IncludeProp(includeProps)
             .Build();
 
-        return queryable.Where(x => id.Equals(x.Id)).Select(projection.GetProject()).FirstOrDefaultAsync();
+        return queryable.Where(x => id.Equals(x.Id)).Select(projection.GetProject().Expand()).FirstOrDefaultAsync();
     }
 
     public Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> expression, bool tracking = true,

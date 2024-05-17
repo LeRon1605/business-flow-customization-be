@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Models;
+using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
@@ -11,6 +12,8 @@ public class SubmissionNumberValue : AuditableEntity, ISubmissionField
     
     public decimal? Value { get; private set; }
     
+    public virtual FormElement Element { get; private set; } = null!;
+    
     public virtual FormSubmission Submission { get; private set; } = null!;
     
     public SubmissionNumberValue(int elementId)
@@ -18,7 +21,7 @@ public class SubmissionNumberValue : AuditableEntity, ISubmissionField
         ElementId = elementId;
     }
     
-    public SubmissionNumberValue(int elementId, decimal value) : this(elementId)
+    public SubmissionNumberValue(int elementId, decimal? value) : this(elementId)
     {
         Value = value;
     }

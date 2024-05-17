@@ -13,5 +13,10 @@ public class SubmissionDateValueEntityConfiguration : IEntityTypeConfiguration<S
         builder.HasOne(x => x.Submission)
             .WithMany(x => x.DateFields)
             .HasForeignKey(x => x.SubmissionId);
+        
+        builder.HasOne(x => x.Element)
+            .WithMany()
+            .HasForeignKey(x => x.ElementId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

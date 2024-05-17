@@ -7,6 +7,7 @@ using Submission.Application.UseCases.Forms.Commands;
 using Submission.Application.UseCases.Forms.Queries;
 using Submission.Application.UseCases.Submissions.Commands;
 using Submission.Application.UseCases.Submissions.Dtos;
+using Submission.Application.UseCases.Submissions.Queries;
 
 namespace Submission.Api.Controllers;
 
@@ -27,6 +28,14 @@ public class SpaceController : ControllerBase
     {
         var submitId = await _mediator.Send(new SubmitFormCommand(spaceId, data));
         return Ok(SimpleIdResponse<int>.Create(submitId));
+    }
+    
+    [HttpGet("{spaceId}/submissions")]
+    [ProducesResponseType(typeof(PagedResultDto<SubmissionDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSubmissions(int spaceId, [FromQuery] SubmissionFilterRequestDto request)
+    {
+        var result = await _mediator.Send(new GetSubmissionQuery(spaceId, request.FormVersionId, request.Page, request.Size));
+        return Ok(result);
     }
 
     [HttpGet("{spaceId}/form-versions")]

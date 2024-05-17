@@ -27,6 +27,7 @@ public static class ErrorCodes
     #region Submission
 
     public const string InvalidSubmissionFieldValue = "Submission:000001";
+    public const string SubmissionFieldValueIsRequired = "Submission:000002";
 
     #endregion
 
@@ -36,6 +37,7 @@ public static class ErrorCodes
     public const string InvalidFormElementSetting = "Form:000002";
     public const string FormNotFound = "Form:000003";
     public const string FormVersionNotFound = "Form:000004";
+    public const string FormElementNotFound = "Form:000005";
 
     #endregion
 }

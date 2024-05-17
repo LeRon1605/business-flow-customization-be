@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using Newtonsoft.Json;
+using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Abstracts;
 using Submission.Domain.SubmissionAggregate.DomainServices.Abstracts;
 using Submission.Domain.SubmissionAggregate.Entities;
@@ -12,10 +13,15 @@ public class SubmissionNumberFieldCreator : ISubmissionFieldCreator
 {
     public FormElementType Type { get; set; } = FormElementType.Number;
 
-    public ISubmissionField Create(SubmissionFieldModel field)
+    public ISubmissionField Create(FormElement formElement, SubmissionFieldModel field)
     {
         if (field.Value == null)
         {
+            if (formElement.IsRequired)
+            {
+                throw new SubmissionFieldValueIsRequiredException(formElement.Id);
+            }
+            
             return new SubmissionNumberValue(field.ElementId);
         }
 

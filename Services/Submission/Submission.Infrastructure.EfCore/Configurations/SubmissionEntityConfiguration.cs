@@ -9,5 +9,9 @@ public class SubmissionEntityConfiguration : IEntityTypeConfiguration<FormSubmis
     public void Configure(EntityTypeBuilder<FormSubmission> builder)
     {
         builder.HasKey(x => x.Id);
+        
+        builder.HasOne(x => x.FormVersion)
+            .WithMany(x => x.Submissions)
+            .HasForeignKey(x => x.FormVersionId);
     }
 }

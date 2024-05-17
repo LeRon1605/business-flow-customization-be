@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Abstracts;
 using Submission.Domain.SubmissionAggregate.Models;
 
@@ -8,5 +9,5 @@ public interface ISubmissionFieldCreator
 {
     FormElementType Type { get; set; }
     
-    ISubmissionField Create(SubmissionFieldModel field);
+    ISubmissionField Create(FormElement formElement, SubmissionFieldModel field);
 }

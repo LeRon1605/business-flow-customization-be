@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Models;
+using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
@@ -10,6 +11,8 @@ public class FormSubmission : AuditableTenantAggregateRoot
     public int FormVersionId { get; private set; }
     
     public int BusinessFlowVersionId { get; private set; }
+    
+    public virtual FormVersion FormVersion { get; private set; } = null!;
     
     public virtual List<SubmissionNumberValue> NumberFields { get; private set; } = new();
 

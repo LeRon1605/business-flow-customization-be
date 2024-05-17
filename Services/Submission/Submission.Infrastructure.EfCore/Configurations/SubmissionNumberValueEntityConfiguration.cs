@@ -13,5 +13,10 @@ public class SubmissionNumberValueEntityConfiguration : IEntityTypeConfiguration
         builder.HasOne(x => x.Submission)
             .WithMany(x => x.NumberFields)
             .HasForeignKey(x => x.SubmissionId);
+
+        builder.HasOne(x => x.Element)
+            .WithMany()
+            .HasForeignKey(x => x.ElementId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

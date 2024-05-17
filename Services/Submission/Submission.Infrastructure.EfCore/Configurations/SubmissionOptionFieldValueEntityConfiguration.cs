@@ -13,5 +13,10 @@ public class SubmissionOptionFieldValueEntityConfiguration : IEntityTypeConfigur
         builder.HasOne(x => x.Field)
             .WithMany(x => x.Values)
             .HasForeignKey(x => x.SubmissionFieldId);
+
+        builder.HasOne(x => x.Option)
+            .WithMany()
+            .HasForeignKey(x => x.OptionId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

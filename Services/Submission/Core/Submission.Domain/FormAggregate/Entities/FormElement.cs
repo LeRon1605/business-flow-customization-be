@@ -23,6 +23,11 @@ public class FormElement : TenantEntity
     
     public virtual List<OptionFormElementSetting> Options { get; private set; } = new();
     
+    public bool IsRequired => 
+        Settings.Any(x => x.Type == FormElementSettingType.Required
+                          && bool.TryParse(x.Value, out var isRequired)
+                          && isRequired);
+    
     public FormElement(FormElementModel elementModel)
     {
         Name = elementModel.Name;

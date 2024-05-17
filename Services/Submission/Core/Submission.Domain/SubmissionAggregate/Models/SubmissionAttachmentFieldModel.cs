@@ -2,6 +2,8 @@
 
 public class SubmissionAttachmentFieldModel
 {
+    public int ElementId { get; set; }
+    
     public SubmissionAttachmentValueModel[] Attachments { get; set; } = null!;
 }
 

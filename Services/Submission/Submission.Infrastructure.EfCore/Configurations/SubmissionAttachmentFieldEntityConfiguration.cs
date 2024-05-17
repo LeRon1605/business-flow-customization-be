@@ -13,5 +13,10 @@ public class SubmissionAttachmentFieldEntityConfiguration : IEntityTypeConfigura
         builder.HasOne(x => x.Submission)
             .WithMany(x => x.AttachmentFields)
             .HasForeignKey(x => x.SubmissionId);
+        
+        builder.HasOne(x => x.Element)
+            .WithMany()
+            .HasForeignKey(x => x.ElementId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

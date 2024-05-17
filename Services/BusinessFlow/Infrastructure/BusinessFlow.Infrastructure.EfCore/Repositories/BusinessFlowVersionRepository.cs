@@ -6,6 +6,7 @@ using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
 using BusinessFlow.Domain.BusinessFlowAggregate.Specifications;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessFlow.Infrastructure.EfCore.Repositories;
@@ -23,7 +24,7 @@ public class BusinessFlowVersionRepository : EfCoreRepository<BusinessFlowVersio
 
         return await GetQueryable(specification)
             .OrderByDescending(x => x.Id)
-            .Select(projection.GetProject())
+            .Select(projection.GetProject().Expand())
             .FirstOrDefaultAsync();
     }
 }
