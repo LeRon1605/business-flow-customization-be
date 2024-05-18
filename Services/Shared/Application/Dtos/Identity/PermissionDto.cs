@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Submissions.Identity;
+﻿namespace Application.Dtos.Identity;
 
 public class PermissionDto
 {

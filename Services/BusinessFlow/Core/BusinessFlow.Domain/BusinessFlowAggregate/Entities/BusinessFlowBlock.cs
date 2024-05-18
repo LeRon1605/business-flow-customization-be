@@ -26,6 +26,10 @@ public class BusinessFlowBlock : Entity<Guid>
     
     public virtual List<BusinessFlowOutCome> OutComes { get; private set; } = new();
     
+    public virtual List<BusinessFlowBlockTaskSetting> TaskSettings { get; private set; } = new();
+    
+    public virtual List<BusinessFlowBlockPersonInChargeSetting> PersonInChargeSettings { get; private set; } = new();
+    
     public BusinessFlowBlock(BusinessFlowBlockModel model)
     {
         Id = model.Id;
@@ -33,6 +37,8 @@ public class BusinessFlowBlock : Entity<Guid>
         Type = model.Type;
         
         AddOutComes(model.OutComes);
+        AddTaskSettings(model.Tasks);
+        AddPersonInCharges(model.PersonInChargeIds);
     }
     
     public void AddOutComes(List<BusinessFlowOutComeModel> outComes)
@@ -61,6 +67,28 @@ public class BusinessFlowBlock : Entity<Guid>
         if (branch.ToBlockId == Id)
         {
             ToBranches.Add(branch);
+        }
+    }
+    
+    public void AddTaskSettings(List<BusinessFlowBlockTaskSettingModel> taskSettings)
+    {
+        foreach (var taskSetting in taskSettings)
+        {
+            TaskSettings.Add(new BusinessFlowBlockTaskSetting(taskSetting.Name, taskSetting.Index));
+        }
+    }
+    
+    public void AddPersonInCharges(List<string> userIds)
+    {
+        foreach (var userId in userIds)
+        {
+            var isExisted = PersonInChargeSettings.Any(p => p.UserId == userId);
+            if (isExisted)
+            {
+                continue;
+            }
+            
+            PersonInChargeSettings.Add(new BusinessFlowBlockPersonInChargeSetting(userId));
         }
     }
 

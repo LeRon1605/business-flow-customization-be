@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace BuildingBlocks.Presentation;
@@ -34,7 +35,10 @@ public static class ServiceCollectionExtensions
     
     public static WebApplicationBuilder AddPresentationServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers().AddNewtonsoftJson();
+        builder.Services.AddControllers().AddNewtonsoftJson(config =>
+        {
+            config.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+        });
         builder.Services.AddSwagger();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddApplicationCors();

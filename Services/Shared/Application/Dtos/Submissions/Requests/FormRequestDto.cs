@@ -4,7 +4,8 @@ namespace Application.Dtos.Submissions.Requests;
 
 public class FormRequestDto
 {
-    [Required]
+    public Guid? BusinessFlowBlockId { get; set; }
+    
     public string Name { get; set; } = null!;
     
     [Required]

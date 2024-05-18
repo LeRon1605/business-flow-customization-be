@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Submissions.Identity;
+using Application.Dtos.Identity;
 using AutoMapper;
 using BuildingBlocks.Application.Data;
 using BuildingBlocks.Application.Identity.Dtos;

@@ -1,9 +1,11 @@
 ﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
 using Identity.Domain.RoleAggregate.Entities;
 using Identity.Domain.UserAggregate;
 using Identity.Domain.UserAggregate.Entities;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.EfCore.Repositories;
@@ -51,6 +53,14 @@ public class UserRepository : EfCoreRepository<ApplicationUser, string>, IUserRe
                     SELECT Name From AspNetRoles
                     WHERE Id IN (SELECT RoleId FROM AspNetUserRoles WHERE TenantId = {0} AND UserId = {1})
                 ", tenantId.ToString(), id)
+            .ToListAsync();
+    }
+
+    public async Task<IList<TOut>> FindByTenantAsync<TOut>(int tenantId, IProjection<ApplicationUser, string, TOut> projection)
+    {
+        return await GetQueryable()
+            .Where(x => x.Tenants.Any(t => t.TenantId == tenantId))
+            .Select(projection.GetProject().Expand())
             .ToListAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Domain.Repositories;
 using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.BusinessFlowAggregate.Enums;
@@ -27,6 +28,14 @@ public class BusinessFlowDto : IProjection<BusinessFlowVersion, BusinessFlowDto>
                 Id = b.Id,
                 Name = b.Name,
                 Type = b.Type,
+                Tasks = b.TaskSettings
+                    .OrderBy(t => t.Id)
+                    .Select(t => new BusinessFlowBlockTaskDto()
+                    {
+                        Name = t.Name,
+                        Index = t.Index
+                    }).ToList(),
+                PersonInChargeIds = b.PersonInChargeSettings.Select(p => p.UserId).ToList(),
                 Branches = b.FromBranches.Select(br => new BusinessFlowBranchDto()
                 {
                     Id = br.Id,
@@ -64,6 +73,12 @@ public class BusinessFlowBlockDto
     public List<BusinessFlowBranchDto> Branches { get; set; } = new();
 
     public List<BusinessFlowOutComeDto> OutComes { get; set; } = new();
+
+    public List<FormElementDto> Elements { get; set; } = new();
+    
+    public List<BusinessFlowBlockTaskDto> Tasks { get; set; } = new();
+    
+    public List<string> PersonInChargeIds { get; set; } = new();
 }
 
 public class BusinessFlowBranchDto
@@ -84,4 +99,11 @@ public class BusinessFlowOutComeDto
     public string Name { get; set; } = null!;
 
     public string Color { get; set; } = null!;
+}
+
+public class BusinessFlowBlockTaskDto
+{
+    public string Name { get; set; } = null!;
+    
+    public double Index { get; set; }
 }

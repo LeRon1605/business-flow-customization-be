@@ -28,6 +28,7 @@ public static class ErrorCodes
 
     public const string InvalidSubmissionFieldValue = "Submission:000001";
     public const string SubmissionFieldValueIsRequired = "Submission:000002";
+    public const string SubmissionNotFound = "Submission:000003";
 
     #endregion
 

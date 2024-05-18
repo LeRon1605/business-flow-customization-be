@@ -17,7 +17,7 @@ public class FormVersionRepository : EfCoreRepository<FormVersion>, IFormVersion
     public Task<TOut?> GetLatestSpaceVersionAsync<TOut>(int spaceId, IProjection<FormVersion, TOut> projection)
     {
         return GetQueryable()
-            .Where(x => x.Form.SpaceId == spaceId)
+            .Where(x => x.Form.SpaceId == spaceId && x.Form.BusinessFlowBlockId == null)
             .OrderByDescending(x => x.Id)
             .Select(projection.GetProject())
             .FirstOrDefaultAsync();
@@ -35,7 +35,7 @@ public class FormVersionRepository : EfCoreRepository<FormVersion>, IFormVersion
     {
         return GetQueryable()
             .OrderByDescending(x => x.Id)
-            .Where(x => x.Form.SpaceId == spaceId)
+            .Where(x => x.Form.SpaceId == spaceId && x.Form.BusinessFlowBlockId == null)
             .Select(projection.GetProject())
             .ToListAsync();
     }

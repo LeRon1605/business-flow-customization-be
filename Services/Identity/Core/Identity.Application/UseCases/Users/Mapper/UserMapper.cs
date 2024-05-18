@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Application.Identity.Dtos;
+﻿using Application.Dtos.Identity;
+using BuildingBlocks.Application.Identity.Dtos;
 using BuildingBlocks.Application.Mappers;
 using Identity.Application.UseCases.Users.Dtos;
 using Identity.Domain.UserAggregate.Entities;
@@ -12,5 +13,6 @@ public class UserMapper : MappingProfile
         CreateMap<ApplicationUser, IdentityUserDto>();
         CreateMap<ApplicationUser, UserBasicInfoDto>();
         CreateMap<ApplicationUser, UserDetailDto>();
+        CreateMap<UserBasicInfoDto, BasicUserInfoDto>();
     }
 }

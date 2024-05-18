@@ -11,4 +11,8 @@ public class BusinessFlowBlockModel
     public BusinessFlowBlockType Type { get; set; }
 
     public List<BusinessFlowOutComeModel> OutComes { get; set; } = new();
+    
+    public List<BusinessFlowBlockTaskSettingModel> Tasks { get; set; } = new();
+    
+    public List<string> PersonInChargeIds { get; set; } = new();
 }

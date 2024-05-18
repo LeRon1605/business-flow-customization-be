@@ -1,8 +1,12 @@
-﻿using BuildingBlocks.Application.Cqrs;
+﻿using Application.Dtos.Submissions.Requests;
+using AutoMapper;
+using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
+using BusinessFlow.Application.Clients.Abstracts;
+using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 using BusinessFlow.Domain.BusinessFlowAggregate.DomainServices.Interfaces;
-using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.BusinessFlowAggregate.Models;
+using BusinessFlow.Domain.SpaceAggregate.Entities;
 using BusinessFlow.Domain.SpaceAggregate.Exceptions;
 using BusinessFlow.Domain.SpaceAggregate.Repositories;
 using Microsoft.Extensions.Logging;
@@ -14,16 +18,22 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
     private readonly ISpaceRepository _spaceRepository;
     private readonly IBusinessFlowDomainService _businessFlowDomainService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly ISubmissionClient _submissionClient;
     private readonly ILogger<UpdateSpaceBusinessFlowCommandHandler> _logger;
     
     public UpdateSpaceBusinessFlowCommandHandler(ISpaceRepository spaceRepository
         , IBusinessFlowDomainService businessFlowDomainService
         , IUnitOfWork unitOfWork
+        , IMapper mapper
+        , ISubmissionClient submissionClient
         , ILogger<UpdateSpaceBusinessFlowCommandHandler> logger)
     {
         _spaceRepository = spaceRepository;
         _businessFlowDomainService = businessFlowDomainService;
         _unitOfWork = unitOfWork;
+        _submissionClient = submissionClient;
+        _mapper = mapper;
         _logger = logger;
     }
     
@@ -35,12 +45,55 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
             throw new SpaceNotFoundException(request.Id);
         }
 
-        var businessFlowVersion = await _businessFlowDomainService.CreateAsync(space, new BusinessFlowModel(request.Blocks, request.Branches));
-        
-        await _unitOfWork.CommitAsync();
+        var blockModel = _mapper.Map<List<BusinessFlowBlockModel>>(request.Blocks);
+        var branchModel = _mapper.Map<List<BusinessFlowBranchModel>>(request.Branches);
+        var businessFlowModel = BusinessFlowModel.Create(blockModel, branchModel);
 
-        _logger.LogInformation("New business flow version created successfully. Id: {Id}", businessFlowVersion.Id);
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            
+            var businessFlowVersion = await _businessFlowDomainService.CreateAsync(space, businessFlowModel.BusinessFlowModel);
+
+            await _unitOfWork.CommitAsync();
+            
+            await CreateBusinessFlowBlockFormsAsync(space, businessFlowModel.MappingGeneratedIds, request.Blocks);
+
+            _logger.LogInformation("New business flow version created successfully. Id: {Id}", businessFlowVersion.Id);
+
+            await _unitOfWork.CommitTransactionAsync();
+
+            return businessFlowVersion.Id;
+        }
+        catch
+        {
+            await _unitOfWork.RollbackTransactionAsync();
+            throw;
+        }
+    }
+    
+    private async Task CreateBusinessFlowBlockFormsAsync(Space space
+        , Dictionary<Guid, Guid> mappingGeneratedIds
+        , List<BusinessFlowBlockRequestDto> blocks)
+    {
+        var tasks = new List<Task>();
         
-        return businessFlowVersion.Id;
+        foreach (var block in blocks)
+        {
+            if (!block.Elements.Any()) 
+                continue;
+            
+            var request = new FormRequestDto()
+            {
+                BusinessFlowBlockId = mappingGeneratedIds[block.Id],
+                Name = block.Name,
+                Elements = block.Elements,
+                CoverImageUrl = "default"
+            };
+            
+            tasks.Add(_submissionClient.CreateFormAsync(space.Id, request));
+        }
+
+        await Task.WhenAll(tasks);
     }
 }

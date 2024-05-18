@@ -6,16 +6,27 @@ public class BusinessFlowModel
     
     public List<BusinessFlowBranchModel> Branches { get; set; }
     
-    public BusinessFlowModel(List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)
+    private BusinessFlowModel(List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)
     {
-        GenerateIdentifier(blocks, branches);
-        
         Blocks = blocks;
         Branches = branches;
     }
-
-    private void GenerateIdentifier(List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)
+    
+    public static BusinessFlowBlockModelFactoryResult Create(List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)
     {
+        var mappingGeneratedIds = GenerateIdentifier(blocks, branches);
+        
+        return new BusinessFlowBlockModelFactoryResult()
+        {
+            BusinessFlowModel = new BusinessFlowModel(blocks, branches),
+            MappingGeneratedIds = mappingGeneratedIds
+        };
+    }
+
+    private static Dictionary<Guid, Guid> GenerateIdentifier(List<BusinessFlowBlockModel> blocks, List<BusinessFlowBranchModel> branches)
+    {
+        var mappingGeneratedIds = new Dictionary<Guid, Guid>();
+        
         foreach (var block in blocks)
         {
             var generatedBlockId = Guid.NewGuid();
@@ -50,7 +61,17 @@ public class BusinessFlowModel
                 outcome.Id = generatedOutcomeId;
             }
             
+            mappingGeneratedIds.Add(block.Id, generatedBlockId);
             block.Id = generatedBlockId;
         }
+
+        return mappingGeneratedIds;
     }
+}
+
+public class BusinessFlowBlockModelFactoryResult
+{
+    public BusinessFlowModel BusinessFlowModel { get; set; } = null!;
+
+    public Dictionary<Guid, Guid> MappingGeneratedIds { get; set; } = null!;
 }

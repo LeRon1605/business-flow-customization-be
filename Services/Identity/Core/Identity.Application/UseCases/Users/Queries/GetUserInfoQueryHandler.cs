@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Submissions.Identity;
+using Application.Dtos.Identity;
 using AutoMapper;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Identity;
@@ -43,6 +43,7 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, UserInfoD
         var roles = await _identityService.GetRolesAsync(user.Id, _currentUser.TenantId);
         var permissions = await _identityService.GetPermissionsForUserAsync(user.Id, _currentUser.TenantId);
         var tenants = await _tenantRepository.FindByUserAsync(user.Id);
+        var tenantUsers = await _userRepository.FindByTenantAsync(_currentUser.TenantId, new UserBasicInfoDto());
 
         var userInfo = new UserInfoDto()
         {
@@ -53,7 +54,8 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, UserInfoD
             Roles = roles,
             Permissions = permissions,
             TenantId = _currentUser.TenantId,
-            Tenants = _mapper.Map<IEnumerable<TenantDto>>(tenants)
+            Tenants = _mapper.Map<IEnumerable<TenantDto>>(tenants),
+            TenantUsers = _mapper.Map<IEnumerable<BasicUserInfoDto>>(tenantUsers)
         };
         
         var userInTenant = user.Tenants.FirstOrDefault(x => x.TenantId == _currentUser.TenantId);

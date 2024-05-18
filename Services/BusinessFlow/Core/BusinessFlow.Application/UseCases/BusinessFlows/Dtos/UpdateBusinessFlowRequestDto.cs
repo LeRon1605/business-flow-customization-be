@@ -6,8 +6,8 @@ namespace BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 public class UpdateBusinessFlowRequestDto
 {
     [Required] 
-    public List<BusinessFlowBlockModel> Blocks { get; set; } = null!;
+    public List<BusinessFlowBlockRequestDto> Blocks { get; set; } = null!;
 
     [Required] 
-    public List<BusinessFlowBranchModel> Branches { get; set; } = null!;
+    public List<BusinessFlowBranchRequestDto> Branches { get; set; } = null!;
 }

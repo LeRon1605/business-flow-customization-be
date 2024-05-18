@@ -48,6 +48,53 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.ToTable("BusinessFlowBlock");
                 });
 
+            modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlockPersonInChargeSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("BusinessFlowBlockId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessFlowBlockId");
+
+                    b.ToTable("BusinessFlowBlockPersonInChargeSetting");
+                });
+
+            modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlockTaskSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("BusinessFlowBlockId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Index")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessFlowBlockId");
+
+                    b.ToTable("BusinessFlowBlockTaskSetting");
+                });
+
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBranch", b =>
                 {
                     b.Property<int>("Id")
@@ -254,6 +301,65 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.ToTable("SubmissionExecution");
                 });
 
+            modelBuilder.Entity("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecutionPersonInCharge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ExecutionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExecutionId");
+
+                    b.ToTable("SubmissionExecutionPersonInCharge");
+                });
+
+            modelBuilder.Entity("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecutionTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExecutionId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Index")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExecutionId");
+
+                    b.ToTable("SubmissionExecutionTask");
+                });
+
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", b =>
                 {
                     b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowVersion", "BusinessFlowVersion")
@@ -263,6 +369,28 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                         .IsRequired();
 
                     b.Navigation("BusinessFlowVersion");
+                });
+
+            modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlockPersonInChargeSetting", b =>
+                {
+                    b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", "BusinessFlowBlock")
+                        .WithMany("PersonInChargeSettings")
+                        .HasForeignKey("BusinessFlowBlockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessFlowBlock");
+                });
+
+            modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlockTaskSetting", b =>
+                {
+                    b.HasOne("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", "BusinessFlowBlock")
+                        .WithMany("TaskSettings")
+                        .HasForeignKey("BusinessFlowBlockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessFlowBlock");
                 });
 
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBranch", b =>
@@ -346,6 +474,28 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Navigation("OutCome");
                 });
 
+            modelBuilder.Entity("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecutionPersonInCharge", b =>
+                {
+                    b.HasOne("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecution", "Execution")
+                        .WithMany("PersonInCharges")
+                        .HasForeignKey("ExecutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Execution");
+                });
+
+            modelBuilder.Entity("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecutionTask", b =>
+                {
+                    b.HasOne("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecution", "Execution")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ExecutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Execution");
+                });
+
             modelBuilder.Entity("BusinessFlow.Domain.BusinessFlowAggregate.Entities.BusinessFlowBlock", b =>
                 {
                     b.Navigation("Executions");
@@ -353,6 +503,10 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Navigation("FromBranches");
 
                     b.Navigation("OutComes");
+
+                    b.Navigation("PersonInChargeSettings");
+
+                    b.Navigation("TaskSettings");
 
                     b.Navigation("ToBranches");
                 });
@@ -379,6 +533,13 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
             modelBuilder.Entity("BusinessFlow.Domain.SpaceAggregate.Entities.SpaceRole", b =>
                 {
                     b.Navigation("Members");
+                });
+
+            modelBuilder.Entity("BusinessFlow.Domain.SubmissionExecutionAggregate.Entities.SubmissionExecution", b =>
+                {
+                    b.Navigation("PersonInCharges");
+
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

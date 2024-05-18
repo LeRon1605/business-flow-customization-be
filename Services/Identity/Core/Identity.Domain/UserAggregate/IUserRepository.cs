@@ -12,4 +12,6 @@ public interface IUserRepository : IRepository<ApplicationUser, string>
     Task<ApplicationUser?> FindByRefreshTokenAsync(string refreshToken);
 
     Task<IList<string>> GetRolesAsync(string id, int tenantId);
+    
+    Task<IList<TOut>> FindByTenantAsync<TOut>(int tenantId, IProjection<ApplicationUser, string , TOut> projection);
 }

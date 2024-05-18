@@ -18,7 +18,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
     
     public async Task<PagedResultDto<SubmissionDto>> Handle(GetSubmissionQuery request, CancellationToken cancellationToken)
     {
-        var specification = new SubmissionBySpaceSpecification(request.Page, request.Size, request.Sorting, request.SpaceId)
+        var specification = new SubmissionBySpacePagingSpecification(request.Page, request.Size, request.Sorting, request.SpaceId)
             .And(new SubmissionByVersionSpecification(request.FormVersionId));
         
         var submissions = await _submissionRepository.GetPagedListAsync(specification, new SubmissionDto());

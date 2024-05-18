@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
-using Submission.Domain.SubmissionAggregate.Entities;
+using Newtonsoft.Json.Serialization;
 using Submission.Domain.SubmissionAggregate.Models;
 
 namespace Submission.Application.UseCases.Submissions.Dtos;
@@ -44,13 +44,19 @@ public class SubmissionFieldDto
     public SubmissionFieldDto(SubmissionDateFieldModel model)
     {
         ElementId = model.ElementId;
-        Value = JsonConvert.SerializeObject(model.Value);
+        Value = JsonConvert.SerializeObject(model.Value, new JsonSerializerSettings
+        {
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc
+        });
     }
     
     public SubmissionFieldDto(SubmissionAttachmentFieldModel model)
     {
         ElementId = model.ElementId;
-        Value = JsonConvert.SerializeObject(model.Attachments);
+        Value = JsonConvert.SerializeObject(model.Attachments, new JsonSerializerSettings 
+        { 
+            ContractResolver = new CamelCasePropertyNamesContractResolver() 
+        });
     }
     
     public SubmissionFieldDto(SubmissionOptionFieldModel model)

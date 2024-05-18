@@ -2,6 +2,8 @@
 
 public class FormModel
 {
+    public Guid? BusinessFlowBlockId { get; set; }
+    
     public string Name { get; set; } = null!;
     
     public string CoverImageUrl { get; set; } = null!;

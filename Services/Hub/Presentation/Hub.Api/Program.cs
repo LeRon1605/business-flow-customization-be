@@ -1,5 +1,6 @@
 using Application;
 using BuildingBlocks.Application;
+using BuildingBlocks.Infrastructure.CloudflareR2;
 using BuildingBlocks.Infrastructure.Cloudinary;
 using BuildingBlocks.Infrastructure.Mail;
 using BuildingBlocks.Presentation;
@@ -23,7 +24,7 @@ builder
 
 builder.Services
     .AddEmailSender(builder.Configuration)
-    .AddCloudinary(builder.Configuration);
+    .AddCloudflareR2(builder.Configuration);
 
 var app = builder.Build();
 

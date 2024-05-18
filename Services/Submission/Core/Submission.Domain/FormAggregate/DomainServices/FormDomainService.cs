@@ -19,13 +19,13 @@ public class FormDomainService : IFormDomainService
     
     public async Task<Form> CreateAsync(int spaceId, FormModel formModel)
     {
-        var isExisted = await _formRepository.AnyAsync(new SpaceFormSpecification(spaceId));
+        var isExisted = await _formRepository.AnyAsync(new SpaceFormSpecification(spaceId, formModel.BusinessFlowBlockId));
         if (isExisted)
         {
             throw new SpaceFormAlreadyExistedException(spaceId);
         }
         
-        var form = new Form(spaceId, formModel.Name, formModel.CoverImageUrl);
+        var form = new Form(spaceId, formModel.BusinessFlowBlockId, formModel.Name, formModel.CoverImageUrl);
         form.AddVersion(new FormVersion(formModel.Elements));
         
         await _formRepository.InsertAsync(form);

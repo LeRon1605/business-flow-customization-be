@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Submissions.Requests;
+using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Clients;
 using BusinessFlow.Application.Clients.Abstracts;
@@ -17,6 +18,17 @@ public class SubmissionClient : RestSharpClient, ISubmissionClient
         var request = new RestRequest($"spaces/{spaceId}/forms", Method.Post);
         request.AddJsonBody(formDto);
         
-        await PostAsync(request);
+        await ExecuteAsync(request);
+    }
+
+    public Task<BusinessFlowBlocksElementsResponse> GetBusinessFlowBlocksElementsAsync(int spaceId, List<Guid> businessFlowBlockIds)
+    {
+        var request = new RestRequest($"spaces/{spaceId}/business-flows/forms", Method.Get);
+        foreach (var id in businessFlowBlockIds)
+        {
+            request.AddQueryParameter("businessFlowBlockIds", id);
+        }
+
+        return ExecuteAsync<BusinessFlowBlocksElementsResponse>(request);
     }
 }

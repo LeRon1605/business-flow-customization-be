@@ -45,9 +45,24 @@ public class RestSharpClient
         }
     }
 
-    protected async Task PostAsync(RestRequest request)
+    protected async Task ExecuteAsync(RestRequest request)
     {
         var response = await Client.ExecuteAsync(request);
+        
+        ProcessResponse(response);
+    }
+    
+    protected async Task<T> ExecuteAsync<T>(RestRequest request)
+    {
+        var response = await Client.ExecuteAsync<T>(request);
+        
+        ProcessResponse(response);
+
+        return response.Data ?? throw new Exception("Internal call error.");;
+    }
+    
+    private void ProcessResponse(RestResponse response)
+    {
         if (!response.IsSuccessStatusCode && !string.IsNullOrEmpty(response.Content))
         {
             var message = JsonConvert.DeserializeObject<ErrorResponseDto>(response.Content!);

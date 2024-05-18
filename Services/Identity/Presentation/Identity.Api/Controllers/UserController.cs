@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Application.Dtos.Submissions.Identity;
+using Application.Dtos.Identity;
 using BuildingBlocks.Application.Dtos;
 using BuildingBlocks.Presentation.Authorization;
 using Domain.Permissions;

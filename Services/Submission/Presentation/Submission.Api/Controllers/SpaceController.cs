@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Submissions.Requests;
+using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -76,5 +77,21 @@ public class SpaceController : ControllerBase
     {
         var form = await _mediator.Send(new GetFormVersionQuery(spaceId, versionId));
         return Ok(form);
+    }
+    
+    [HttpGet("{spaceId:int}/forms/{versionId:int}/submissions/{submissionId:int}")]
+    [ProducesResponseType(typeof(SubmissionDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSubmission(int spaceId, int versionId, int submissionId)
+    {
+        var submission = await _mediator.Send(new GetSubmissionByIdQuery(submissionId, spaceId, versionId));
+        return Ok(submission);
+    }
+    
+    [HttpGet("{spaceId:int}/business-flows/forms")]
+    [ProducesResponseType(typeof(BusinessFlowBlocksElementsResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetBusinessFlowBlocksElements(int spaceId, [FromQuery] BusinessFlowBlocksElementsRequest dto)
+    {
+        var elements = await _mediator.Send(new GetBusinessFlowBlocksElementsQuery(spaceId, dto.BusinessFlowBlockIds));
+        return Ok(elements);
     }
 }

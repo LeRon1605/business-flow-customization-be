@@ -15,6 +15,10 @@ public class SubmissionExecution : AuditableTenantAggregateRoot
     
     public virtual BusinessFlowOutCome? OutCome { get; private set; }
     
+    public virtual List<SubmissionExecutionPersonInCharge> PersonInCharges { get; private set; } = new();
+    
+    public virtual List<SubmissionExecutionTask> Tasks { get; private set; } = new();
+    
     public SubmissionExecution(Guid businessFlowBlockId, int submissionId)
     {
         BusinessFlowBlockId = businessFlowBlockId;

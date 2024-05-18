@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Dtos;
-using Application.Dtos.Submissions.Identity;
+using Application.Dtos.Identity;
 using BuildingBlocks.Domain.Repositories;
 using Identity.Domain.TenantAggregate.Entities;
 

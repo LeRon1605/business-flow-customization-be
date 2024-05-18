@@ -4,11 +4,11 @@ using Submission.Domain.SubmissionAggregate.Entities;
 
 namespace Submission.Domain.SubmissionAggregate.Specifications;
 
-public class SubmissionBySpaceSpecification : PagingAndSortingSpecification<FormSubmission>
+public class SubmissionBySpaceSpecification : Specification<FormSubmission>
 {
     private readonly int _spaceId;
     
-    public SubmissionBySpaceSpecification(int page, int size, string? sorting, int spaceId) : base(page, size, sorting)
+    public SubmissionBySpaceSpecification(int spaceId)
     {
         _spaceId = spaceId;
     }

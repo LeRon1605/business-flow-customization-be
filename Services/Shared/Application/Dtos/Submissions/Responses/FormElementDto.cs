@@ -1,6 +1,6 @@
 ﻿using Domain.Enums;
 
-namespace Submission.Application.UseCases.Dtos;
+namespace Application.Dtos.Submissions.Responses;
 
 public class FormElementDto
 {
