@@ -10,6 +10,7 @@ public abstract class CurrentUser : ICurrentUser
 {
     private string? _id;
     private int? _tenantId;
+    private bool? _isAuthenticated;
     
     public string Id
     {
@@ -30,8 +31,12 @@ public abstract class CurrentUser : ICurrentUser
         get => _tenantId ?? throw new ResourceUnauthorizedAccessException("User is not authenticated");
         set => _tenantId = value;
     }
-    
-    public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+
+    public bool IsAuthenticated
+    {
+        get => _isAuthenticated ?? false;
+        set => _isAuthenticated = value;
+    }
 
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -42,6 +47,7 @@ public abstract class CurrentUser : ICurrentUser
         _tenantId = int.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(AppClaim.TenantId), out var tenantId)
             ? tenantId
             : null;
+        _isAuthenticated = _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated;
     }
 
     public async Task<bool> IsInRoleAsync(string role)

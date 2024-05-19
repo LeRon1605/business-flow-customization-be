@@ -7,4 +7,11 @@
         <RootNamespace>BusinessFlow.IntegrationEventHandler</RootNamespace>
     </PropertyGroup>
 
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus\BuildingBlocks.EventBus\BuildingBlocks.EventBus.csproj" />
+      <ProjectReference Include="..\..\..\Shared\IntegrationEvents\IntegrationEvents.csproj" />
+      <ProjectReference Include="..\BusinessFlow.Application\BusinessFlow.Application.csproj" />
+    </ItemGroup>
+
 </Project>

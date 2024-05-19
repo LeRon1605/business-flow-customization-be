@@ -5,7 +5,7 @@ using Submission.Domain.SubmissionAggregate.Models;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
 
-public class SubmissionAttachmentField : AuditableEntity, ISubmissionField
+public class SubmissionAttachmentField : AuditableEntity, ISubmissionField<SubmissionAttachmentField>
 {
     public int SubmissionId { get; set; }
     
@@ -33,6 +33,11 @@ public class SubmissionAttachmentField : AuditableEntity, ISubmissionField
         {
             Values.Add(new SubmissionAttachmentValue(attachment.Name, attachment.FileUrl));
         }
+    }
+    
+    public void UpdateValue(SubmissionAttachmentField field)
+    {
+        Values = field.Values;
     }
     
     private SubmissionAttachmentField()

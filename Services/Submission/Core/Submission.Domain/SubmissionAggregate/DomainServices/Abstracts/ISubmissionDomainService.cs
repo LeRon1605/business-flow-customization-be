@@ -6,5 +6,7 @@ namespace Submission.Domain.SubmissionAggregate.DomainServices.Abstracts;
 
 public interface ISubmissionDomainService : IDomainService
 {
-    Task<FormSubmission> CreateAsync(int spaceId, SubmissionModel submission);
+    Task<FormSubmission> CreateAsync(int spaceId, int? executionId, SubmissionModel submission);
+    
+    Task UpdateAsync(int submissionId, SubmissionFieldModel fieldModel);
 }

@@ -7,7 +7,7 @@ using Submission.Domain.FormAggregate.Models;
 
 namespace Submission.Application.UseCases.Forms.Commands;
 
-public class CreateFormCommandHandler : ICommandHandler<CreateFormCommand>
+public class CreateFormCommandHandler : ICommandHandler<CreateFormCommand, int>
 {
     private readonly IFormDomainService _formDomainService;
     private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +25,7 @@ public class CreateFormCommandHandler : ICommandHandler<CreateFormCommand>
         _logger = logger;
     }
     
-    public async Task Handle(CreateFormCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateFormCommand request, CancellationToken cancellationToken)
     {
         var formModel = _mapper.Map<FormModel>(request.FormDto);
         
@@ -34,5 +34,7 @@ public class CreateFormCommandHandler : ICommandHandler<CreateFormCommand>
         await _unitOfWork.CommitAsync();
         
         _logger.LogInformation("Form {FormId} is created for space {SpaceId}", form.Id, request.SpaceId);
+
+        return form.Id;
     }
 }

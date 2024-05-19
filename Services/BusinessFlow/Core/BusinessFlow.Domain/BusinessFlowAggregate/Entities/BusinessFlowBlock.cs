@@ -6,7 +6,7 @@ using BusinessFlow.Domain.SubmissionExecutionAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
-public class BusinessFlowBlock : Entity<Guid>
+public class BusinessFlowBlock : AggregateRoot<Guid>
 {
     public string Name { get; private set; }
     
@@ -90,6 +90,11 @@ public class BusinessFlowBlock : Entity<Guid>
             
             PersonInChargeSettings.Add(new BusinessFlowBlockPersonInChargeSetting(userId));
         }
+    }
+    
+    public void SetFormId(int formId)
+    {
+        FormId = formId;
     }
 
     private BusinessFlowBlock()

@@ -31,6 +31,14 @@ public class FormVersionRepository : EfCoreRepository<FormVersion>, IFormVersion
             .FirstOrDefaultAsync();
     }
 
+    public Task<TOut?> GetAsync<TOut>(Guid businessFlowBlockId, IProjection<FormVersion, TOut> projection)
+    {
+        return GetQueryable()
+            .Where(x => x.Form.BusinessFlowBlockId == businessFlowBlockId)
+            .Select(projection.GetProject())
+            .FirstOrDefaultAsync();
+    }
+
     public Task<List<TOut>> GetBySpaceAsync<TOut>(int spaceId, IProjection<FormVersion, TOut> projection)
     {
         return GetQueryable()

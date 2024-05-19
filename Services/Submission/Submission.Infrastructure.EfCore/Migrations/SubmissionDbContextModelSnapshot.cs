@@ -229,6 +229,9 @@ namespace Submission.Infrastructure.EfCore.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ExecutionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("FormVersionId")
                         .HasColumnType("int");
 

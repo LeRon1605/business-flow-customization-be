@@ -6,3 +6,8 @@ public interface ISubmissionField
     
     public int ElementId { get; set; }
 }
+
+public interface ISubmissionField<in T> : ISubmissionField
+{
+    public void UpdateValue(T field);
+}

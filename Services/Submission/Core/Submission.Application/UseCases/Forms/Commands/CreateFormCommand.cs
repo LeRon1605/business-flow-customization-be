@@ -3,7 +3,7 @@ using BuildingBlocks.Application.Cqrs;
 
 namespace Submission.Application.UseCases.Forms.Commands;
 
-public class CreateFormCommand : ICommand
+public class CreateFormCommand : ICommand<int>
 {
     public int SpaceId { get; set; }
     

@@ -61,24 +61,28 @@ public class BusinessFlowDto : IProjection<BusinessFlowVersion, BusinessFlowDto>
     }
 }
 
-public class BusinessFlowBlockDto
+public class BasicBusinessFlowBlockDto
 {
     public Guid Id { get; set; }
     
     public string Name { get; set; } = null!;
     
     public BusinessFlowBlockType Type { get; set; }
+}
+
+public class BusinessFlowBlockDto : BasicBusinessFlowBlockDto
+{
     
     [JsonIgnore]
     public List<BusinessFlowBranchDto> Branches { get; set; } = new();
-
-    public List<BusinessFlowOutComeDto> OutComes { get; set; } = new();
 
     public List<FormElementDto> Elements { get; set; } = new();
     
     public List<BusinessFlowBlockTaskDto> Tasks { get; set; } = new();
     
     public List<string> PersonInChargeIds { get; set; } = new();
+    
+    public List<BusinessFlowOutComeDto> OutComes { get; set; } = new();
 }
 
 public class BusinessFlowBranchDto

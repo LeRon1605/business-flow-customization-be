@@ -21,6 +21,8 @@ public static class ErrorCodes
     public const string InvalidBusinessFlowBranch = "BusinessFlow:000001";
     public const string InvalidBusinessFlow = "BusinessFlow:000002";
     public const string BusinessFlowNotFound = "BusinessFlow:000003";
+    public const string BusinessFlowBlockNotFound = "BusinessFlow:000004";
+    public const string BusinessFlowOutComeNotFound = "BusinessFlow:000005";
 
     #endregion
 
@@ -39,6 +41,18 @@ public static class ErrorCodes
     public const string FormNotFound = "Form:000003";
     public const string FormVersionNotFound = "Form:000004";
     public const string FormElementNotFound = "Form:000005";
+    public const string BusinessFlowBlockFormNotFound = "Form:000006";
+
+    #endregion
+
+    #region SubmissionExecution
+
+    public const string SubmissionHasAlreadyExecuted = "SubmissionExecution:000001";
+    public const string SubmissionExecutionNotFound = "SubmissionExecution:000002";
+    public const string ExecutionNotFound = "SubmissionExecution:000003";
+    public const string ExecutionTaskNotFound = "SubmissionExecution:000004";
+    public const string ExecutionInCompletedTask = "SubmissionExecution:000005";
+    public const string ExecutionSubmissionNotFound = "SubmissionExecution:000006";
 
     #endregion
 }

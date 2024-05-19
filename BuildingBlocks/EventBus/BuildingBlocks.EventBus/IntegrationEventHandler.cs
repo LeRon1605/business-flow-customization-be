@@ -21,6 +21,7 @@ public abstract class IntegrationEventHandler<TEvent> : IIntegrationEventHandler
     {
         if (context.Message.UserId != null && context.Message.TenantId != null)
         {
+            CurrentUser.IsAuthenticated = true;
             CurrentUser.Id = context.Message.UserId;
             CurrentUser.TenantId = context.Message.TenantId.Value;
         }

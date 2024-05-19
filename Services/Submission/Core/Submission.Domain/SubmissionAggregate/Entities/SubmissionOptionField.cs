@@ -4,7 +4,7 @@ using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
 
-public class SubmissionOptionField : AuditableEntity, ISubmissionField
+public class SubmissionOptionField : AuditableEntity, ISubmissionField<SubmissionOptionField>
 {
     public int SubmissionId { get; set; }
     
@@ -36,6 +36,11 @@ public class SubmissionOptionField : AuditableEntity, ISubmissionField
             
             Values.Add(new SubmissionOptionFieldValue(optionId));
         }
+    }
+    
+    public void UpdateValue(SubmissionOptionField field)
+    {
+        Values = field.Values;
     }
 
 

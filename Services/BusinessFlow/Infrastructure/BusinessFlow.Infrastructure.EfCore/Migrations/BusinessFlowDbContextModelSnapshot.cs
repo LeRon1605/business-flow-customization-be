@@ -271,6 +271,12 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Property<Guid>("BusinessFlowBlockId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CompletedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -285,6 +291,9 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
 
                     b.Property<Guid?>("OutComeId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<int>("SubmissionId")
                         .HasColumnType("int");
@@ -352,6 +361,9 @@ namespace BusinessFlow.Infrastructure.EfCore.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

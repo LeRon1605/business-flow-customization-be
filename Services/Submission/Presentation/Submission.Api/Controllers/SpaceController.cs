@@ -48,11 +48,11 @@ public class SpaceController : ControllerBase
     }
     
     [HttpPost("{spaceId}/forms")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateForm(int spaceId, [FromBody] FormRequestDto data)
     {
-        await _mediator.Send(new CreateFormCommand(spaceId, data));
-        return Ok();
+        var id = await _mediator.Send(new CreateFormCommand(spaceId, data));
+        return Ok(SimpleIdResponse<int>.Create(id));
     }
     
     [HttpPut("{spaceId}/forms")]

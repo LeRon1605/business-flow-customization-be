@@ -25,7 +25,7 @@ public class SubmitFormCommandHandler : ICommandHandler<SubmitFormCommand, int>
     {
         var submissionModel = _mapper.Map<SubmissionModel>(request.Data);
         
-        var submission = await _submissionDomainService.CreateAsync(request.SpaceId, submissionModel);
+        var submission = await _submissionDomainService.CreateAsync(request.SpaceId, null, submissionModel);
 
         await _unitOfWork.CommitAsync();
 

@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Models;
+using BusinessFlow.Domain.SubmissionExecutionAggregate.Enums;
 
 namespace BusinessFlow.Domain.SubmissionExecutionAggregate.Entities;
 
@@ -8,6 +9,8 @@ public class SubmissionExecutionTask : AuditableEntity
     
     public double Index { get; private set; }
     
+    public SubmissionExecutionTaskStatus Status { get; private set; }
+    
     public int ExecutionId { get; private set; }
     
     public virtual SubmissionExecution Execution { get; private set; } = null!;
@@ -16,6 +19,12 @@ public class SubmissionExecutionTask : AuditableEntity
     {
         Name = name;
         Index = index;
+        Status = SubmissionExecutionTaskStatus.Pending;
+    }
+    
+    public void SetStatus(SubmissionExecutionTaskStatus status)
+    {
+        Status = status;
     }
     
     private SubmissionExecutionTask()

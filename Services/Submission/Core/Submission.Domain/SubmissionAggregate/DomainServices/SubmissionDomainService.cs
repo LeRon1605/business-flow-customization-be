@@ -30,7 +30,7 @@ public class SubmissionDomainService : ISubmissionDomainService
         _formElementRepository = formElementRepository;
     }
     
-    public async Task<FormSubmission> CreateAsync(int spaceId, SubmissionModel submissionModel)
+    public async Task<FormSubmission> CreateAsync(int spaceId, int? executionId, SubmissionModel submissionModel)
     {
         var businessFlow = await _spaceBusinessFlowRepository.FindBySpaceId(spaceId);
         if (businessFlow == null)
@@ -39,6 +39,7 @@ public class SubmissionDomainService : ISubmissionDomainService
         }
 
         var submission = new FormSubmission(submissionModel.Name
+            , executionId
             , submissionModel.FormVersionId
             , businessFlow.BusinessFlowVersionId);
         
@@ -59,7 +60,29 @@ public class SubmissionDomainService : ISubmissionDomainService
 
         return submission;
     }
-    
+
+    public async Task UpdateAsync(int submissionId, SubmissionFieldModel fieldModel)
+    {
+        var element = await _formElementRepository.FindByIdAsync(fieldModel.ElementId);
+        if (element == null)
+        {
+            throw new FormElementNotFoundException(fieldModel.ElementId);
+        }
+        
+        var submission = await _submissionRepository.FindByIdAsync(submissionId, GetSubmissionIncludeProp(element));
+        if (submission == null)
+        {
+            throw new SubmissionNotFoundException(submissionId);
+        }
+        
+        var creator = _submissionFieldCreatorFactory.Get(element.Type);
+        
+        var submissionField = creator.Create(element, fieldModel);
+        submission.UpdateField(submissionField);
+        
+        _submissionRepository.Update(submission);
+    }
+
     private async Task<List<FormElement>> GetElementsAsync(int spaceId, int versionId, List<int> elementIds)
     {
         var specification = new FormElementBySpaceSpecification(spaceId)
@@ -74,5 +97,29 @@ public class SubmissionDomainService : ISubmissionDomainService
         }
         
         return formElements.ToList();
+    }
+    
+    private string? GetSubmissionIncludeProp(FormElement element)
+    {
+        switch (element.Type)
+        {
+            case FormElementType.Number:
+                return nameof(FormSubmission.NumberFields);
+            
+            case FormElementType.Text:
+                return nameof(FormSubmission.TextFields);
+            
+            case FormElementType.Date:
+                return nameof(FormSubmission.DateFields);
+            
+            case FormElementType.SingleOption:
+            case FormElementType.MultiOption:
+                return $"{nameof(FormSubmission.OptionFields)}.{nameof(SubmissionOptionField.Values)}";
+            
+            case FormElementType.Attachment:
+                return $"{nameof(FormSubmission.AttachmentFields)}.{nameof(SubmissionAttachmentField.Values)}";
+        }
+
+        return null;
     }
 }

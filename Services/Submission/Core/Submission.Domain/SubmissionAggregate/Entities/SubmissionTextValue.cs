@@ -4,7 +4,7 @@ using Submission.Domain.SubmissionAggregate.Abstracts;
 
 namespace Submission.Domain.SubmissionAggregate.Entities;
 
-public class SubmissionTextValue : AuditableEntity, ISubmissionField
+public class SubmissionTextValue : AuditableEntity, ISubmissionField<SubmissionTextValue>
 {
     public int SubmissionId { get; set; }
     
@@ -25,4 +25,10 @@ public class SubmissionTextValue : AuditableEntity, ISubmissionField
     {
         Value = value;
     }
+    
+    public void UpdateValue(SubmissionTextValue field)
+    {
+        Value = field.Value;
+    }
+
 }

@@ -2,11 +2,14 @@
 using AutoMapper;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Dtos;
 using BuildingBlocks.Application.Identity;
 using BusinessFlow.Application.Clients.Abstracts;
 using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 using BusinessFlow.Domain.BusinessFlowAggregate.DomainServices.Interfaces;
+using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.BusinessFlowAggregate.Models;
+using BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
 using BusinessFlow.Domain.SpaceAggregate.DomainServices;
 using BusinessFlow.Domain.SpaceAggregate.Entities;
 using Microsoft.Extensions.Logging;
@@ -17,6 +20,7 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
 {
     private readonly ISpaceDomainService _spaceDomainService;
     private readonly IBusinessFlowDomainService _businessFlowDomainService;
+    private readonly IBusinessFlowVersionRepository _businessFlowVersionRepository;
     private readonly ICurrentUser _currentUser;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISubmissionClient _submissionClient;
@@ -25,6 +29,7 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
     
     public CreateSpaceCommandHandler(ISpaceDomainService spaceDomainService
         , IBusinessFlowDomainService businessFlowDomainService
+        , IBusinessFlowVersionRepository businessFlowVersionRepository
         , ISubmissionClient submissionClient
         , ICurrentUser currentUser
         , IUnitOfWork unitOfWork
@@ -33,6 +38,7 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
     {
         _spaceDomainService = spaceDomainService;
         _businessFlowDomainService = businessFlowDomainService;
+        _businessFlowVersionRepository = businessFlowVersionRepository;
         _submissionClient = submissionClient;
         _currentUser = currentUser;
         _unitOfWork = unitOfWork;
@@ -52,7 +58,7 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
             var branchModel = _mapper.Map<List<BusinessFlowBranchModel>>(request.Branches);
             var businessFlowModel = BusinessFlowModel.Create(blockModel, branchModel);
             
-            await _businessFlowDomainService.CreateAsync(space, businessFlowModel.BusinessFlowModel);
+            var businessFlowVersion = await _businessFlowDomainService.CreateAsync(space, businessFlowModel.BusinessFlowModel);
         
             await _unitOfWork.CommitAsync();
         
@@ -60,7 +66,7 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
 
             await _submissionClient.CreateFormAsync(space.Id, request.Form);
             
-            await CreateBusinessFlowBlockFormsAsync(space, businessFlowModel.MappingGeneratedIds, request.Blocks);
+            await CreateBusinessFlowBlockFormsAsync(space, businessFlowModel.MappingGeneratedIds, request.Blocks, businessFlowVersion);
 
             await _unitOfWork.CommitTransactionAsync();
 
@@ -75,9 +81,10 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
     
     private async Task CreateBusinessFlowBlockFormsAsync(Space space
         , Dictionary<Guid, Guid> mappingGeneratedIds
-        , List<BusinessFlowBlockRequestDto> blocks)
+        , List<BusinessFlowBlockRequestDto> blocks
+        , BusinessFlowVersion businessFlowVersion)
     {
-        var tasks = new List<Task>();
+        var forms = new Dictionary<Guid, Task<SimpleIdResponse<int>>>();
         
         foreach (var block in blocks)
         {
@@ -92,9 +99,21 @@ public class CreateSpaceCommandHandler : ICommandHandler<CreateSpaceCommand, int
                 CoverImageUrl = "default"
             };
             
-            tasks.Add(_submissionClient.CreateFormAsync(space.Id, request));
+            forms.Add(mappingGeneratedIds[block.Id], _submissionClient.CreateFormAsync(space.Id, request));
         }
 
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(forms.Select(x => x.Value));
+
+        foreach (var form in forms)
+        {
+            var block = businessFlowVersion.Blocks.FirstOrDefault(b => b.Id == form.Key);
+            if (block == null)
+                continue;
+            
+            block.SetFormId(form.Value.Result.Id);
+        }
+        
+        _businessFlowVersionRepository.Update(businessFlowVersion);
+        await _unitOfWork.CommitAsync();
     }
 }

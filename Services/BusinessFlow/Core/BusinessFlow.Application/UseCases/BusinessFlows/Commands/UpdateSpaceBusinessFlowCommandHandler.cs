@@ -2,10 +2,13 @@
 using AutoMapper;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Dtos;
 using BusinessFlow.Application.Clients.Abstracts;
 using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 using BusinessFlow.Domain.BusinessFlowAggregate.DomainServices.Interfaces;
+using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.BusinessFlowAggregate.Models;
+using BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
 using BusinessFlow.Domain.SpaceAggregate.Entities;
 using BusinessFlow.Domain.SpaceAggregate.Exceptions;
 using BusinessFlow.Domain.SpaceAggregate.Repositories;
@@ -17,6 +20,7 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
 {
     private readonly ISpaceRepository _spaceRepository;
     private readonly IBusinessFlowDomainService _businessFlowDomainService;
+    private readonly IBusinessFlowVersionRepository _businessFlowVersionRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ISubmissionClient _submissionClient;
@@ -24,6 +28,7 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
     
     public UpdateSpaceBusinessFlowCommandHandler(ISpaceRepository spaceRepository
         , IBusinessFlowDomainService businessFlowDomainService
+        , IBusinessFlowVersionRepository businessFlowVersionRepository
         , IUnitOfWork unitOfWork
         , IMapper mapper
         , ISubmissionClient submissionClient
@@ -31,6 +36,7 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
     {
         _spaceRepository = spaceRepository;
         _businessFlowDomainService = businessFlowDomainService;
+        _businessFlowVersionRepository = businessFlowVersionRepository;
         _unitOfWork = unitOfWork;
         _submissionClient = submissionClient;
         _mapper = mapper;
@@ -57,7 +63,7 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
 
             await _unitOfWork.CommitAsync();
             
-            await CreateBusinessFlowBlockFormsAsync(space, businessFlowModel.MappingGeneratedIds, request.Blocks);
+            await CreateBusinessFlowBlockFormsAsync(space, businessFlowModel.MappingGeneratedIds, request.Blocks, businessFlowVersion);
 
             _logger.LogInformation("New business flow version created successfully. Id: {Id}", businessFlowVersion.Id);
 
@@ -74,9 +80,10 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
     
     private async Task CreateBusinessFlowBlockFormsAsync(Space space
         , Dictionary<Guid, Guid> mappingGeneratedIds
-        , List<BusinessFlowBlockRequestDto> blocks)
+        , List<BusinessFlowBlockRequestDto> blocks
+        , BusinessFlowVersion businessFlowVersion)
     {
-        var tasks = new List<Task>();
+        var forms = new Dictionary<Guid, Task<SimpleIdResponse<int>>>();
         
         foreach (var block in blocks)
         {
@@ -91,9 +98,21 @@ public class UpdateSpaceBusinessFlowCommandHandler : ICommandHandler<UpdateSpace
                 CoverImageUrl = "default"
             };
             
-            tasks.Add(_submissionClient.CreateFormAsync(space.Id, request));
+            forms.Add(mappingGeneratedIds[block.Id], _submissionClient.CreateFormAsync(space.Id, request));
         }
 
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(forms.Select(x => x.Value));
+
+        foreach (var form in forms)
+        {
+            var block = businessFlowVersion.Blocks.FirstOrDefault(b => b.Id == form.Key);
+            if (block == null)
+                continue;
+            
+            block.SetFormId(form.Value.Result.Id);
+        }
+        
+        _businessFlowVersionRepository.Update(businessFlowVersion);
+        await _unitOfWork.CommitAsync();
     }
 }

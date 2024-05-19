@@ -6,7 +6,7 @@ public interface ICurrentUser
     string Name { get; }
     string Email { get; }
     int TenantId { get; set; }
-    bool IsAuthenticated { get; }
+    bool IsAuthenticated { get; set; }
     
     string? GetClaim(string claimType);
     Task<List<string>> GetRolesAsync();
