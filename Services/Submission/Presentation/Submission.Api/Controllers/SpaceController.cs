@@ -31,11 +31,18 @@ public class SpaceController : ControllerBase
         return Ok(SimpleIdResponse<int>.Create(submitId));
     }
     
-    [HttpGet("{spaceId}/submissions")]
+    [HttpPost("{spaceId}/submissions/search")]
     [ProducesResponseType(typeof(PagedResultDto<SubmissionDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSubmissions(int spaceId, [FromQuery] SubmissionFilterRequestDto request)
+    public async Task<IActionResult> GetSubmissions(int spaceId, [FromBody] SubmissionFilterRequestDto request)
     {
-        var result = await _mediator.Send(new GetSubmissionQuery(spaceId, request.FormVersionId, request.Page, request.Size));
+        var query = new GetSubmissionQuery(spaceId
+            , request.FormVersionId
+            , request.Search
+            , request.Filters
+            , request.Page
+            , request.Size);
+        
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 

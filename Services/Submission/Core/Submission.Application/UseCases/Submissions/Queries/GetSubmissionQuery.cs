@@ -11,9 +11,20 @@ public class GetSubmissionQuery : PagingAndSortingRequestDto, IQuery<PagedResult
     
     public int FormVersionId { get; set; }
     
-    public GetSubmissionQuery(int spaceId, int formVersionId, int page, int size) : base(page, size, $"{nameof(FormSubmission.Created)} DESC")
+    public string? Search { get; set; }
+    
+    public List<SubmissionFilterFieldDto>? FilterFields { get; set; }
+    
+    public GetSubmissionQuery(int spaceId
+        , int formVersionId
+        , string? search
+        , List<SubmissionFilterFieldDto>? filterFields
+        , int page
+        , int size) : base(page, size, $"{nameof(FormSubmission.Created)} DESC")
     {
         SpaceId = spaceId;
         FormVersionId = formVersionId;
+        FilterFields = filterFields;
+        Search = search;
     }
 }
