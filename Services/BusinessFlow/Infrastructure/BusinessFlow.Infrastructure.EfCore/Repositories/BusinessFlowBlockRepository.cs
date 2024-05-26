@@ -39,4 +39,10 @@ public class BusinessFlowBlockRepository : EfCoreRepository<BusinessFlowBlock, G
             .Where(x => x.ToBranches.Any(y => y.OutComeId == outComeId))
             .FirstOrDefaultAsync();
     }
+
+    public Task<bool> IsHasFormAsync(Guid blockId)
+    {
+        return GetQueryable()
+            .AnyAsync(x => x.Id == blockId && x.FormId.HasValue);
+    }
 }

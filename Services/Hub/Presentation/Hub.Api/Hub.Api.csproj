@@ -17,6 +17,8 @@
       <ProjectReference Include="..\..\..\Shared\Presentation\Presentation.csproj" />
       <ProjectReference Include="..\..\Core\Hub.Application\Hub.Application.csproj" />
       <ProjectReference Include="..\..\Core\Hub.IntegrationEventHandlers\Hub.IntegrationEventHandlers.csproj" />
+      <ProjectReference Include="..\..\Hub.Infrastructure.MongoDb\Hub.Infrastructure.MongoDb.csproj" />
+      <ProjectReference Include="..\..\Hub.Infrastructure.SignalR\Hub.Infrastructure.SignalR.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,7 +26,5 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
-
-
 
 </Project>

@@ -52,14 +52,14 @@ public class TokenProvider : ITokenProvider
             IncludeAllIdentityClaims = true,
             ValidatedResources = new ResourceValidationResult(new Resources(Config.IdentityResources()
                 , Config.ApiResources()
-                , Config.ApiScopes())),
+                , Config.AuthScopes())),
             ValidatedRequest = new ValidatedRequest()
             {
                 Subject = identityUser.CreatePrincipal(),
                 Client = client,
                 ValidatedResources = new ResourceValidationResult(new Resources(Config.IdentityResources()
                     , Config.ApiResources()
-                    , Config.ApiScopes())),
+                    , Config.AuthScopes())),
                 Options = _options,
                 ClientId = client.ClientId,
                 ClientClaims = identityUser.AdditionalClaims,

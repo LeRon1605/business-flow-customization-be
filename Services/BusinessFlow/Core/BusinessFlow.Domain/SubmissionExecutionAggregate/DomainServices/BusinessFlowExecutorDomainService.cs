@@ -37,8 +37,6 @@ public class BusinessFlowExecutorDomainService : IBusinessFlowExecutorDomainServ
         await ValidateAsync(submissionId, startBlock);
         
         var submissionExecution = new SubmissionExecution(startBlock.Id, submissionId);
-        if (startBlock.FormId.HasValue)
-            submissionExecution.AddDomainEvent(new SubmissionExecutionCreatedDomainEvent(submissionExecution));
         ApplyBusinessFlowBlockSetting(submissionExecution, startBlock);
         
         await _submissionExecutionRepository.InsertAsync(submissionExecution);
@@ -82,8 +80,6 @@ public class BusinessFlowExecutorDomainService : IBusinessFlowExecutorDomainServ
         }
         
         var submissionExecution = new SubmissionExecution(nextBlock.Id, submissionId);
-        if (nextBlock.FormId.HasValue)
-            submissionExecution.AddDomainEvent(new SubmissionExecutionCreatedDomainEvent(submissionExecution));
         ApplyBusinessFlowBlockSetting(submissionExecution, nextBlock);
 
         if (nextBlock.Type is BusinessFlowBlockType.End)

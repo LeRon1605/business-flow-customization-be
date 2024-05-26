@@ -25,7 +25,6 @@ public abstract class PagingAndSortingSpecification<TEntity, TKey> : Specificati
         Sorting = specification.BuildSorting();
         IncludeExpressions = specification.IncludeExpressions;
         IncludeStrings = specification.IncludeStrings;
-        IsTracking = specification.IsTracking;
     }
     
     protected PagingAndSortingSpecification(IPagingAndSortingSpecification<TEntity, TKey> left, ISpecification<TEntity, TKey> right)
@@ -35,7 +34,6 @@ public abstract class PagingAndSortingSpecification<TEntity, TKey> : Specificati
         Sorting = left.BuildSorting();
         IncludeExpressions = left.IncludeExpressions;
         IncludeStrings = left.IncludeStrings;
-        IsTracking = left.IsTracking;
         
         IncludeExpressions.AddRange(right.IncludeExpressions);
         IncludeStrings.AddRange(right.IncludeStrings);

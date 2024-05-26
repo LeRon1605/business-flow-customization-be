@@ -22,7 +22,8 @@ public class Config
             },
             AllowedScopes =
             {
-                "internal-api"
+                "internal-api",
+                "microservice"
             }
         });
     }
@@ -33,20 +34,38 @@ public class Config
             .Select(x => x.Name)
             .ToList();
         
-        return internalApis.Select(x => new ApiResource(x)
+        var apiResources = internalApis.Select(x => new ApiResource(x)
         {
             Scopes =
             {
-                "internal-api"
+                "internal-api",
+                "microservice"
             }
-        });
+        }).ToList();
+        
+        return apiResources;
+    }
+    
+    public static IEnumerable<ApiScope> AuthScopes()
+    {
+        return new List<ApiScope>()
+        {
+            new ("internal-api"),
+        };
     }
 
     public static IEnumerable<ApiScope> ApiScopes()
     {
         return new List<ApiScope>()
         {
-            new ApiScope("internal-api")
+            new ("internal-api"),
+            new ("microservice")
+            {
+                UserClaims =
+                {
+                    JwtClaimTypes.Audience
+                }
+            }
         };
     }
 

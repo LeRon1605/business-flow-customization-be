@@ -5,5 +5,5 @@ namespace BusinessFlow.Domain.SpaceAggregate.Repositories;
 
 public interface ISpaceRepository : IRepository<Space>
 {
-    
+    Task<Space?> GetByBlockAsync(Guid blockId);
 }

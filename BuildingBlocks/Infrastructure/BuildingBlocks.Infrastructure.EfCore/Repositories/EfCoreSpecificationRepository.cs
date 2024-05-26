@@ -55,12 +55,13 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
         return await GetQueryable(specification).Select(projection.GetProject().Expand()).ToListAsync();
     }
 
-    public Task<TEntity?> FindAsync(ISpecification<TEntity, TKey> specification)
+    public Task<TEntity> FindAsync(ISpecification<TEntity, TKey> specification)
     {
         return GetQueryable(specification).FirstOrDefaultAsync();
     }
 
-    public Task<TOut?> FindAsync<TOut>(ISpecification<TEntity, TKey> specification, IProjection<TEntity, TKey, TOut> projection)
+    public Task<TOut> FindAsync<TOut>(ISpecification<TEntity, TKey> specification,
+        IProjection<TEntity, TKey, TOut> projection)
     {
         return GetQueryable(specification).Select(projection.GetProject().Expand()).FirstOrDefaultAsync();
     }

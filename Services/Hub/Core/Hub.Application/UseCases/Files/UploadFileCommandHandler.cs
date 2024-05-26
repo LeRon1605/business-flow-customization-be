@@ -2,7 +2,7 @@
 using BuildingBlocks.Application.FileUploader;
 using BuildingBlocks.Domain.Exceptions.Resources;
 
-namespace Hub.Application.UseCases;
+namespace Hub.Application.UseCases.Files;
 
 public class UploadFileCommandHandler : ICommandHandler<UploadFileCommand, string>
 {

@@ -1,7 +1,7 @@
 ﻿using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Application.MailSender;
 using BuildingBlocks.EventBus;
-using Hub.Application.MailSender;
+using Hub.Application.Services.Abstracts;
 using IntegrationEvents.Hub;
 using Microsoft.Extensions.Logging;
 
@@ -10,14 +10,15 @@ namespace Hub.IntegrationEventHandlers.Handlers;
 public class EmailSenderIntegrationEventHandler : IntegrationEventHandler<EmailSenderIntegrationEvent>
 {
     private readonly IEmailSender _emailSender;
-    private readonly IEmailTemplateGenerator _emailTemplateGenerator;
+    private readonly ITemplateGenerator _templateGenerator;
 
-    public EmailSenderIntegrationEventHandler(IEmailSender emailSender
-        , IEmailTemplateGenerator emailTemplateGenerator
-        , IServiceProvider serviceProvider) : base(serviceProvider)
+    public EmailSenderIntegrationEventHandler(ICurrentUser currentUser
+        , ILogger<IntegrationEventHandler<EmailSenderIntegrationEvent>> logger
+        , IEmailSender emailSender
+        , ITemplateGenerator templateGenerator) : base(currentUser, logger)
     {
         _emailSender = emailSender;
-        _emailTemplateGenerator = emailTemplateGenerator;
+        _templateGenerator = templateGenerator;
     }
 
     public override async Task HandleAsync(EmailSenderIntegrationEvent @event)
@@ -28,7 +29,7 @@ public class EmailSenderIntegrationEventHandler : IntegrationEventHandler<EmailS
         {
             ToAddress = @event.ToAddress,
             Subject = @event.Subject,
-            Body = _emailTemplateGenerator.GenerateEmailBody(@event.TemplateName, @event.Data)
+            Body = _templateGenerator.GenerateEmailBody(@event.TemplateName, @event.Data)
         };
 
         await _emailSender.SendAsync(emailMessage);

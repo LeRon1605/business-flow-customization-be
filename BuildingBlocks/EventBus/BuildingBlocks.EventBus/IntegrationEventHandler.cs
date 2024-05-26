@@ -11,10 +11,10 @@ public abstract class IntegrationEventHandler<TEvent> : IIntegrationEventHandler
     protected ICurrentUser CurrentUser;
     protected ILogger<IntegrationEventHandler<TEvent>> Logger;
     
-    public IntegrationEventHandler(IServiceProvider serviceProvider)
+    public IntegrationEventHandler(ICurrentUser currentUser, ILogger<IntegrationEventHandler<TEvent>> logger)
     {
-        CurrentUser = serviceProvider.GetRequiredService<ICurrentUser>();
-        Logger = serviceProvider.GetRequiredService<ILogger<IntegrationEventHandler<TEvent>>>();
+        CurrentUser = currentUser;
+        Logger = logger;
     }
     
     public async Task Consume(ConsumeContext<TEvent> context)

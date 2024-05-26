@@ -21,14 +21,12 @@ public abstract class Specification<TEntity, TKey> : ISpecification<TEntity, TKe
 
     protected Specification(ISpecification<TEntity, TKey> specification)
     {
-        IsTracking = specification.IsTracking;
         IncludeExpressions = specification.IncludeExpressions;
         IncludeStrings = specification.IncludeStrings;
     }
     
     protected Specification(ISpecification<TEntity, TKey> left, ISpecification<TEntity, TKey> right)
     {
-        IsTracking = left.IsTracking;
         IncludeExpressions = left.IncludeExpressions;
         IncludeStrings = left.IncludeStrings;
         

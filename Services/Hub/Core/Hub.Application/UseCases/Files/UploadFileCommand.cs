@@ -1,7 +1,7 @@
 ﻿using BuildingBlocks.Application.Cqrs;
 using Microsoft.AspNetCore.Http;
 
-namespace Hub.Application.UseCases;
+namespace Hub.Application.UseCases.Files;
 
 public class UploadFileCommand : ICommand<string>
 {

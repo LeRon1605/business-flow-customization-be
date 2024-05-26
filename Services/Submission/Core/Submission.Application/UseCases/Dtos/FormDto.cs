@@ -9,6 +9,8 @@ public class FormDto : IProjection<FormVersion, FormDto>
 {
     public int Id { get; set; }
     
+    public int SpaceId { get; set; }
+    
     public int VersionId { get; set; }
     
     public string Name { get; set; } = null!;
@@ -22,6 +24,7 @@ public class FormDto : IProjection<FormVersion, FormDto>
         return x => new FormDto()
         {
             Id = x.Form.Id,
+            SpaceId = x.Form.SpaceId,
             VersionId = x.Id,
             Name = x.Form.Name,
             CoverImageUrl = x.Form.CoverImageUrl,

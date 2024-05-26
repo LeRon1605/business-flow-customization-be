@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Application.Mappers;
+﻿using Application.Dtos.Notifications.Responses;
+using BuildingBlocks.Application.Mappers;
 using Submission.Application.UseCases.Submissions.Dtos;
 using Submission.Domain.SubmissionAggregate.Models;
 
@@ -10,5 +11,6 @@ public class SubmissionMapper : MappingProfile
     {
         CreateMap<SubmitFormDto, SubmissionModel>();
         CreateMap<SubmissionFieldDto, SubmissionFieldModel>();
+        CreateMap<BasicSubmissionDto, SubmissionNotificationDataDto>();
     }
 }

@@ -9,6 +9,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\BuildingBlocks.EventBus\BuildingBlocks.EventBus.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\Shared\BuildingBlocks.Shared\BuildingBlocks.Shared.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
 

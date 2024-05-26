@@ -54,6 +54,21 @@ public static class ServiceCollectionExtensions
                 options.Authority = InternalApis.Identity;
                 options.Audience = AssemblyHelper.GetServiceName();
                 options.RequireHttpsMetadata = false;
+                
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/notification-hub")))
+                        {
+                            context.Token = accessToken;
+                        }
+                        
+                        return Task.CompletedTask;
+                    }
+                };
             });
         
         builder.AddPermissionAuthorization();
@@ -97,6 +112,7 @@ public static class ServiceCollectionExtensions
     {
         builder.Services.AddAuthorization();
         builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        builder.Services.AddScoped<IAuthorizationHandler, InternalApiAuthorizationHandler>();
         builder.Services.AddSingleton<IAuthorizationPolicyProvider, ApplicationAuthorizationPolicyProvider>();
         
         return builder;

@@ -33,6 +33,7 @@ public class SubmissionExecution : AuditableTenantAggregateRoot
         BusinessFlowBlockId = businessFlowBlockId;
         SubmissionId = submissionId;
         Status = SubmissionExecutionStatus.InProgress;
+        AddDomainEvent(new SubmissionExecutionCreatedDomainEvent(this));
     }
 
     public void AddTask(string name, double index)

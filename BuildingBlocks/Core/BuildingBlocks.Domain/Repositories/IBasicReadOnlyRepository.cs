@@ -12,6 +12,8 @@ public interface IBasicReadOnlyRepository<TEntity, TKey> : ISpecificationReposit
     
     Task<IList<TEntity>> FindByIncludedIdsAsync(IEnumerable<TKey> ids);
     
+    Task<IList<TOut>> FindByIncludedIdsAsync<TOut>(IEnumerable<TKey> ids, IProjection<TEntity, TKey, TOut> projection);
+    
     Task<IList<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>>? expression = null, string? sorting = null);
     
     Task<IList<TOut>> FindAllAsync<TOut>(IProjection<TEntity, TKey, TOut> projection, Expression<Func<TEntity, bool>>? expression = null, string? sorting = null);

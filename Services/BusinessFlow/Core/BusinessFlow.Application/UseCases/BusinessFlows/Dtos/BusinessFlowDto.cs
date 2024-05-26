@@ -61,13 +61,23 @@ public class BusinessFlowDto : IProjection<BusinessFlowVersion, BusinessFlowDto>
     }
 }
 
-public class BasicBusinessFlowBlockDto
+public class BasicBusinessFlowBlockDto : IProjection<BusinessFlowBlock, Guid, BasicBusinessFlowBlockDto>
 {
     public Guid Id { get; set; }
     
     public string Name { get; set; } = null!;
     
     public BusinessFlowBlockType Type { get; set; }
+    
+    public Expression<Func<BusinessFlowBlock, BasicBusinessFlowBlockDto>> GetProject()
+    {
+        return x => new BasicBusinessFlowBlockDto()
+        {
+            Id = x.Id,
+            Name = x.Name,
+            Type = x.Type
+        };
+    }
 }
 
 public class BusinessFlowBlockDto : BasicBusinessFlowBlockDto

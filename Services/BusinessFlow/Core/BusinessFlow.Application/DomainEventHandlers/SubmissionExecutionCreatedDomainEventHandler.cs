@@ -1,26 +1,22 @@
-﻿using BuildingBlocks.Domain.Events;
-using BuildingBlocks.EventBus.Abstracts;
+﻿using BuildingBlocks.Application.Schedulers;
+using BuildingBlocks.Domain.Events;
+using BusinessFlow.Application.UseCases.BusinessFlows.Jobs;
 using BusinessFlow.Domain.SubmissionExecutionAggregate.DomainEvents;
-using BusinessFlow.Domain.SubmissionExecutionAggregate.Repositories;
-using IntegrationEvents.BusinessFlow;
 
 namespace BusinessFlow.Application.DomainEventHandlers;
 
 public class SubmissionExecutionCreatedDomainEventHandler : IPersistedDomainEventHandler<SubmissionExecutionCreatedDomainEvent>
 {
-    private readonly ISubmissionExecutionRepository _submissionExecutionRepository;
-    private readonly IEventPublisher _eventPublisher;
+    private readonly IBackGroundJobManager _backGroundJobManager;
     
-    public SubmissionExecutionCreatedDomainEventHandler(ISubmissionExecutionRepository submissionExecutionRepository
-        , IEventPublisher eventPublisher)
+    public SubmissionExecutionCreatedDomainEventHandler(IBackGroundJobManager backGroundJobManager)
     {
-        _submissionExecutionRepository = submissionExecutionRepository;
-        _eventPublisher = eventPublisher;
+        _backGroundJobManager = backGroundJobManager;
     }
     
-    public async Task Handle(SubmissionExecutionCreatedDomainEvent @event, CancellationToken cancellationToken)
+    public Task Handle(SubmissionExecutionCreatedDomainEvent @event, CancellationToken cancellationToken)
     {
-        await _eventPublisher.Publish(new ExecutionSubmissionCreatedIntegrationEvent(@event.SubmissionExecution.Id
-            , @event.SubmissionExecution.BusinessFlowBlockId), cancellationToken);
+        _backGroundJobManager.Fire(new SubmissionExecutionPublishIntegrationEventJob(@event.SubmissionExecution.Id));
+        return Task.CompletedTask;
     }
 }

@@ -3,14 +3,16 @@ using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Clients;
 using BuildingBlocks.Application.Dtos;
+using BuildingBlocks.Application.Identity;
 using BusinessFlow.Application.Clients.Abstracts;
+using Microsoft.AspNetCore.Http;
 using RestSharp;
 
 namespace BusinessFlow.Application.Clients;
 
 public class SubmissionClient : RestSharpClient, ISubmissionClient
 {
-    public SubmissionClient(IServiceProvider serviceProvider) : base(serviceProvider, InternalApis.Submission)
+    public SubmissionClient(IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser) : base(httpContextAccessor, currentUser, InternalApis.Submission)
     {
     }
     

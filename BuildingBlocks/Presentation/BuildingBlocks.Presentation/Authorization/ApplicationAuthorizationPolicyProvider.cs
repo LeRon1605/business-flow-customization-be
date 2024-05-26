@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Permissions;
+﻿using Domain.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
@@ -25,6 +24,15 @@ public class ApplicationAuthorizationPolicyProvider : IAuthorizationPolicyProvid
             var policyBuilder = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .AddRequirements(new PermissionAuthorizationRequirement(policyName));
+            
+            return Task.FromResult(policyBuilder.Build());
+        }
+        
+        if (policyName.StartsWith("InternalApi", StringComparison.OrdinalIgnoreCase))
+        {
+            var policyBuilder = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .AddRequirements(new InternalApiAuthorizationRequirement());
             
             return Task.FromResult(policyBuilder.Build());
         }

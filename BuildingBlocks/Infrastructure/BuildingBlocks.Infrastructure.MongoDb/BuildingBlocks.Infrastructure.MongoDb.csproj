@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
+      <PackageReference Include="Slazure.MongoDB" Version="1.4.3" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+      <ProjectReference Include="..\..\Shared\BuildingBlocks.Shared\BuildingBlocks.Shared.csproj" />
+    </ItemGroup>
+
+
+
+
+
+</Project>

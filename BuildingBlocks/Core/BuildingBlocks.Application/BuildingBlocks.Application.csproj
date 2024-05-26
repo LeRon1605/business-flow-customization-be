@@ -10,6 +10,8 @@
 
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Services\Shared\Domain\Domain.csproj" />
+      <ProjectReference Include="..\..\Shared\BuildingBlocks.Shared\BuildingBlocks.Shared.csproj" />
       <ProjectReference Include="..\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
     </ItemGroup>
 
@@ -19,6 +21,7 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="IdentityModel" Version="4.4.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />

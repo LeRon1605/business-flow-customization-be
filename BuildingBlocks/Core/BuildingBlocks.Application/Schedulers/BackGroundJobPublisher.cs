@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using BuildingBlocks.Application.Identity;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -19,6 +20,15 @@ public class BackGroundJobPublisher : IBackGroundJobPublisher
     {
         var scope = _serviceProvider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var currentUser = scope.ServiceProvider.GetRequiredService<ICurrentUser>();
+        
+        if (!string.IsNullOrEmpty(job.UserId) && job.TenantId.HasValue)
+        {
+            currentUser.IsAuthenticated = true;
+            currentUser.Id = job.UserId;
+            currentUser.TenantId = job.TenantId.Value;
+        }
+        
         _logger.LogInformation("Job {JobName} published!", job.GetType().Name);
         try
         {

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Application.Schedulers;
 using Hangfire;
 
@@ -7,14 +8,16 @@ namespace BuildingBlocks.Infrastructure.HangFire;
 public class HangFireBackGroundJobManager : IBackGroundJobManager
 {
     private readonly IBackgroundJobClient _backgroundJobClient;
+    private readonly ICurrentUser _currentUser;
     private readonly IRecurringJobManager _recurringJobManager;
     
-    public HangFireBackGroundJobManager(
-        IBackgroundJobClient backgroundJobClient,
-        IRecurringJobManager recurringJobManager)
+    public HangFireBackGroundJobManager(IBackgroundJobClient backgroundJobClient
+        , IRecurringJobManager recurringJobManager
+        , ICurrentUser currentUser)
     {
         _backgroundJobClient = backgroundJobClient;
         _recurringJobManager = recurringJobManager;
+        _currentUser = currentUser;
     }
     
     public string Fire(Expression<Action> factory)
@@ -29,6 +32,12 @@ public class HangFireBackGroundJobManager : IBackGroundJobManager
 
     public string Fire(IBackGroundJob job)
     {
+        if (_currentUser.IsAuthenticated)
+        {
+            job.UserId = _currentUser.Id;
+            job.TenantId = _currentUser.TenantId;
+        }
+        
         return _backgroundJobClient.Enqueue<IBackGroundJobPublisher>(x => x.Publish(job));
     }
 
@@ -44,6 +53,12 @@ public class HangFireBackGroundJobManager : IBackGroundJobManager
 
     public string FireAfter(IBackGroundJob job, TimeSpan timeSpan)
     {
+        if (_currentUser.IsAuthenticated)
+        {
+            job.UserId = _currentUser.Id;
+            job.TenantId = _currentUser.TenantId;
+        }
+        
         return _backgroundJobClient.Schedule<IBackGroundJobPublisher>(x => x.Publish(job), timeSpan);
     }
 
@@ -59,6 +74,12 @@ public class HangFireBackGroundJobManager : IBackGroundJobManager
     
     public string FireAt(IBackGroundJob job, DateTime dateTime)
     {
+        if (_currentUser.IsAuthenticated)
+        {
+            job.UserId = _currentUser.Id;
+            job.TenantId = _currentUser.TenantId;
+        }
+        
         return _backgroundJobClient.Schedule<IBackGroundJobPublisher>(x => x.Publish(job), new DateTimeOffset(dateTime));
     }
 

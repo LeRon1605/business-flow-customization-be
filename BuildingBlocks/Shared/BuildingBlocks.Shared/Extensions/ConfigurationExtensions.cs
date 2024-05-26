@@ -45,4 +45,12 @@ public static class ConfigurationExtensions
         
         return (T)convertedValue;
     }
+    
+    public static T GetSetting<T>(this IConfiguration configuration, string sectionName) where T : class
+    {
+        var obj = Activator.CreateInstance<T>();
+        configuration.GetSection(sectionName).Bind(obj);
+        
+        return obj;
+    }
 }

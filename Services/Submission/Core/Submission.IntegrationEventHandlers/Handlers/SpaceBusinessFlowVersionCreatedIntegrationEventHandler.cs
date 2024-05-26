@@ -1,6 +1,8 @@
 ﻿using BuildingBlocks.Application.Data;
+using BuildingBlocks.Application.Identity;
 using BuildingBlocks.EventBus;
 using IntegrationEvents.BusinessFlow;
+using Microsoft.Extensions.Logging;
 using Submission.Domain.SpaceBusinessFlowAggregate.DomainServices;
 
 namespace Submission.IntegrationEvents.Handlers;
@@ -10,9 +12,10 @@ public class SpaceBusinessFlowVersionCreatedIntegrationEventHandler : Integratio
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISpaceBusinessFlowDomainService _spaceBusinessFlowDomainService;
     
-    public SpaceBusinessFlowVersionCreatedIntegrationEventHandler(IServiceProvider serviceProvider
+    public SpaceBusinessFlowVersionCreatedIntegrationEventHandler(ICurrentUser currentUser
+        , ILogger<IntegrationEventHandler<SpaceBusinessFlowVersionCreatedIntegrationEvent>> logger
         , IUnitOfWork unitOfWork
-        , ISpaceBusinessFlowDomainService spaceBusinessFlowDomainService) : base(serviceProvider)
+        , ISpaceBusinessFlowDomainService spaceBusinessFlowDomainService) : base(currentUser, logger)
     {
         _unitOfWork = unitOfWork;
         _spaceBusinessFlowDomainService = spaceBusinessFlowDomainService;

@@ -1,4 +1,5 @@
 ﻿using Hub.Application.UseCases;
+using Hub.Application.UseCases.Files;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

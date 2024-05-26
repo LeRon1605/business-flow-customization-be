@@ -11,7 +11,7 @@ public static class SpecificationEvaluator<TEntity, TKey>
 {
     public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity, TKey> specification)
     {
-        var queryable = specification.IsTracking ? inputQuery : inputQuery.AsNoTracking();
+        var queryable = inputQuery;
 
         if (specification.IncludeExpressions.Any())
         {

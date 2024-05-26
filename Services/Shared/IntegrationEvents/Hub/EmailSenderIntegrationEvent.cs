@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.EventBus;
+using BuildingBlocks.Shared.Extensions;
 
 namespace IntegrationEvents.Hub;
 
@@ -18,20 +19,11 @@ public class EmailSenderIntegrationEvent : IntegrationEvent
         Data = data;
     }
     
-    public EmailSenderIntegrationEvent(string subject, string toAddress, string templateName, dynamic data)
+    public EmailSenderIntegrationEvent(string subject, string toAddress, string templateName, object data)
     {
         Subject = subject;
         ToAddress = toAddress;
         TemplateName = templateName;
-        Data = new Dictionary<string, string>();
-        
-        var properties = data.GetType().GetProperties();
-        foreach (var property in properties)
-        {
-            var name = property.Name;
-            var value = data.GetType().GetProperty(property.Name).GetValue(data, null);
-            
-            Data.Add(name, value?.ToString() ?? string.Empty);
-        }
+        Data = data.ToDictionary();
     }
 }

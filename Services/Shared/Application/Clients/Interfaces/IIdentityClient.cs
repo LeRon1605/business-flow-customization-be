@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Dtos.Identity;
+﻿using Application.Dtos.Identity;
 using BuildingBlocks.Application.Clients;
 
 namespace Application.Clients.Interfaces;
