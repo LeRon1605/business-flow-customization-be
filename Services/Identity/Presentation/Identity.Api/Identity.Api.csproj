@@ -22,16 +22,11 @@
       <ProjectReference Include="..\..\Infrastructure\Identity.Infrastructure.EfCore\Identity.Infrastructure.EfCore.csproj" />
       <ProjectReference Include="..\..\Infrastructure\Identity.Infrastructure.IdentityServer\Identity.Infrastructure.IdentityServer.csproj" />
     </ItemGroup>
-
-
+    
     <ItemGroup>
       <Content Include="..\..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
-
-
-
-
-
+    
 </Project>

@@ -1,0 +1,155 @@
+services:
+  apigateway:
+    image: rubeha/business_flow_customization_api_gateway
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80:80"
+    depends_on:
+      db:
+        condition: service_started
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+  
+  identity:
+    image: rubeha/identity_api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5001:80"
+    depends_on:
+      db:
+        condition: service_started
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+  
+  hub:
+    image: rubeha/hub_api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5002:80"
+    depends_on:
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+        
+  business-flow:
+    image: rubeha/business_flow_api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5003:80"
+    depends_on:
+      db:
+        condition: service_started
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+        
+  submission:
+    image: rubeha/submission_api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5004:80"
+    depends_on:
+      db:
+        condition: service_started
+      seq:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    
+    
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - "5341:5341"
+      - "5342:80"
+    environment:
+      - ACCEPT_EULA=Y
+    restart: always
+    volumes:
+      - seqdata:/data
+        
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Admin123
+    restart: always
+    volumes:
+      - dbdata:/var/opt/mssql
+        
+  rabbitmq:
+    image: rabbitmq:3.12.13-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    restart: always
+    volumes:
+      - mqdata:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      
+  redis:
+    image: redis:alpine3.19
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redisdata:/data
+        
+  mongoDb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Admin123
+    volumes:
+      - mongodata:/data/db
+      
+volumes: 
+  seqdata:
+  dbdata:
+  mqdata:
+  redisdata:
+  mongodata:
+    

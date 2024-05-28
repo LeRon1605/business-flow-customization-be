@@ -21,6 +21,7 @@
       <ProjectReference Include="..\..\Hub.Infrastructure.SignalR\Hub.Infrastructure.SignalR.csproj" />
     </ItemGroup>
 
+
     <ItemGroup>
       <Content Include="..\..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
