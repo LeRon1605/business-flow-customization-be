@@ -194,14 +194,14 @@ workflows:
     
     jobs:
       - build-api-gateway-image:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
 
       - apply-api-gateway-image:
-        requires:
-          - build-api-gateway-image
+          requires:
+            - build-api-gateway-image
 
   deploy-business-flow-service:
     when: 
@@ -210,14 +210,14 @@ workflows:
     
     jobs:
       - build-business-flow-service-image:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
 
       - apply-business-flow-service-image:
-        requires:
-          - build-business-flow-service-image
+          requires:
+            - build-business-flow-service-image
 
   deploy-hub-service:
     when: 
@@ -226,14 +226,14 @@ workflows:
     
     jobs:
       - build-hub-service-image:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
 
       - apply-hub-service-image:
-        requires:
-          - build-hub-service-image
+          requires:
+            - build-hub-service-image
 
   deploy-identity-service:
     when: 
@@ -242,14 +242,14 @@ workflows:
     
     jobs:
       - build-identity-service-image:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
 
       - apply-identity-service-image:
-        requires:
-          - build-identity-service-image
+          requires:
+            - build-identity-service-image
 
   deploy-submission-service:
     when: 
@@ -258,11 +258,11 @@ workflows:
     
     jobs:
       - build-submission-service-image:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
 
       - apply-submission-service-image:
-        requires:
-          - build-submission-service-image
+          requires:
+            - build-submission-service-image
