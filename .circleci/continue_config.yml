@@ -186,11 +186,20 @@ jobs:
           command: |
             ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./deploy-submission.sh"
 
+  clean-image:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Clean images
+          command: |
+            ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./clean.sh"
+
 workflows:
   deploy-api-gateway:
-    when: 
-      condition:
-        or: [ << pipeline.parameters.api-gateway >>, << pipeline.parameters.shared >> ]
+    or:
+        - equal: [ true, <<pipeline.parameters.api-gateway>> ]
+        - equal: [ true, <<pipeline.parameters.shared>> ]
     
     jobs:
       - build-api-gateway-image:
@@ -203,10 +212,15 @@ workflows:
           requires:
             - build-api-gateway-image
 
+      - clean-image:
+          requires:
+            - apply-api-gateway-image
+
   deploy-business-flow-service:
     when: 
-      condition:
-        or: [ << pipeline.parameters.business-flow-service >>, << pipeline.parameters.shared >> ]
+      or:
+        - equal: [ true, <<pipeline.parameters.business-flow-service>> ]
+        - equal: [ true, <<pipeline.parameters.shared>> ]
     
     jobs:
       - build-business-flow-service-image:
@@ -219,10 +233,15 @@ workflows:
           requires:
             - build-business-flow-service-image
 
+      - clean-image:
+          requires:
+            - apply-business-flow-service-image
+
   deploy-hub-service:
     when: 
-      condition:
-        or: [ << pipeline.parameters.hub-service >>, << pipeline.parameters.shared >> ]
+      or:
+        - equal: [ true, <<pipeline.parameters.hub-service>> ]
+        - equal: [ true, <<pipeline.parameters.shared>> ]
     
     jobs:
       - build-hub-service-image:
@@ -235,10 +254,15 @@ workflows:
           requires:
             - build-hub-service-image
 
+      - clean-image:
+          requires:
+            - apply-hub-service-image
+
   deploy-identity-service:
     when: 
-      condition:
-        or: [ << pipeline.parameters.identity-service >>, << pipeline.parameters.shared >> ]
+      or:
+        - equal: [ true, <<pipeline.parameters.identity-service>> ]
+        - equal: [ true, <<pipeline.parameters.shared>> ]
     
     jobs:
       - build-identity-service-image:
@@ -251,10 +275,15 @@ workflows:
           requires:
             - build-identity-service-image
 
+      - clean-image:
+          requires:
+            - apply-identity-service-image
+
   deploy-submission-service:
     when: 
-      condition:
-        or: [ << pipeline.parameters.submission-service >>, << pipeline.parameters.shared >> ]
+      or:
+        - equal: [ true, <<pipeline.parameters.submission-service>> ]
+        - equal: [ true, <<pipeline.parameters.shared>> ]
     
     jobs:
       - build-submission-service-image:
@@ -266,3 +295,7 @@ workflows:
       - apply-submission-service-image:
           requires:
             - build-submission-service-image
+
+      - clean-image:
+          requires:
+            - apply-submission-service-image
