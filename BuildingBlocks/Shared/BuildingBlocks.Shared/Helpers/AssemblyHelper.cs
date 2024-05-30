@@ -45,4 +45,5 @@ public static class AssemblyHelper
 
         return ServiceNames.GetValueOrDefault(entryAssembly.GetName().Name!) ?? string.Empty;
     }
+    
 }
