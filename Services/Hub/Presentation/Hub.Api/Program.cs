@@ -42,4 +42,5 @@ app.MapHub<NotificationHub>("/notification-hub");
 
 app.RegisterCommonPipelines();
 
+
 app.Run();
