@@ -28,4 +28,5 @@ app.UseIdentityServer();
 
 await app.ApplyMigrationAsync<AppIdentityDbContext>();
 
+
 app.Run();
