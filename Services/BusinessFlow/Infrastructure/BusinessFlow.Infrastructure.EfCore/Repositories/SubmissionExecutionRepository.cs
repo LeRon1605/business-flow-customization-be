@@ -20,4 +20,12 @@ public class SubmissionExecutionRepository : EfCoreRepository<SubmissionExecutio
         return GetQueryable()
             .AnyAsync(x => x.BusinessFlowBlock.FormId.HasValue && x.Id == executionId);
     }
+
+    public Task<SubmissionExecution?> GetExecutedAsync(int submissionId, Guid outComeId)
+    {
+        return GetQueryable()
+            .FirstOrDefaultAsync(x => x.SubmissionId == submissionId 
+                           && x.OutComeId.HasValue 
+                           && x.OutComeId == outComeId);
+    }
 }

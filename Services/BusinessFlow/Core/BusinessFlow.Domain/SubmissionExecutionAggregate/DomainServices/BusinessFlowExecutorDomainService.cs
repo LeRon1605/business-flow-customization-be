@@ -2,7 +2,6 @@
 using BusinessFlow.Domain.BusinessFlowAggregate.Enums;
 using BusinessFlow.Domain.BusinessFlowAggregate.Exceptions;
 using BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
-using BusinessFlow.Domain.SubmissionExecutionAggregate.DomainEvents;
 using BusinessFlow.Domain.SubmissionExecutionAggregate.Entities;
 using BusinessFlow.Domain.SubmissionExecutionAggregate.Enums;
 using BusinessFlow.Domain.SubmissionExecutionAggregate.Exceptions;
@@ -44,6 +43,12 @@ public class BusinessFlowExecutorDomainService : IBusinessFlowExecutorDomainServ
 
     public async Task MoveNextAsync(int submissionId, Guid outComeId, string completedBy)
     {
+        var executedSubmission = await _submissionExecutionRepository.GetExecutedAsync(submissionId, outComeId);
+        if (executedSubmission != null)
+        {
+            throw new ExecutionHasAlreadyCompletedException(executedSubmission.Id);
+        }
+        
         var specification = new SubmissionExecutionSpecification(submissionId)
             .And(new SubmissionExecutionByStatusSpecification(SubmissionExecutionStatus.InProgress));
         
@@ -51,12 +56,6 @@ public class BusinessFlowExecutorDomainService : IBusinessFlowExecutorDomainServ
         if (currentExecution == null)
         {
             throw new SubmissionExecutionNotFoundException(submissionId);
-        }
-        
-        var hasInCompleteTask = currentExecution.Tasks.Any(x => x.Status != SubmissionExecutionTaskStatus.Done);
-        if (hasInCompleteTask)
-        {
-            throw new ExecutionInCompletedTaskException(currentExecution.Id);
         }
         
         var currentBlock = await _businessFlowBlockRepository.GetBlockAsync(currentExecution.BusinessFlowBlockId);
@@ -71,9 +70,15 @@ public class BusinessFlowExecutorDomainService : IBusinessFlowExecutorDomainServ
             throw new BusinessFlowOutComeNotFoundException(currentBlock.Id, outComeId);
         }
         
+        var hasInCompleteTask = currentExecution.Tasks.Any(x => x.Status != SubmissionExecutionTaskStatus.Done);
+        if (hasInCompleteTask)
+        {
+            throw new ExecutionInCompletedTaskException(currentExecution.Id);
+        }
+        
         currentExecution.MarkCompleted(outComeId, completedBy);
         
-        var nextBlock = await _businessFlowBlockRepository.GetBlockByOutComeAsync(outComeId);
+        var nextBlock = await _businessFlowBlockRepository.GetNextBlockByOutComeAsync(outComeId);
         if (nextBlock == null)
         {
             throw new SubmissionExecutionNotFoundException(submissionId);

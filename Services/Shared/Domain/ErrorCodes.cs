@@ -53,6 +53,7 @@ public static class ErrorCodes
     public const string ExecutionTaskNotFound = "SubmissionExecution:000004";
     public const string ExecutionInCompletedTask = "SubmissionExecution:000005";
     public const string ExecutionSubmissionNotFound = "SubmissionExecution:000006";
+    public const string ExecutionHasAlreadyCompleted = "SubmissionExecution:000007";
 
     #endregion
 }

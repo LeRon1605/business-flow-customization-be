@@ -10,12 +10,15 @@ public class BasicSubmissionDto : IProjection<FormSubmission, BasicSubmissionDto
     
     public string Name { get; set; } = null!;
     
+    public int FormVersionId { get; set; }
+    
     public Expression<Func<FormSubmission, BasicSubmissionDto>> GetProject()
     {
         return x => new BasicSubmissionDto()
         {
             Id = x.Id,
-            Name = x.Name
+            Name = x.Name,
+            FormVersionId = x.FormVersionId
         };
     }
 }

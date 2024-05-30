@@ -11,5 +11,7 @@ public interface IBusinessFlowBlockRepository : IRepository<BusinessFlowBlock, G
     
     Task<BusinessFlowBlock?> GetBlockByOutComeAsync(Guid outComeId);
     
+    Task<BusinessFlowBlock?> GetNextBlockByOutComeAsync(Guid outComeId);
+    
     Task<bool> IsHasFormAsync(Guid blockId);
 }

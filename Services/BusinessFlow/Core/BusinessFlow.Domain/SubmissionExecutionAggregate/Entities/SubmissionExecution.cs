@@ -62,6 +62,11 @@ public class SubmissionExecution : AuditableTenantAggregateRoot
             throw new ExecutionTaskNotFoundException(Id, taskId);
         }
         
+        if (Status == SubmissionExecutionStatus.Completed)
+        {
+            throw new ExecutionHasAlreadyCompletedException(Id);
+        }
+        
         task.SetStatus(status);
     }
 

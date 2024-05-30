@@ -199,7 +199,8 @@ public class NotificationSenderService : INotificationSenderService
             {
                 { "SpaceId",  model.SpaceId.ToString() },
                 { "BusinessFlowBlockId", model.BusinessFlowBlockId.ToString() },
-                { "SubmissionId", model.SubmissionId.ToString() }
+                { "SubmissionId", model.SubmissionId.ToString() },
+                { "FormVersionId", submission.FormVersionId.ToString() }
             }
         };
     }

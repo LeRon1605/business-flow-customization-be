@@ -34,6 +34,13 @@ public class BusinessFlowBlockRepository : EfCoreRepository<BusinessFlowBlock, G
     public Task<BusinessFlowBlock?> GetBlockByOutComeAsync(Guid outComeId)
     {
         return GetQueryable()
+            .Where(x => x.OutComes.Any(o => o.Id == outComeId))
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<BusinessFlowBlock?> GetNextBlockByOutComeAsync(Guid outComeId)
+    {
+        return GetQueryable()
             .Include(x => x.TaskSettings)
             .Include(x => x.PersonInChargeSettings)
             .Where(x => x.ToBranches.Any(y => y.OutComeId == outComeId))
