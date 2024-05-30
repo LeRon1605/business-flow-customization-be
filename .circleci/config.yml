@@ -1,0 +1,22 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  path-filtering: circleci/path-filtering@0.1.1
+
+workflows:
+  always-run:
+    jobs:
+      - path-filtering/filter:
+          name: check-updated-files
+          mapping: |
+            ApiGateway/.* api-gateway true
+            Services/BusinessFlow/.* business-flow-service true
+            Services/Hub/.* hub-service true
+            Services/Identity/.* identity-service true
+            Services/Submission/.* submission-service true
+            Services/Shared/.* shared true
+            BuildingBlocks/.* shared true
+          base-revision: << pipeline.git.base_revision >>
+          config-path: .circleci/continue_config.yml

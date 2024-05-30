@@ -1,0 +1,268 @@
+version: 2.1
+
+parameters:
+  api-gateway:
+    type: boolean
+    default: false
+  business-flow-service:
+    type: boolean
+    default: false
+  hub-service:
+    type: boolean
+    default: false
+  identity-service:
+    type: boolean
+    default: false
+  submission-service:
+    type: boolean
+    default: false
+  shared:
+    type: boolean
+    default: false
+
+jobs:
+  build-api-gateway-image:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Login docker
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM 
+            docker build -t $DOCKER_USER/business_flow_customization_api_gateway:latest -f ./ApiGateway/Dockerfile .
+            docker build -t $DOCKER_USER/business_flow_customization_api_gateway:$TAG -f ./ApiGateway/Dockerfile .
+      - run:
+          name: Deploy docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/business_flow_customization_api_gateway:latest
+            docker push $DOCKER_USER/business_flow_customization_api_gateway:$TAG
+
+  build-business-flow-service-image:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Login docker
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM 
+            docker build -t $DOCKER_USER/business_flow_api:latest -f ./Services/BusinessFlow/Presentation/BusinessFlow.Api/Dockerfile .
+            docker build -t $DOCKER_USER/business_flow_api:$TAG -f ./Services/BusinessFlow/Presentation/BusinessFlow.Api/Dockerfile .
+      - run:
+          name: Deploy docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/business_flow_api:latest
+            docker push $DOCKER_USER/business_flow_api:$TAG
+
+  build-hub-service-image:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Login docker
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM 
+            docker build -t $DOCKER_USER/hub_api:latest -f ./Services/Hub/Presentation/Hub.Api/Dockerfile .
+            docker build -t $DOCKER_USER/hub_api:$TAG -f ./Services/Hub/Presentation/Hub.Api/Dockerfile .
+      - run:
+          name: Deploy docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/hub_api:latest
+            docker push $DOCKER_USER/hub_api:$TAG
+
+  build-identity-service-image:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Login docker
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM 
+            docker build -t $DOCKER_USER/identity_api:latest -f ./Services/Identity/Presentation/Identity.Api/Dockerfile .
+            docker build -t $DOCKER_USER/identity_api:$TAG -f ./Services/Identity/Presentation/Identity.Api/Dockerfile .
+      - run:
+          name: Deploy docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/identity_api:latest
+            docker push $DOCKER_USER/identity_api:$TAG
+
+  build-submission-service-image:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Login docker
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+      - run:
+          name: Build docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM 
+            docker build -t $DOCKER_USER/submission_api:latest -f ./Services/Submission/Presentation/Submission.Api/Dockerfile .
+            docker build -t $DOCKER_USER/submission_api:$TAG -f ./Services/Submission/Presentation/Submission.Api/Dockerfile .
+      - run:
+          name: Deploy docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker push $DOCKER_USER/submission_api:latest
+            docker push $DOCKER_USER/submission_api:$TAG
+
+  apply-api-gateway-image:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Deploy over ssh
+          command: |
+            ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./deploy-api-gateway.sh"
+
+  apply-business-flow-service-image:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Deploy over ssh
+          command: |
+            ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./deploy-business-flow.sh"
+
+  apply-hub-service-image:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Deploy over ssh
+          command: |
+            ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./deploy-hub.sh"
+
+  apply-identity-service-image:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Deploy over ssh
+          command: |
+            ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./deploy-identity.sh"
+
+  apply-submission-service-image:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - run:
+          name: Deploy over ssh
+          command: |
+            ssh $SSH_USER@$SSH_HOST "cd /usr/business-flow && sudo ./deploy-submission.sh"
+
+workflows:
+  deploy-api-gateway:
+    when: 
+      condition:
+        or: [ << pipeline.parameters.api-gateway >>, << pipeline.parameters.shared >> ]
+    
+    jobs:
+      - build-api-gateway-image:
+          filters:
+            branches:
+              only:
+                - master
+
+      - apply-api-gateway-image:
+          requires:
+            - build-api-gateway-image
+
+  deploy-business-flow-service:
+    when: 
+      condition:
+        or: [ << pipeline.parameters.business-flow-service >>, << pipeline.parameters.shared >> ]
+    
+    jobs:
+      - build-business-flow-service-image:
+          filters:
+            branches:
+              only:
+                - master
+
+      - apply-business-flow-service-image:
+          requires:
+            - build-business-flow-service-image
+
+  deploy-hub-service:
+    when: 
+      condition:
+        or: [ << pipeline.parameters.hub-service >>, << pipeline.parameters.shared >> ]
+    
+    jobs:
+      - build-hub-service-image:
+          filters:
+            branches:
+              only:
+                - master
+
+      - apply-hub-service-image:
+          requires:
+            - build-hub-service-image
+
+  deploy-identity-service:
+    when: 
+      condition:
+        or: [ << pipeline.parameters.identity-service >>, << pipeline.parameters.shared >> ]
+    
+    jobs:
+      - build-identity-service-image:
+          filters:
+            branches:
+              only:
+                - master
+
+      - apply-identity-service-image:
+          requires:
+            - build-identity-service-image
+
+  deploy-submission-service:
+    when: 
+      condition:
+        or: [ << pipeline.parameters.submission-service >>, << pipeline.parameters.shared >> ]
+    
+    jobs:
+      - build-submission-service-image:
+          filters:
+            branches:
+              only:
+                - master
+
+      - apply-submission-service-image:
+          requires:
+            - build-submission-service-image
