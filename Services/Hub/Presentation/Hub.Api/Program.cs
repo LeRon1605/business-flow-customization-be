@@ -35,7 +35,7 @@ builder.Services.AddSignalR();
 builder.Services
     .AddEmailSender(builder.Configuration)
     .AddCloudflareR2(builder.Configuration);
-
+    
 var app = builder.Build();
 
 app.MapHub<NotificationHub>("/notification-hub");

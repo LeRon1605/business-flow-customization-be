@@ -197,9 +197,10 @@ jobs:
 
 workflows:
   deploy-api-gateway:
-    or:
-        - equal: [ true, <<pipeline.parameters.api-gateway>> ]
-        - equal: [ true, <<pipeline.parameters.shared>> ]
+    when:
+      or:
+          - equal: [ true, <<pipeline.parameters.api-gateway>> ]
+          - equal: [ true, <<pipeline.parameters.shared>> ]
     
     jobs:
       - build-api-gateway-image:
