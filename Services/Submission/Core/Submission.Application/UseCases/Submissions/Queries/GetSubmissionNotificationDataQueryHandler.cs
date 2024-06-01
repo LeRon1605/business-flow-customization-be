@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Notifications.Responses;
+using Application.Dtos.Submissions.Responses;
 using AutoMapper;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Domain.Repositories;
@@ -25,7 +26,7 @@ public class GetSubmissionNotificationDataQueryHandler : IQueryHandler<GetSubmis
         var specification = new SubmissionBySpaceSpecification(request.SpaceId)
             .And(new SubmissionByIdsSpecification(request.SubmissionIds));
         
-        var submissions = await _submissionRepository.FilterAsync(specification, new BasicSubmissionDto());
+        var submissions = await _submissionRepository.FilterAsync(specification, new BasicSubmissionQueryDto());
         return _mapper.Map<List<SubmissionNotificationDataDto>>(submissions);
     }
 }

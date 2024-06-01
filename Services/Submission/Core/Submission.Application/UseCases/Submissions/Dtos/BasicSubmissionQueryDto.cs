@@ -1,17 +1,12 @@
 ﻿using System.Linq.Expressions;
+using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Domain.Repositories;
 using Submission.Domain.SubmissionAggregate.Entities;
 
 namespace Submission.Application.UseCases.Submissions.Dtos;
 
-public class BasicSubmissionDto : IProjection<FormSubmission, BasicSubmissionDto>
+public class BasicSubmissionQueryDto : BasicSubmissionDto, IProjection<FormSubmission, BasicSubmissionDto>
 {
-    public int Id { get; set; }
-    
-    public string Name { get; set; } = null!;
-    
-    public int FormVersionId { get; set; }
-    
     public Expression<Func<FormSubmission, BasicSubmissionDto>> GetProject()
     {
         return x => new BasicSubmissionDto()

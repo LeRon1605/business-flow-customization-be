@@ -1,5 +1,6 @@
 ﻿using ApiGateway.Clients.Abstracts;
 using Application.Dtos.Forms;
+using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Clients;
 using RestSharp;
@@ -22,5 +23,16 @@ public class SubmissionClient : RestSharpClient, ISubmissionClient
         }
         
         return ExecuteAsync<List<BasicFormDto>>(request);
+    }
+    
+    public Task<List<BasicSubmissionDto>> GetSubmissionDataAsync(List<int> submissionIds)
+    {
+        var request = new RestRequest("submissions/data");
+        foreach (var submissionId in submissionIds)
+        {
+            request.AddQueryParameter("submissionIds", submissionId);
+        }
+        
+        return ExecuteAsync<List<BasicSubmissionDto>>(request);
     }
 }

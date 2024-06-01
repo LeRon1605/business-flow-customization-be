@@ -40,4 +40,11 @@ public class SubmissionController : ControllerBase
         var submission = await _mediator.Send(new GetExecutionSubmissionQuery(executionId));
         return Ok(submission);
     }
+    
+    [HttpGet("data")]
+    public async Task<IActionResult> GetSubmissions([FromQuery] List<int> submissionIds)
+    {
+        var result = await _mediator.Send(new GetSubmissionDataQuery(submissionIds));
+        return Ok(result);
+    }
 }

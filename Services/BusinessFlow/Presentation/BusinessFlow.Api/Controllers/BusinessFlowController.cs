@@ -1,4 +1,5 @@
-﻿using BusinessFlow.Application.UseCases.BusinessFlows.Commands;
+﻿using Application.Dtos.SubmissionExecutions;
+using BusinessFlow.Application.UseCases.BusinessFlows.Commands;
 using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 using BusinessFlow.Application.UseCases.BusinessFlows.Queries;
 using BusinessFlow.Domain.BusinessFlowAggregate.Models;
@@ -51,5 +52,13 @@ public class BusinessFlowController : ControllerBase
     {
         await _mediator.Send(new SelectBusinessFlowOutComeCommand(submissionId, requestDto.OutComeId));
         return Ok();
+    }
+    
+    [HttpGet("in-charge-executions")]
+    [ProducesResponseType(typeof(List<AssignedSubmissionExecutionDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAssignedSubmissionExecutions()
+    {
+        var result = await _mediator.Send(new GetAssignedSubmissionExecutionQuery());
+        return Ok(result);
     }
 }

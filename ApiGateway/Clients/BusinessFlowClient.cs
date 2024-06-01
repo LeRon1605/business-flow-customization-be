@@ -1,5 +1,6 @@
 ﻿using ApiGateway.Clients.Abstracts;
 using Application.Dtos.Spaces;
+using Application.Dtos.SubmissionExecutions;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Clients;
 using RestSharp;
@@ -17,5 +18,11 @@ public class BusinessFlowClient : RestSharpClient, IBusinessFlowClient
     {
         var request = new RestRequest("spaces");
         return await ExecuteAsync<List<SpaceDto>>(request);
+    }
+    
+    public async Task<List<AssignedSubmissionExecutionDto>> GetAssignedSubmissionExecutionsAsync()
+    {
+        var request = new RestRequest("business-flows/in-charge-executions");
+        return await ExecuteAsync<List<AssignedSubmissionExecutionDto>>(request);
     }
 }

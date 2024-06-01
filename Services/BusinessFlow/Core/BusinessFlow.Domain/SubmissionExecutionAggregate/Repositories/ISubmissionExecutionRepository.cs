@@ -8,4 +8,6 @@ public interface ISubmissionExecutionRepository : IRepository<SubmissionExecutio
     Task<bool> IsHasFormAsync(int executionId);
     
     Task<SubmissionExecution?> GetExecutedAsync(int submissionId, Guid outComeId);
+    
+    Task<IList<TOut>> GetByPersonInChargeAsync<TOut>(string userId, IProjection<SubmissionExecution, TOut> projection);
 }

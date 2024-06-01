@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Notifications.Responses;
+using Application.Dtos.Submissions.Responses;
 using BuildingBlocks.Application.Mappers;
 using Submission.Application.UseCases.Submissions.Dtos;
 using Submission.Domain.SubmissionAggregate.Models;
