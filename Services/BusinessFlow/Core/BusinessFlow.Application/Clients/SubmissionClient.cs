@@ -12,7 +12,7 @@ namespace BusinessFlow.Application.Clients;
 
 public class SubmissionClient : RestSharpClient, ISubmissionClient
 {
-    public SubmissionClient(IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser) : base(httpContextAccessor, currentUser, InternalApis.Submission)
+    public SubmissionClient(IServiceProvider serviceProvider) : base(serviceProvider, InternalApis.Submission)
     {
     }
     

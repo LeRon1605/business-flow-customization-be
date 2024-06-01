@@ -53,6 +53,16 @@ public class MongoDbBasicReadOnlyRepository<TEntity, TKey> : MongoDbSpecificatio
             .ToListAsync();
     }
 
+    public async Task<IList<TOut>> FindAllAsync<TOut>(Expression<Func<TEntity, TOut>> projection, Expression<Func<TEntity, bool>>? expression = null, string? sorting = null)
+    {
+        return await new AppQueryableBuilder<TEntity, TKey>(GetQueryable())
+            .ApplyFilter(expression)
+            .ApplySorting(sorting)
+            .Build()
+            .Select(projection)
+            .ToListAsync();
+    }
+
     public async Task<IList<TEntity>> GetPagedListAsync(int skip
         , int take
         , Expression<Func<TEntity, bool>> expression

@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Application.Dtos;
+﻿using Application.Dtos.Spaces;
+using BuildingBlocks.Application.Dtos;
 using BuildingBlocks.Presentation.Authorization;
 using BusinessFlow.Application.UseCases.BusinessFlows.Commands;
 using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;

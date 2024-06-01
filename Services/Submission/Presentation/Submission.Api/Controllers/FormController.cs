@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Dtos.Spaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Submission.Application.UseCases.Dtos;
 using Submission.Application.UseCases.Forms.Queries;
@@ -22,5 +23,13 @@ public class FormController : ControllerBase
     {
         var form = await _mediator.Send(new GetBusinessFlowBlockFormQuery(businessFlowBlockId));
         return Ok(form);
+    }
+    
+    [HttpGet("spaces")]
+    [ProducesResponseType(typeof(List<SpaceDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpaces([FromQuery] List<int> spaceIds)
+    {
+        var spaces = await _mediator.Send(new GetSpacesFormQuery(spaceIds));
+        return Ok(spaces);
     }
 }

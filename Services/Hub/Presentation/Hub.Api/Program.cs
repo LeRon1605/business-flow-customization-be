@@ -5,7 +5,6 @@ using BuildingBlocks.Infrastructure.Mail;
 using BuildingBlocks.Infrastructure.MongoDb;
 using BuildingBlocks.Presentation;
 using Hub.Application;
-using Hub.Application.Clients;
 using Hub.Domain;
 using Hub.Infrastructure.MongoDb;
 using Hub.Infrastructure.SignalR.Hubs;

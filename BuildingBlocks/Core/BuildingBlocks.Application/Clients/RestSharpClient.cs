@@ -2,6 +2,7 @@
 using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Exceptions.Resources;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -12,19 +13,18 @@ public class RestSharpClient
 {
     private readonly string _url;
     private readonly ClientAuthenticationType _authenticationType;
-    private readonly ICurrentUser _currentUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IServiceProvider _serviceProvider;
 
     protected RestClient Client => CreateClient(_url, _authenticationType);
     
-    protected RestSharpClient(IHttpContextAccessor httpContextAccessor
-        , ICurrentUser currentUser
+    protected RestSharpClient(IServiceProvider serviceProvider
         , string url
         , ClientAuthenticationType authenticationType = ClientAuthenticationType.JwtForward)
     {
+        _serviceProvider = serviceProvider;
         _url = url;
-        _httpContextAccessor = httpContextAccessor;
-        _currentUser = currentUser;
+        _httpContextAccessor = _serviceProvider.GetRequiredService<IHttpContextAccessor>();
         _authenticationType = authenticationType;
     }
     
@@ -50,8 +50,10 @@ public class RestSharpClient
                 return null;
             
             case ClientAuthenticationType.ClientCredentials:
-                var userId = _currentUser.IsAuthenticated ? _currentUser.Id : null;
-                var tenantId = _currentUser.IsAuthenticated ? (int?)_currentUser.TenantId : null;
+                var currentUser = _serviceProvider.GetRequiredService<ICurrentUser>();
+                
+                var userId = currentUser.IsAuthenticated ? currentUser.Id : null;
+                var tenantId = currentUser.IsAuthenticated ? (int?)currentUser.TenantId : null;
                 
                 return new ClientCredentialAuthenticator(userId!, tenantId);
             

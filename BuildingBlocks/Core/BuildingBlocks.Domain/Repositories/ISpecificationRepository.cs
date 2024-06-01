@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Domain.Models.Interfaces;
+﻿using System.Linq.Expressions;
+using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Specifications.Interfaces;
 
 namespace BuildingBlocks.Domain.Repositories;
@@ -12,6 +13,8 @@ public interface ISpecificationRepository<TEntity, TKey> : IBaseRepository
     Task<IList<TEntity>> FilterAsync(ISpecification<TEntity, TKey> specification);
     
     Task<IList<TOut>> FilterAsync<TOut>(ISpecification<TEntity, TKey> specification, IProjection<TEntity, TKey, TOut> projection);
+    
+    Task<IList<TOut>> FilterAsync<TOut>(ISpecification<TEntity, TKey> specification, Expression<Func<TEntity, TOut>> projection);
     
     Task<IList<TEntity>> GetPagedListAsync(int skip, int take, ISpecification<TEntity, TKey> specification, string? sorting = null);
 

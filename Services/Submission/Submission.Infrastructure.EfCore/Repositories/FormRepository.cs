@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Application.Identity;
+using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,5 +19,16 @@ public class FormRepository : EfCoreRepository<Form>, IFormRepository
         return GetQueryable()
             .Include(x => x.Versions)
             .FirstOrDefaultAsync(x => x.BusinessFlowBlockId.HasValue && x.BusinessFlowBlockId == businessFlowBlockId);
+    }
+
+    public Task<List<TOut>> GetBySpacesAsync<TOut>(List<int> spaceIds, IProjection<FormVersion, TOut> projection)
+    {
+        return GetQueryable()
+            .Where(x => spaceIds.Contains(x.SpaceId) && x.BusinessFlowBlockId == null)
+            .SelectMany(x => x.Versions
+                .OrderByDescending(v => v.Id)
+                .Take(1))
+            .Select(projection.GetProject())
+            .ToListAsync();
     }
 }

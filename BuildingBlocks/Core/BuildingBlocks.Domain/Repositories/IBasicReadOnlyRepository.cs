@@ -18,6 +18,8 @@ public interface IBasicReadOnlyRepository<TEntity, TKey> : ISpecificationReposit
     
     Task<IList<TOut>> FindAllAsync<TOut>(IProjection<TEntity, TKey, TOut> projection, Expression<Func<TEntity, bool>>? expression = null, string? sorting = null);
 
+    Task<IList<TOut>> FindAllAsync<TOut>(Expression<Func<TEntity, TOut>> projection, Expression<Func<TEntity, bool>>? expression = null, string? sorting = null);
+    
     Task<IList<TEntity>> GetPagedListAsync(int skip, int take, Expression<Func<TEntity, bool>> expression, string? sorting = null, bool tracking = true, string? includeProps = null);
 
     Task<TEntity?> FindByIdAsync(object id, string? includeProps = null, bool tracking = true);

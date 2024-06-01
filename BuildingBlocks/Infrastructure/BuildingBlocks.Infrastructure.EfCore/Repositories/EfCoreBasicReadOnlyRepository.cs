@@ -50,6 +50,16 @@ public class EfCoreBasicReadOnlyRepository<TEntity, TKey> : EfCoreSpecificationR
             .ToListAsync();
     }
 
+    public async Task<IList<TOut>> FindAllAsync<TOut>(Expression<Func<TEntity, TOut>> projection, Expression<Func<TEntity, bool>>? expression = null, string? sorting = null)
+    {
+        return await new AppQueryableBuilder<TEntity, TKey>(GetQueryable())
+            .ApplyFilter(expression)
+            .ApplySorting(sorting)
+            .Build()
+            .Select(projection)
+            .ToListAsync();
+    }
+
     public async Task<IList<TEntity>> GetPagedListAsync(int skip, int take, Expression<Func<TEntity, bool>> expression, string? sorting = null, bool tracking = true, string? includeProps = null)
     {
         var queryable = new AppQueryableBuilder<TEntity, TKey>(GetQueryable(tracking))

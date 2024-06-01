@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using ApiGateway.Clients;
+using ApiGateway.Clients.Abstracts;
+using ApiGateway.Services;
+using ApiGateway.Services.Abstracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -49,6 +53,21 @@ public static class ServiceCollectionExtensions
                 });
             });
         });
+
+        return services;
+    }
+    
+    public static IServiceCollection AddClients(this IServiceCollection services)
+    {
+        services.AddScoped<ISubmissionClient, SubmissionClient>();
+        services.AddScoped<IBusinessFlowClient, BusinessFlowClient>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddScoped<IFormService, FormService>();
 
         return services;
     }

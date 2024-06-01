@@ -11,8 +11,8 @@ namespace Hub.Application.Clients;
 
 public class InternalBusinessFlowClient : RestSharpClient, IInternalBusinessFlowClient
 {
-    public InternalBusinessFlowClient(IHttpContextAccessor httpContextAccessor
-        , ICurrentUser currentUser) : base(httpContextAccessor, currentUser, InternalApis.BusinessFlow, ClientAuthenticationType.ClientCredentials)
+    public InternalBusinessFlowClient(IServiceProvider serviceProvider) 
+        : base(serviceProvider, InternalApis.BusinessFlow, ClientAuthenticationType.ClientCredentials)
     {
     }
 

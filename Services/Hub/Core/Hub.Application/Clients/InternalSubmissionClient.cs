@@ -11,8 +11,8 @@ namespace Hub.Application.Clients;
 
 public class InternalSubmissionClient : RestSharpClient, IInternalSubmissionClient
 {
-    public InternalSubmissionClient(IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser) 
-        : base(httpContextAccessor, currentUser, InternalApis.Submission, ClientAuthenticationType.ClientCredentials)
+    public InternalSubmissionClient(IServiceProvider serviceProvider) 
+        : base(serviceProvider, InternalApis.Submission, ClientAuthenticationType.ClientCredentials)
     {
     }
 

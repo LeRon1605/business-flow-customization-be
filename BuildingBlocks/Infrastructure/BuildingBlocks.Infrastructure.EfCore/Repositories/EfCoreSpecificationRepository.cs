@@ -5,6 +5,7 @@ using BuildingBlocks.Domain.Specifications.Interfaces;
 using BuildingBlocks.Infrastructure.EfCore.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using LinqKit;
 
 namespace BuildingBlocks.Infrastructure.EfCore.Repositories;
@@ -37,6 +38,11 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
     public async Task<IList<TOut>> FilterAsync<TOut>(ISpecification<TEntity, TKey> specification, IProjection<TEntity, TKey, TOut> projection)
     {
         return await GetQueryable(specification).Select(projection.GetProject().Expand()).ToListAsync();
+    }
+
+    public async Task<IList<TOut>> FilterAsync<TOut>(ISpecification<TEntity, TKey> specification, Expression<Func<TEntity, TOut>> projection)
+    {
+        return await GetQueryable(specification).Select(projection).ToListAsync();
     }
 
     public async Task<IList<TEntity>> GetPagedListAsync(int skip, int take, ISpecification<TEntity, TKey> specification, string? sorting = null)

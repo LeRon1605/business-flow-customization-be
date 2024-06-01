@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.Notifications.Requests;
 using Application.Dtos.Notifications.Responses;
+using Application.Dtos.Spaces;
 using BuildingBlocks.Application.Mappers;
 using BusinessFlow.Application.UseCases.Spaces.Dtos;
 

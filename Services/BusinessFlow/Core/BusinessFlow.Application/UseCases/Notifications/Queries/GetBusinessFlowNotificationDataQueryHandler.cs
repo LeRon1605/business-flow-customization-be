@@ -1,5 +1,6 @@
 ﻿using Application.Dtos.Notifications.Requests;
 using Application.Dtos.Notifications.Responses;
+using Application.Dtos.Spaces;
 using AutoMapper;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Domain.Repositories;
@@ -47,7 +48,7 @@ public class GetBusinessFlowNotificationDataQueryHandler : IQueryHandler<GetBusi
     
     private async Task<BusinessFlowNotificationDataDto?> GetSpaceNotificationData(int spaceId)
     {
-        var space = await _spaceRepository.FindByIdAsync(spaceId, new SpaceDto());
+        var space = await _spaceRepository.FindByIdAsync(spaceId, new SpaceQueryDto());
         if (space == null)
         {
             return null;
