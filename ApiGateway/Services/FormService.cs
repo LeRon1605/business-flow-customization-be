@@ -26,7 +26,9 @@ public class FormService : IFormService
             Id = f.Id,
             Name = f.Name,
             SpaceName = spaces.First(s => s.Id == f.SpaceId).Name,
-            SpaceColor = spaces.First(s => s.Id == f.SpaceId).Color
+            SpaceColor = spaces.First(s => s.Id == f.SpaceId).Color,
+            SpaceId = f.SpaceId,
+            VersionId = f.VersionId
         }).ToList();
     }
 }
