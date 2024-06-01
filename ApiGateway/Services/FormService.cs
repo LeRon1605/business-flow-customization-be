@@ -1,6 +1,6 @@
 ﻿using ApiGateway.Clients.Abstracts;
+using ApiGateway.Dtos;
 using ApiGateway.Services.Abstracts;
-using Application.Dtos.Forms;
 
 namespace ApiGateway.Services;
 
@@ -15,11 +15,18 @@ public class FormService : IFormService
         _businessFlowClient = businessFlowClient;
     }
 
-    public async Task<List<BasicFormDto>> GetSubmittableFormsAsync()
+    public async Task<List<SubmittableFormDto>> GetSubmittableFormsAsync()
     {
         var spaces = await _businessFlowClient.GetSpacesAsync();
         var spaceIds = spaces.Select(s => s.Id).ToList();
         
-        return await _submissionClient.GetFormsBySpacesAsync(spaceIds);
+        var forms = await _submissionClient.GetFormsBySpacesAsync(spaceIds);
+        return forms.Select(f => new SubmittableFormDto
+        {
+            Id = f.Id,
+            Name = f.Name,
+            SpaceName = spaces.First(s => s.Id == f.SpaceId).Name,
+            SpaceColor = spaces.First(s => s.Id == f.SpaceId).Color
+        }).ToList();
     }
 }
