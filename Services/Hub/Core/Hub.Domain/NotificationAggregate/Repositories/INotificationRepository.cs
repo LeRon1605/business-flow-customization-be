@@ -7,6 +7,8 @@ public interface INotificationRepository : IRepository<Notification, Guid>
 {
     Task<List<Notification>> GetPagedAsync(int page, int pageSize, string receiverId);
     
+    Task<List<Notification>> GetAsync(string receiverId);
+    
     Task<int> GetCountAsync(string receiverId);
     
     Task<int> GetUnReadCountAsync(string receiverId);

@@ -26,6 +26,17 @@ public class NotificationRepository : MongoDbRepository<Notification, Guid>, INo
             .ToListAsync();
     }
 
+    public Task<List<Notification>> GetAsync(string receiverId)
+    {
+        var filter = Builders<Notification>.Filter.Eq(x => x.ReceiverId, receiverId)
+                     & Builders<Notification>.Filter.Eq(x => x.TenantId, CurrentUser.TenantId);
+        var sort = Builders<Notification>.Sort.Descending(x => x.Created);
+        
+        return Collection.Find(filter)
+            .Sort(sort)
+            .ToListAsync();
+    }
+
     public async Task<int> GetCountAsync(string receiverId)
     {
         var filter = Builders<Notification>.Filter.Eq(x => x.ReceiverId, receiverId)

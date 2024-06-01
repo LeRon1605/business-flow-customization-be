@@ -24,7 +24,9 @@ public class GetNotificationQueryHandler : IQueryHandler<GetNotificationQuery, P
     
     public async Task<PagedResultDto<NotificationDto>> Handle(GetNotificationQuery request, CancellationToken cancellationToken)
     {
-        var notifications = await _notificationRepository.GetPagedAsync(request.Page, request.Size, _currentUser.Id);
+        var notifications = request.IsPaging
+            ? await _notificationRepository.GetPagedAsync(request.Page, request.Size, _currentUser.Id)
+            : await _notificationRepository.GetAsync(_currentUser.Id);
         var total = await _notificationRepository.GetCountAsync(_currentUser.Id);
 
         return new PagedResultDto<NotificationDto>(total, request.Size, _mapper.Map<List<NotificationDto>>(notifications));

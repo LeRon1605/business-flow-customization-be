@@ -6,7 +6,10 @@ namespace Hub.Application.UseCases.Notifications.Queries;
 
 public class GetNotificationQuery : PagingRequestDto, IQuery<PagedResultDto<NotificationDto>>
 {
-    public GetNotificationQuery(int page, int size) : base(page, size)
+    public bool IsPaging { get; set; }
+    
+    public GetNotificationQuery(int page, int size, bool isPaging) : base(page, size)
     {
+        IsPaging = isPaging;
     }
 }

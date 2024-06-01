@@ -1,5 +1,6 @@
 ﻿using BuildingBlocks.Application.Dtos;
 using Hub.Application.UseCases.Notifications.Commands;
+using Hub.Application.UseCases.Notifications.Dtos;
 using Hub.Application.UseCases.Notifications.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,9 +21,9 @@ public class NotificationController : ControllerBase
     
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetNotifications([FromQuery] PagingRequestDto dto)
+    public async Task<IActionResult> GetNotifications([FromQuery] NotificationPagingRequestDto dto)
     {
-        var result = await _mediator.Send(new GetNotificationQuery(dto.Page, dto.Size));
+        var result = await _mediator.Send(new GetNotificationQuery(dto.Page, dto.Size, dto.IsPaging));
         return Ok(result);
     }
     
