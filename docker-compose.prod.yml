@@ -6,7 +6,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - "80:80"
+      - "5000:80"
     depends_on:
       db:
         condition: service_started
@@ -145,6 +145,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: Admin123
     volumes:
       - mongodata:/data/db
+
+  web:
+    image: rubeha/business_flow_web
+    ports:
+      - "80:80"
+    restart: always
       
 volumes: 
   seqdata:
@@ -152,4 +158,3 @@ volumes:
   mqdata:
   redisdata:
   mongodata:
-    
