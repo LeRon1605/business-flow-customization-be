@@ -6,5 +6,5 @@ public class NotificationTemplateDto
 
     public string Content { get; set; } = null!;
     
-    public Dictionary<string, string> MetaData { get; set; } = new();
+    public Dictionary<string, object> MetaData { get; set; } = new();
 }

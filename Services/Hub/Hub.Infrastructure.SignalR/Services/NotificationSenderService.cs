@@ -157,6 +157,9 @@ public class NotificationSenderService : INotificationSenderService
             
             case NotificationType.SubmissionExecutionInitiated:
                 return GetSubmissionExecutionInitiatedTemplate(data);
+            
+            case NotificationType.UserInvitationAccepted:
+                return GetUserInvitationAcceptedTemplate(data);
         }
 
         return null;
@@ -195,7 +198,7 @@ public class NotificationSenderService : INotificationSenderService
         {
             Title = title,
             Content = content,
-            MetaData = new Dictionary<string, string>()
+            MetaData = new Dictionary<string, object>()
             {
                 { "SpaceId",  model.SpaceId.ToString() },
                 { "BusinessFlowBlockId", model.BusinessFlowBlockId.ToString() },
@@ -213,10 +216,43 @@ public class NotificationSenderService : INotificationSenderService
         
         return new NotificationTemplateDto
         {
-            MetaData = new Dictionary<string, string>()
+            MetaData = new Dictionary<string, object>()
             {
                 { "Id",  model.Id.ToString() },
                 { "ExecutionId", model.ExecutionId.ToString() }
+            }
+        };
+    }
+    
+    private NotificationTemplateDto? GetUserInvitationAcceptedTemplate(string data)
+    {
+        var model = JsonConvert.DeserializeObject<NotificationUserInvitationAcceptedModel>(data);
+        if (model == null)
+            return null;
+        
+        var titleData = new Dictionary<string, string>
+        {
+            { "TenantName", model.TenantName }
+        };
+        
+        var contentData = new Dictionary<string, string>
+        {
+            { "UserFullName", model.FullName }
+        };
+        
+        var title = _templateGenerator.GenerateNotificationTitle(NotificationType.UserInvitationAccepted, titleData);
+        var content = _templateGenerator.GenerateNotificationContent(NotificationType.UserInvitationAccepted, contentData);
+        
+        return new NotificationTemplateDto
+        {
+            Title = title,
+            Content = content,
+            MetaData = new Dictionary<string, object>()
+            {
+                { "UserId",  model.UserId },
+                { "TenantId", model.TenantId },
+                { "TenantName", model.TenantName },
+                { "FullName", model.FullName }
             }
         };
     }

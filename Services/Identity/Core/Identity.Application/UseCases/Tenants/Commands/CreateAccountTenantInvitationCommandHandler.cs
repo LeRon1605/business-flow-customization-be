@@ -51,7 +51,10 @@ public class CreateAccountTenantInvitationCommandHandler : ICommandHandler<Creat
                 throw new ResourceInvalidOperationException(result.Error!, result.ErrorCode!);
             }
 
+            _currentUser.IsAuthenticated = true;
             _currentUser.Id = result.Data!.Id;
+            _currentUser.TenantId = invitation.TenantId;
+            
             tenant.AcceptInvitation(request.Token);
             
             await _unitOfWork.CommitTransactionAsync();
