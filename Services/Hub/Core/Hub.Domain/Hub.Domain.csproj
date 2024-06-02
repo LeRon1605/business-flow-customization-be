@@ -9,6 +9,11 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Domain\Domain.csproj" />
 
+
+
+
+
+
     </ItemGroup>
 
 

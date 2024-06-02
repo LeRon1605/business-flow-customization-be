@@ -4,5 +4,6 @@ public enum NotificationType
 {
     PersonInChargeAssigned,
     SubmissionExecutionInitiated,
-    UserInvitationAccepted
+    UserInvitationAccepted,
+    SubmissionCommentMentioned
 }
