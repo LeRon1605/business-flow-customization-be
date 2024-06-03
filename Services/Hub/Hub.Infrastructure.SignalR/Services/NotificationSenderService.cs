@@ -296,7 +296,7 @@ public class NotificationSenderService : INotificationSenderService
             Content = content,
             MetaData = new Dictionary<string, object>()
             {
-                { "SpaceId",  submission.Id.ToString() },
+                { "SpaceId",  submission.SpaceId.ToString() },
                 { "SubmissionId", model.SubmissionId.ToString() },
                 { "FormVersionId", submission.FormVersionId.ToString() }
             }
