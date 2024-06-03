@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Domain.Models.Interfaces;
 using BuildingBlocks.Domain.Repositories;
+using MediatR;
 using MongoDB.Driver;
 
 namespace BuildingBlocks.Infrastructure.MongoDb.Repositories;
@@ -9,11 +10,16 @@ public class MongoDbRepository<TAggregateRoot, TKey> : MongoDbReadOnlyRepository
     where TAggregateRoot : class, IAggregateRoot<TKey>
     where TKey : IEquatable<TKey>
 {
-    public MongoDbRepository(IMongoDatabase database, ICurrentUser currentUser) : base(database, currentUser)
+    private readonly IMediator _mediator;
+    
+    public MongoDbRepository(IMongoDatabase database
+        , ICurrentUser currentUser
+        , IMediator mediator) : base(database, currentUser)
     {
+        _mediator = mediator;
     }
 
-    public Task InsertAsync(TAggregateRoot entity)
+    public async Task InsertAsync(TAggregateRoot entity)
     {
         if (typeof(TAggregateRoot).IsAssignableTo(typeof(IHasAuditable)))
         {
@@ -24,8 +30,16 @@ public class MongoDbRepository<TAggregateRoot, TKey> : MongoDbReadOnlyRepository
         {
             ((IHasTenant)entity).TenantId = CurrentUser.TenantId;
         }
+
+        await Collection.InsertOneAsync(entity);
         
-        return Collection.InsertOneAsync(entity);
+        if (entity.DomainEvents == null || !entity.DomainEvents.Any())
+            return;
+        
+        foreach (var domainEvent in entity.DomainEvents)
+        {
+            await _mediator.Publish(domainEvent);
+        }
     }
 
     public Task InsertRangeAsync(IEnumerable<TAggregateRoot> entities)

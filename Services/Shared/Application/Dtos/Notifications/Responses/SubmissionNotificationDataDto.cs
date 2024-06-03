@@ -7,4 +7,6 @@ public class SubmissionNotificationDataDto
     public string Name { get; set; } = null!;
     
     public int FormVersionId { get; set; }
+    
+    public int SpaceId { get; set; }
 }

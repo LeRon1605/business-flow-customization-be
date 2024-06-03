@@ -3,7 +3,6 @@ using Application.Dtos.Notifications.Requests;
 using AutoMapper;
 using BuildingBlocks.Application.Identity;
 using Domain.Enums;
-using Hub.Application.Clients;
 using Hub.Application.Clients.Abstracts;
 using Hub.Application.Dtos;
 using Hub.Application.Services.Abstracts;
@@ -25,6 +24,7 @@ public class NotificationSenderService : INotificationSenderService
     private readonly ITemplateGenerator _templateGenerator;
     private readonly IInternalSubmissionClient _internalSubmissionClient;
     private readonly IInternalBusinessFlowClient _internalBusinessFlowClient;
+    private readonly IInternalIdentityClient _internalIdentityClient;
     private readonly IMapper _mapper;
     
     public NotificationSenderService(ICurrentUser currentUser
@@ -34,6 +34,7 @@ public class NotificationSenderService : INotificationSenderService
         , INotificationDomainService notificationDomainService
         , IInternalSubmissionClient internalSubmissionClient
         , IInternalBusinessFlowClient internalBusinessFlowClient
+        , IInternalIdentityClient internalIdentityClient
         , IMapper mapper)
     {
         _currentUser = currentUser;
@@ -43,6 +44,7 @@ public class NotificationSenderService : INotificationSenderService
         _notificationDomainService = notificationDomainService;
         _internalSubmissionClient = internalSubmissionClient;
         _internalBusinessFlowClient = internalBusinessFlowClient;
+        _internalIdentityClient = internalIdentityClient;
         _mapper = mapper;
     }
 
@@ -160,6 +162,10 @@ public class NotificationSenderService : INotificationSenderService
             
             case NotificationType.UserInvitationAccepted:
                 return GetUserInvitationAcceptedTemplate(data);
+            
+            case NotificationType.SubmissionComment:
+            case NotificationType.SubmissionCommentMentioned:
+                return await GetSubmissionCommentAsync(data, type);
         }
 
         return null;
@@ -171,8 +177,7 @@ public class NotificationSenderService : INotificationSenderService
         if (model == null)
             return null;
 
-        var submissions = await _internalSubmissionClient.GetSubmissionNotificationDataAsync(model.SpaceId
-            , new List<int>() { model.SubmissionId });
+        var submissions = await _internalSubmissionClient.GetSubmissionNotificationDataAsync(new List<int>() { model.SubmissionId });
         var businessFlows = await _internalBusinessFlowClient.GetBusinessFlowNotificationDataAsync(model.SpaceId
             , new List<Guid>() { model.BusinessFlowBlockId });
         
@@ -256,4 +261,45 @@ public class NotificationSenderService : INotificationSenderService
             }
         };
     }
+    
+    private async Task<NotificationTemplateDto?> GetSubmissionCommentAsync(string data, NotificationType submissionCommentNotificationType)
+    {
+        var model = JsonConvert.DeserializeObject<NotificationSubmissionCommentModel>(data);
+        if (model == null)
+            return null;
+        
+        var users = await _internalIdentityClient.GetIdentityNotificationDataAsync(new List<string>() { _currentUser.Id });
+        var submissions = await _internalSubmissionClient.GetSubmissionNotificationDataAsync(new List<int>() { model.SubmissionId });
+        
+        var submission = submissions.FirstOrDefault();
+        var user = users.FirstOrDefault();
+        if (submission == null || user == null)
+            return null;
+        
+        var titleData = new Dictionary<string, string>
+        {
+            { "UserFullName", user.FullName },
+            { "RecordName", submission.Name }
+        };
+        
+        var contentData = new Dictionary<string, string>
+        {
+            { "Content", model.Content }
+        };
+        
+        var title = _templateGenerator.GenerateNotificationTitle(submissionCommentNotificationType, titleData);
+        var content = _templateGenerator.GenerateNotificationContent(submissionCommentNotificationType, contentData);
+        
+        return new NotificationTemplateDto
+        {
+            Title = title,
+            Content = content,
+            MetaData = new Dictionary<string, object>()
+            {
+                { "SpaceId",  submission.Id.ToString() },
+                { "SubmissionId", model.SubmissionId.ToString() },
+                { "FormVersionId", submission.FormVersionId.ToString() }
+            }
+        };
+    } 
 }

@@ -3,13 +3,15 @@ using BuildingBlocks.Infrastructure.MongoDb.Repositories;
 using Hub.Domain.NotificationAggregate.Entities;
 using Hub.Domain.NotificationAggregate.Enums;
 using Hub.Domain.NotificationAggregate.Repositories;
+using MediatR;
 using MongoDB.Driver;
 
 namespace Hub.Infrastructure.MongoDb.Repositories;
 
 public class NotificationRepository : MongoDbRepository<Notification, Guid>, INotificationRepository
 {
-    public NotificationRepository(IMongoDatabase database, ICurrentUser currentUser) : base(database, currentUser)
+    public NotificationRepository(IMongoDatabase database, ICurrentUser currentUser, IMediator mediator) 
+        : base(database, currentUser, mediator)
     {
     }
 

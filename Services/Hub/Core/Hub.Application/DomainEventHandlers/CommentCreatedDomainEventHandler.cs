@@ -1,34 +1,21 @@
-﻿using BuildingBlocks.Application.Identity;
+﻿using BuildingBlocks.Application.Schedulers;
 using BuildingBlocks.Domain.Events;
-using Domain.Enums;
-using Hub.Application.Services.Abstracts;
+using Hub.Application.UseCases.Comments.Jobs;
 using Hub.Domain.CommentAggregate.DomainEvents;
-using Hub.Domain.CommentAggregate.Enums;
 
 namespace Hub.Application.DomainEventHandlers;
 
 public class CommentCreatedDomainEventHandler : IDomainEventHandler<CommentCreatedDomainEvent>
 {
-    private readonly INotificationSenderService _notificationSenderService;
-    private readonly ICurrentUser _currentUser;
+    private readonly IBackGroundJobManager _backGroundJobManager;
     
-    public CommentCreatedDomainEventHandler(INotificationSenderService notificationSenderService
-        , ICurrentUser currentUser)
+    public CommentCreatedDomainEventHandler(IBackGroundJobManager backGroundJobManager)
     {
-        _notificationSenderService = notificationSenderService;
-        _currentUser = currentUser;
+        _backGroundJobManager = backGroundJobManager;
     }
     
     public async Task Handle(CommentCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var mentionUserIds = notification.Comment.Mentions
-            .Where(x => x.EntityType == MentionEntity.User)
-            .SelectMany(x => x.EntityIds)
-            .ToList();
-        
-        await _notificationSenderService.SendAsync(mentionUserIds
-            , _currentUser.TenantId
-            , string.Empty
-            , NotificationType.SubmissionCommentMentioned);
+        _backGroundJobManager.Fire(new PushCommentNotificationBackGroundJob(notification.Comment.Id));
     }
 }

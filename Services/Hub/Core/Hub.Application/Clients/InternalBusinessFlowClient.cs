@@ -2,9 +2,7 @@
 using Application.Dtos.Notifications.Responses;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Clients;
-using BuildingBlocks.Application.Identity;
 using Hub.Application.Clients.Abstracts;
-using Microsoft.AspNetCore.Http;
 using RestSharp;
 
 namespace Hub.Application.Clients;
@@ -29,5 +27,23 @@ public class InternalBusinessFlowClient : RestSharpClient, IInternalBusinessFlow
         });
 
         return await ExecuteAsync<List<BusinessFlowNotificationDataDto>>(request);
+    }
+
+    public Task<List<BusinessFlowNotificationDataDto>> GetExecutionPersonInChargeDataAsync(List<int> submissionIds)
+    {
+        var request = new RestRequest("notifications/business-flows/data", Method.Post);
+        
+        request.AddJsonBody(new GetBusinessFlowNotificationDataRequestDto
+        {
+            Entities = submissionIds
+                .Select(x => new GetBusinessFlowNotificationDataEntityRequestDto
+                {
+                    Id = x.ToString(), 
+                    Type = BusinessFlowNotificationDataType.ExecutionPersonInCharge
+                })
+                .ToList()
+        });
+
+        return ExecuteAsync<List<BusinessFlowNotificationDataDto>>(request);
     }
 }

@@ -5,5 +5,5 @@ namespace Hub.Application.Clients.Abstracts;
 
 public interface IInternalSubmissionClient : IRestSharpClient
 {
-    Task<List<SubmissionNotificationDataDto>> GetSubmissionNotificationDataAsync(int spaceId, List<int> submissionIds);
+    Task<List<SubmissionNotificationDataDto>> GetSubmissionNotificationDataAsync(List<int> submissionIds);
 }

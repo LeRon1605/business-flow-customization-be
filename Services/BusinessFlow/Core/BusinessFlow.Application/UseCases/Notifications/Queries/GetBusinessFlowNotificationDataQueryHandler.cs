@@ -1,14 +1,17 @@
 ﻿using Application.Dtos.Notifications.Requests;
 using Application.Dtos.Notifications.Responses;
-using Application.Dtos.Spaces;
 using AutoMapper;
 using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Domain.Repositories;
 using BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
+using BusinessFlow.Application.UseCases.Notifications.Dtos;
 using BusinessFlow.Application.UseCases.Spaces.Dtos;
 using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.SpaceAggregate.Entities;
 using BusinessFlow.Domain.SubmissionExecutionAggregate.Entities;
+using BusinessFlow.Domain.SubmissionExecutionAggregate.Enums;
+using BusinessFlow.Domain.SubmissionExecutionAggregate.Repositories;
+using BusinessFlow.Domain.SubmissionExecutionAggregate.Specifications;
 
 namespace BusinessFlow.Application.UseCases.Notifications.Queries;
 
@@ -34,6 +37,7 @@ public class GetBusinessFlowNotificationDataQueryHandler : IQueryHandler<GetBusi
         , CancellationToken cancellationToken)
     {
         var businessFlows = await GetBusinessFlowNotificationData(request);
+        var submissionPersonInCharge = await GetExecutionPersonInChargeDataAsync(request);
         var spaces = await GetSpaceNotificationData(request.SpaceId);
         
         var result = new List<BusinessFlowNotificationDataDto>();
@@ -43,6 +47,8 @@ public class GetBusinessFlowNotificationDataQueryHandler : IQueryHandler<GetBusi
         }
         
         result.AddRange(businessFlows);
+        result.AddRange(submissionPersonInCharge);
+        
         return result;
     }
     
@@ -63,6 +69,8 @@ public class GetBusinessFlowNotificationDataQueryHandler : IQueryHandler<GetBusi
             .Where(x => x.Type == BusinessFlowNotificationDataType.BusinessFlow)
             .Select(x => Guid.Parse(x.Id))
             .ToList();
+        if (!businessFlowIds.Any())
+            return new List<BusinessFlowNotificationDataDto>();
         
         var businessFlows = await _businessFlowBlockRepository.FindByIncludedIdsAsync(businessFlowIds, new BasicBusinessFlowBlockDto());
         return _mapper.Map<List<BusinessFlowNotificationDataDto>>(businessFlows);
@@ -79,4 +87,21 @@ public class GetBusinessFlowNotificationDataQueryHandler : IQueryHandler<GetBusi
     //
     //     return _mapper.Map<List<BusinessFlowNotificationDataDto>>(executions);
     // }
+    
+    private async Task<List<BusinessFlowNotificationDataDto>> GetExecutionPersonInChargeDataAsync(GetBusinessFlowNotificationDataQuery request)
+    {
+        var submissionIds = request.Entities
+            .Where(x => x.Type == BusinessFlowNotificationDataType.ExecutionPersonInCharge)
+            .Select(x => int.Parse(x.Id))
+            .ToList();
+        if (!submissionIds.Any())
+            return new List<BusinessFlowNotificationDataDto>();
+        
+        var specification = new SubmissionExecutionByIncludedSubmissionIdsSpecification(submissionIds)
+            .And(new SubmissionExecutionByStatusSpecification(SubmissionExecutionStatus.InProgress));
+        var personInCharges = await _businessFlowExecutionRepository
+            .FilterAsync(specification, new PersonInChargeQueryDto());
+
+        return _mapper.Map<List<BusinessFlowNotificationDataDto>>(personInCharges);
+    }
 }

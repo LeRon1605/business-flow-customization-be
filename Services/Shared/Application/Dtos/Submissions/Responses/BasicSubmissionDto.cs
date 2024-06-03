@@ -7,4 +7,6 @@ public class BasicSubmissionDto
     public string Name { get; set; } = null!;
     
     public int FormVersionId { get; set; }
+    
+    public int SpaceId { get; set; }
 }

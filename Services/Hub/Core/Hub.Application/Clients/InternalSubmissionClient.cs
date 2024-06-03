@@ -16,21 +16,15 @@ public class InternalSubmissionClient : RestSharpClient, IInternalSubmissionClie
     {
     }
 
-    public async Task<List<SubmissionNotificationDataDto>> GetSubmissionNotificationDataAsync(int spaceId, List<int> submissionIds)
+    public async Task<List<SubmissionNotificationDataDto>> GetSubmissionNotificationDataAsync(List<int> submissionIds)
     {
         var request = new RestRequest("notifications/submissions/data", Method.Post);
         
         request.AddJsonBody(new GetSubmissionNotificationDataRequestDto
         {
-            SpaceId = spaceId,
             SubmissionIds = submissionIds
         });
 
         return await ExecuteAsync<List<SubmissionNotificationDataDto>>(request);
-    }
-
-    public Task<List<BusinessFlowNotificationDataDto>> GetBusinessFlowNotificationDataAsync(int spaceId, List<int> businessFlowBlockIds)
-    {
-        throw new NotImplementedException();
     }
 }

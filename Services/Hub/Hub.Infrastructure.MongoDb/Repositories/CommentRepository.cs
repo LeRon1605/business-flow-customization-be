@@ -3,13 +3,15 @@ using BuildingBlocks.Infrastructure.MongoDb.Repositories;
 using Hub.Domain.CommentAggregate.Entities;
 using Hub.Domain.CommentAggregate.Enums;
 using Hub.Domain.CommentAggregate.Repositories;
+using MediatR;
 using MongoDB.Driver;
 
 namespace Hub.Infrastructure.MongoDb.Repositories;
 
 public class CommentRepository : MongoDbRepository<Comment, Guid>, ICommentRepository
 {
-    public CommentRepository(IMongoDatabase database, ICurrentUser currentUser) : base(database, currentUser)
+    public CommentRepository(IMongoDatabase database, ICurrentUser currentUser, IMediator mediator) 
+        : base(database, currentUser, mediator)
     {
     }
 

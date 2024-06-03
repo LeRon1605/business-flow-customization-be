@@ -18,5 +18,6 @@ public enum BusinessFlowNotificationDataType
 {
     Space,
     BusinessFlow,
-    Execution
+    Execution,
+    ExecutionPersonInCharge
 }

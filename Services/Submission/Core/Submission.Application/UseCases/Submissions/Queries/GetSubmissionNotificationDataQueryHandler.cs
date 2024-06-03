@@ -23,8 +23,7 @@ public class GetSubmissionNotificationDataQueryHandler : IQueryHandler<GetSubmis
     
     public async Task<List<SubmissionNotificationDataDto>> Handle(GetSubmissionNotificationDataQuery request, CancellationToken cancellationToken)
     {
-        var specification = new SubmissionBySpaceSpecification(request.SpaceId)
-            .And(new SubmissionByIdsSpecification(request.SubmissionIds));
+        var specification = new SubmissionByIdsSpecification(request.SubmissionIds);
         
         var submissions = await _submissionRepository.FilterAsync(specification, new BasicSubmissionQueryDto());
         return _mapper.Map<List<SubmissionNotificationDataDto>>(submissions);

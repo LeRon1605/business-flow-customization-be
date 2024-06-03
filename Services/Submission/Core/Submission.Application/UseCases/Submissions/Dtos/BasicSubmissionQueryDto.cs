@@ -13,7 +13,8 @@ public class BasicSubmissionQueryDto : BasicSubmissionDto, IProjection<FormSubmi
         {
             Id = x.Id,
             Name = x.Name,
-            FormVersionId = x.FormVersionId
+            FormVersionId = x.FormVersionId,
+            SpaceId = x.FormVersion.Form.SpaceId
         };
     }
 }
