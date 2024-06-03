@@ -35,12 +35,29 @@ public class PushCommentNotificationBackGroundJobHandler : IBackGroundJobHandler
         if (comment == null)
             return;
         
+        var mentionedUserIds = comment.Mentions
+            .Where(x => x.EntityType == MentionEntity.User)
+            .SelectMany(x => x.EntityIds)
+            .Where(x => !string.IsNullOrEmpty(x) && x != _currentUser.Id)
+            .Distinct()
+            .ToList();
+        if (mentionedUserIds.Any())
+            await _notificationSenderService.SendAsync(mentionedUserIds!
+                , _currentUser.TenantId
+                , JsonConvert.SerializeObject(new NotificationSubmissionCommentModel()
+                {
+                    Id = comment.Id,
+                    SubmissionId = int.Parse(comment.EntityId),
+                    Content = comment.Content
+                })
+                , NotificationType.SubmissionCommentMentioned);
+        
         var submissionPersonInCharges = await _internalBusinessFlowClient
             .GetExecutionPersonInChargeDataAsync(new List<int> { int.Parse(comment.EntityId) });
         
         var personInChargeIds = submissionPersonInCharges
             .SelectMany(x => JsonConvert.DeserializeObject<List<string>>(x.Id.ToString()!)!)
-            .Where(x => !string.IsNullOrEmpty(x) && x != _currentUser.Id)
+            .Where(x => !string.IsNullOrEmpty(x) && x != _currentUser.Id  && !mentionedUserIds.Contains(x))
             .Distinct()
             .ToList();
         
@@ -54,22 +71,5 @@ public class PushCommentNotificationBackGroundJobHandler : IBackGroundJobHandler
                     Content = comment.Content
                 })
                 , NotificationType.SubmissionComment);
-
-        var mentionedUserIds = comment.Mentions
-            .Where(x => x.EntityType == MentionEntity.User)
-            .SelectMany(x => x.EntityIds)
-            .Where(x => !string.IsNullOrEmpty(x) && x != _currentUser.Id && !personInChargeIds.Contains(x))
-            .Distinct()
-            .ToList();
-        if (mentionedUserIds.Any())
-            await _notificationSenderService.SendAsync(mentionedUserIds!
-                , _currentUser.TenantId
-                , JsonConvert.SerializeObject(new NotificationSubmissionCommentModel()
-                {
-                    Id = comment.Id,
-                    SubmissionId = int.Parse(comment.EntityId),
-                    Content = comment.Content
-                })
-                , NotificationType.SubmissionCommentMentioned);
     }
 }
