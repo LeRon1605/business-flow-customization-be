@@ -15,7 +15,7 @@ public class InternalIdentityClient : RestSharpClient, IInternalIdentityClient
     
     public Task<List<IdentityNotificationDataDto>> GetIdentityNotificationDataAsync(List<string> userIds)
     {
-        var request = new RestRequest("api/notifications/users/data");
+        var request = new RestRequest("notifications/users/data");
 
         foreach (var userId in userIds)
         {

@@ -1,4 +1,5 @@
-﻿using Application.Dtos.Notifications.Models;
+﻿using System.Text.Json;
+using Application.Dtos.Notifications.Models;
 using BuildingBlocks.Application.Identity;
 using BuildingBlocks.Application.Schedulers;
 using Domain.Enums;
@@ -38,7 +39,7 @@ public class PushCommentNotificationBackGroundJobHandler : IBackGroundJobHandler
             .GetExecutionPersonInChargeDataAsync(new List<int> { int.Parse(comment.EntityId) });
         
         var personInChargeIds = submissionPersonInCharges
-            .Select(x => x.Id.ToString())
+            .SelectMany(x => JsonConvert.DeserializeObject<List<string>>(x.Id.ToString()!)!)
             .Where(x => !string.IsNullOrEmpty(x) && x != _currentUser.Id)
             .Distinct()
             .ToList();

@@ -21,7 +21,7 @@ public class NotificationController : ControllerBase
     [InternalApi]
     public async Task<IActionResult> GetSubmissionNotificationData([FromBody] GetSubmissionNotificationDataRequestDto dto)
     {
-        var submissions = await _mediator.Send(new GetSubmissionNotificationDataQuery(dto.SpaceId, dto.SubmissionIds));
+        var submissions = await _mediator.Send(new GetSubmissionNotificationDataQuery(dto.SubmissionIds));
         return Ok(submissions);
     }
 }
