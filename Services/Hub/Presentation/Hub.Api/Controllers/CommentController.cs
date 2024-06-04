@@ -33,4 +33,20 @@ public class CommentController : ControllerBase
         var commentId = await _mediator.Send(new CreateSubmissionCommentCommand(submissionId, comment));
         return Ok(SimpleIdResponse<Guid>.Create(commentId));
     }
+    
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> UpdateComment(Guid id, [FromBody] UpdateCommentDto comment)
+    {
+        await _mediator.Send(new UpdateCommentCommand(id, comment));
+        return NoContent();
+    }
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteComment(Guid id)
+    {
+        await _mediator.Send(new DeleteCommentCommand(id));
+        return NoContent();
+    }
 }

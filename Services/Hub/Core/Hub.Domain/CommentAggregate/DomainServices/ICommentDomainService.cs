@@ -11,4 +11,8 @@ public interface ICommentDomainService : IDomainService
         , CommentEntity entityType
         , Guid? parentId
         , List<CommentMention> mentions);
+    
+    Task UpdateAsync(Guid commentId, string content, List<CommentMention> mentions, string senderId);
+    
+    Task DeleteAsync(Guid commentId, string senderId);
 }

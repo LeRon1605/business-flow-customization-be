@@ -8,4 +8,6 @@ public interface ICommentRepository : IRepository<Comment, Guid>
     Task<List<Comment>> GetSubmissionCommentsAsync(int submissionId, int page, int size);
     
     Task<int> GetSubmissionCommentsCountAsync(int submissionId);
+
+    Task<Comment?> FindAsync(Guid id, string senderId);
 }

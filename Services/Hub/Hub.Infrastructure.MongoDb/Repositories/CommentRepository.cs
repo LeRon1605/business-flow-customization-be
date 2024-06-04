@@ -40,4 +40,13 @@ public class CommentRepository : MongoDbRepository<Comment, Guid>, ICommentRepos
 
         return (int)total;
     }
+
+    public async Task<Comment?> FindAsync(Guid id, string senderId)
+    {
+        var filter = Builders<Comment>.Filter.Eq(x => x.Id, id)
+                     & Builders<Comment>.Filter.Eq(x => x.CreatedBy, senderId)
+                     & Builders<Comment>.Filter.Eq(x => x.TenantId, CurrentUser.TenantId);
+        
+        return await Collection.Find(filter).FirstOrDefaultAsync();
+    }
 }

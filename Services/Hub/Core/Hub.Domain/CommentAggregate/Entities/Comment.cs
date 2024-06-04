@@ -27,6 +27,11 @@ public class Comment : AuditableTenantAggregateRoot<Guid>
         AddDomainEvent(new CommentCreatedDomainEvent(this));
     }
     
+    public void UpdateContent(string content)
+    {
+        Content = content;
+    }
+    
     public void UpdateMentions(List<CommentMention> mentions)
     {
         foreach (var mention in mentions)

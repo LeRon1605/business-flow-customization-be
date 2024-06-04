@@ -56,4 +56,10 @@ public static class ErrorCodes
     public const string ExecutionHasAlreadyCompleted = "SubmissionExecution:000007";
 
     #endregion
+    
+    #region Comment
+    
+    public const string CommentNotFound = "Comment:000001";
+    
+    #endregion
 }
