@@ -101,4 +101,12 @@ public class SpaceController : ControllerBase
         var elements = await _mediator.Send(new GetBusinessFlowBlocksElementsQuery(spaceId, dto.BusinessFlowBlockIds));
         return Ok(elements);
     }
+    
+    [HttpGet("{spaceId:int}/get-public-link")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GeneratePublicLink(int spaceId)
+    {
+        var link = await _mediator.Send(new GenerateFormPublicLinkCommand(spaceId));
+        return Ok(link);
+    }
 }

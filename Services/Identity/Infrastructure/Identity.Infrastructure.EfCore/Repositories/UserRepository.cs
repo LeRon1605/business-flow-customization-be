@@ -63,4 +63,14 @@ public class UserRepository : EfCoreRepository<ApplicationUser, string>, IUserRe
             .Select(projection.GetProject().Expand())
             .ToListAsync();
     }
+    
+    public async Task<string> GetRoleInTenant(string id, int tenantId)
+    {
+        return DbContext.Database.SqlQueryRaw<string>(
+                @"
+                    SELECT Name From AspNetRoles
+                    WHERE Id IN (SELECT RoleId FROM AspNetUserRoles WHERE TenantId = {0} AND UserId = {1})
+                ", tenantId.ToString(), id)
+            .FirstOrDefault();
+    }
 }

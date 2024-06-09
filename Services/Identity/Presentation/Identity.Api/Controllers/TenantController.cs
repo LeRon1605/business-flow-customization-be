@@ -84,7 +84,7 @@ public class TenantController : ControllerBase
 
     [HttpGet("users")]
     // [HasPermission(AppPermission.Tenants.View)]
-    [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResultDto<UserDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllUsersInTenantAsync([FromQuery] UserRequestDto dto)
     {
         var tenants = await _mediator.Send(new GetAllUsersInTenantQuery(dto.Search, dto.Page, dto.Size, dto.Sorting));
@@ -107,5 +107,14 @@ public class TenantController : ControllerBase
     {
         await _mediator.Send(new RemoveUserFromTenantCommand(id));
         return NoContent();
+    }
+    
+    [HttpGet("user/{id}/can-remove")]
+    // [HasPermission(AppPermission.Tenants.Edit)]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CheckCanRemoveUserInTenantAsync(string id)
+    {
+        var canRemove = await _mediator.Send(new CheckCanRemoveUserInTenantQuery(id));
+        return Ok(canRemove);
     }
 }

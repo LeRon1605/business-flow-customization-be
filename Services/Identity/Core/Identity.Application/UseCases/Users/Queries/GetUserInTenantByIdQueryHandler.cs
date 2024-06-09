@@ -4,41 +4,42 @@ using BuildingBlocks.Domain.Repositories;
 using Identity.Application.UseCases.Users.Dtos;
 using Identity.Domain.TenantAggregate.Entities;
 using Identity.Domain.TenantAggregate.Exceptions;
+using Identity.Domain.UserAggregate;
 using Identity.Domain.UserAggregate.Entities;
 using Identity.Domain.UserAggregate.Exceptions;
 
 namespace Identity.Application.UseCases.Users.Queries;
 
-public class GetUserInTenantByIdQueryHandler: IQueryHandler<GetUserInTenantByIdQuery, UserDetailDto>
+public class GetUserInTenantByIdQueryHandler: IQueryHandler<GetUserInTenantByIdQuery, UserDto>
 {
     private readonly ICurrentUser _currentUser;
-    private readonly IBasicReadOnlyRepository<Tenant, int> _tenantRepository;
-    private readonly IBasicReadOnlyRepository<ApplicationUser, string> _userRepository;
+    private readonly IUserRepository _userRepository;
     
-    public GetUserInTenantByIdQueryHandler(
-        ICurrentUser currentUser,
-        IBasicReadOnlyRepository<Tenant, int> tenantRepository,
-        IBasicReadOnlyRepository<ApplicationUser, string> userRepository)
+    public GetUserInTenantByIdQueryHandler(IUserRepository userRepository, ICurrentUser currentUser)
     {
-        _currentUser = currentUser;
-        _tenantRepository = tenantRepository;
         _userRepository = userRepository;
+        _currentUser = currentUser;
     }
     
-    public async Task<UserDetailDto> Handle(GetUserInTenantByIdQuery request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(GetUserInTenantByIdQuery request, CancellationToken cancellationToken)
     {
-        var tenant = await _tenantRepository.FindByIdAsync(_currentUser.TenantId);
-        if (tenant == null)
-        {
-            throw new TenantNotFoundException(_currentUser.TenantId);
-        }
-        
-        var user = await _userRepository.FindByIdAsync(request.Id, new UserDetailDto());
+        var user = await _userRepository.FindByIdAsync(request.Id);
         if (user == null)
         {
             throw new UserNotFoundException(request.Id);
         }
 
-        return user;
+        var userInfo = new UserDto()
+        {
+            CurrentTenantId = _currentUser.TenantId,
+            Id = user.Id,
+            UserName = user.UserName!,
+            FullName = user.FullName,
+            Email = user.Email!,
+            AvatarUrl = user.AvatarUrl,
+            Role = user.GetDefaultRole(_currentUser.TenantId)
+        };
+
+        return userInfo;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Repositories;
+using Identity.Domain.RoleAggregate.Entities;
 using ApplicationUser = Identity.Domain.UserAggregate.Entities.ApplicationUser;
 
 namespace Identity.Domain.UserAggregate;
@@ -14,4 +15,6 @@ public interface IUserRepository : IRepository<ApplicationUser, string>
     Task<IList<string>> GetRolesAsync(string id, int tenantId);
     
     Task<IList<TOut>> FindByTenantAsync<TOut>(int tenantId, IProjection<ApplicationUser, string , TOut> projection);
+    
+    Task<string> GetRoleInTenant(string id, int tenantId);
 }

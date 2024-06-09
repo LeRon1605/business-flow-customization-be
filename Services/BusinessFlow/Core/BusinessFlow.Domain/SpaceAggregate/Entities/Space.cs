@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Domain.Models;
+using BusinessFlow.Domain.BusinessFlowAggregate.DomainEvents;
 using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 using BusinessFlow.Domain.SpaceAggregate.Exceptions;
 
@@ -32,11 +33,21 @@ public class Space : AuditableTenantAggregateRoot
         }
         
         Members.Add(new SpaceMember(userId, role));
+        AddDomainEvent(new AddMemberInSpaceEvent(Name, userId, role.ToString()));
     }
     
     public void AddBusinessFlowVersion(BusinessFlowVersion businessFlowVersion)
     {
         BusinessFlowVersions.Add(businessFlowVersion);
+    }
+    
+    public void UpdateSpaceBasicInfo(string name, string description, string color)
+    {
+        Name = name;
+        Description = description;
+        Color = color;
+        
+        //AddDomainEvent(new SpaceBasicInfoUpdateDomainEvent(name, description, color));
     }
 
     private Space()

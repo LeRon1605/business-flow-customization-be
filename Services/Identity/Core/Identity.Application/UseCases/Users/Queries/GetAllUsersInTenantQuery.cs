@@ -4,7 +4,7 @@ using Identity.Application.UseCases.Users.Dtos;
 
 namespace Identity.Application.UseCases.Users.Queries;
 
-public class GetAllUsersInTenantQuery : PagingAndSortingRequestDto, IQuery<PagedResultDto<UserBasicInfoDto>>
+public class GetAllUsersInTenantQuery : PagingAndSortingRequestDto, IQuery<PagedResultDto<UserDto>>
 {
     public string? Search { get; set; }
     
