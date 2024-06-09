@@ -25,7 +25,24 @@ public class SpaceDomainService : ISpaceDomainService
 
         return space;
     }
-    
+
+    public async Task<Space> UpdateBasicInfoAsync(Space space, string name, string description, string color)
+    {
+        if (space.Name != name)
+        {
+            await ValidateDuplicateNameAsync(name);
+        }
+        space.UpdateSpaceBasicInfo(name, description, color);
+        _spaceRepository.Update(space);
+        return space;
+    }
+
+    public async Task AddMemberAsync(Space space, string userId, int role)
+    {
+        space.AddMember(userId, (Enums.SpaceRole)role);
+        _spaceRepository.Update(space);
+    }
+
     private async Task ValidateDuplicateNameAsync(string name)
     {
         var isNameExisted = await _spaceRepository.AnyAsync(new SpaceByNameSpecification(name));

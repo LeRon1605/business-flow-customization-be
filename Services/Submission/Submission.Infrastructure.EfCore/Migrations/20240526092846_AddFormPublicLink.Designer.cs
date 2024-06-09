@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Submission.Infrastructure.EfCore;
 
@@ -11,9 +12,11 @@ using Submission.Infrastructure.EfCore;
 namespace Submission.Infrastructure.EfCore.Migrations
 {
     [DbContext(typeof(SubmissionDbContext))]
-    partial class SubmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240526092846_AddFormPublicLink")]
+    partial class AddFormPublicLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,6 @@ namespace Submission.Infrastructure.EfCore.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid?>("BusinessFlowBlockId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CoverImageUrl")
                         .IsRequired()
@@ -237,9 +237,6 @@ namespace Submission.Infrastructure.EfCore.Migrations
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ExecutionId")
-                        .HasColumnType("int");
 
                     b.Property<int>("FormVersionId")
                         .HasColumnType("int");

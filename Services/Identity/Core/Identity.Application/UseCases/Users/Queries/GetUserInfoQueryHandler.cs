@@ -43,7 +43,7 @@ public class GetUserInfoQueryHandler : IQueryHandler<GetUserInfoQuery, UserInfoD
         var roles = await _identityService.GetRolesAsync(user.Id, _currentUser.TenantId);
         var permissions = await _identityService.GetPermissionsForUserAsync(user.Id, _currentUser.TenantId);
         var tenants = await _tenantRepository.FindByUserAsync(user.Id);
-        var tenantUsers = await _userRepository.FindByTenantAsync(_currentUser.TenantId, new UserBasicInfoDto());
+        var tenantUsers = await _userRepository.FindByTenantAsync(_currentUser.TenantId, new UserDto());
 
         var userInfo = new UserInfoDto()
         {

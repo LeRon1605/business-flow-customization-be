@@ -42,9 +42,10 @@ public static class ErrorCodes
     public const string FormVersionNotFound = "Form:000004";
     public const string FormElementNotFound = "Form:000005";
     public const string BusinessFlowBlockFormNotFound = "Form:000006";
+    public const string FormAlreadyShared = "Form:000007";
 
     #endregion
-
+    
     #region SubmissionExecution
 
     public const string SubmissionHasAlreadyExecuted = "SubmissionExecution:000001";

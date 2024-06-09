@@ -79,4 +79,28 @@ public class SpaceController : ControllerBase
         var businessFlowId = await _mediator.Send(new UpdateSpaceBusinessFlowCommand(id, dto.Blocks, dto.Branches));
         return Ok(SimpleIdResponse<int>.Create(businessFlowId));
     }
+    
+    [HttpPut("{id:int}/space-basic-info")]
+    [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateSpaceBasicInfo([FromRoute] int id, [FromBody] UpdateSpaceBasicInfoRequestDto dto)
+    {
+        await _mediator.Send(new UpdateSpaceBasicInfoCommand(id, dto.Name, dto.Description, dto.Color));
+        return Ok();
+    }
+    
+    [HttpGet("{id:int}/space-members")]
+    [ProducesResponseType(typeof(List<SpaceMemberDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpaceMembers([FromRoute] int id)
+    {
+        var result = await _mediator.Send(new GetAllMembersInSpaceQuery(id));
+        return Ok(result);
+    }
+    
+    [HttpPost("{id:int}/space-member")]
+    [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> AddSpaceMember([FromRoute] int id, [FromBody] SpaceMemberDto dto)
+    {
+        await _mediator.Send(new AddNewMemberInSpaceCommand(id, dto.Id, dto.Role.Id));
+        return Ok();
+    }
 }

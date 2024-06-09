@@ -1,13 +1,11 @@
 ﻿using BuildingBlocks.Application.Cqrs;
-using Identity.Application.UseCases.Users.Dtos;
 
 namespace Identity.Application.UseCases.Users.Queries;
 
-public class GetUserInTenantByIdQuery : IQuery<UserDto>
+public class CheckCanRemoveUserInTenantQuery : IQuery<bool>
 {
     public string Id { get; set; }
-    
-    public GetUserInTenantByIdQuery(string id)
+    public CheckCanRemoveUserInTenantQuery(string id)
     {
         Id = id;
     }
