@@ -7,6 +7,7 @@ using BusinessFlow.Application.UseCases.BusinessFlows.Queries;
 using BusinessFlow.Application.UseCases.Spaces.Commands;
 using BusinessFlow.Application.UseCases.Spaces.Dtos;
 using BusinessFlow.Application.UseCases.Spaces.Queries;
+using BusinessFlow.Domain.SpaceAggregate.Specifications;
 using Domain.Permissions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -89,18 +90,26 @@ public class SpaceController : ControllerBase
     }
     
     [HttpGet("{id:int}/space-members")]
-    [ProducesResponseType(typeof(List<SpaceMemberDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSpaceMembers([FromRoute] int id)
+    [ProducesResponseType(typeof(PagedResultDto<SpaceMemberDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpaceMembers([FromRoute] int id, [FromQuery] FilterAndPagingSpaceMemberRequestDto dto)
     {
-        var result = await _mediator.Send(new GetAllMembersInSpaceQuery(id));
+        var result = await _mediator.Send(new GetAllMembersInSpaceQuery(id, dto.Page, dto.Size, dto.Sorting, dto.Search));
         return Ok(result);
     }
     
     [HttpPost("{id:int}/space-member")]
     [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> AddSpaceMember([FromRoute] int id, [FromBody] SpaceMemberDto dto)
+    public async Task<IActionResult> AddSpaceMember([FromRoute] int id, [FromQuery] string userId)
     {
-        await _mediator.Send(new AddNewMemberInSpaceCommand(id, dto.Id, dto.Role.Id));
+        await _mediator.Send(new AddNewMemberInSpaceCommand(id, userId));
+        return Ok();
+    }
+    
+    [HttpPut("{spaceId:int}/space-member")]
+    [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateRoleSpaceMember([FromRoute] int spaceId, [FromBody] SpaceMemberDto dto)
+    {
+        await _mediator.Send(new UpdateRoleSpaceMemberCommand(spaceId, dto.Id, dto.Role.Id));
         return Ok();
     }
 }

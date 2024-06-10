@@ -33,7 +33,6 @@ public class Space : AuditableTenantAggregateRoot
         }
         
         Members.Add(new SpaceMember(userId, role));
-        AddDomainEvent(new AddMemberInSpaceEvent(Name, userId, role.ToString()));
     }
     
     public void AddBusinessFlowVersion(BusinessFlowVersion businessFlowVersion)
@@ -46,8 +45,18 @@ public class Space : AuditableTenantAggregateRoot
         Name = name;
         Description = description;
         Color = color;
-        
-        //AddDomainEvent(new SpaceBasicInfoUpdateDomainEvent(name, description, color));
+    }
+
+    public void UpdateRoleSpaceMember(string userId, int role)
+    {
+        var existedMember = Members.FirstOrDefault(x => x.UserId == userId);
+        if (existedMember == null)
+        {
+            throw new SpaceMemberNotFoundException(userId);
+        }
+
+        var spaceRole = (Enums.SpaceRole)role;
+        existedMember.UpdateRole(spaceRole);
     }
 
     private Space()

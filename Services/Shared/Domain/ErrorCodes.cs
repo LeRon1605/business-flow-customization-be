@@ -13,6 +13,7 @@ public static class ErrorCodes
     #region SpaceMember
     
     public const string SpaceMemberAlreadyExisted = "SpaceMember:000001";
+    public const string SpaceMemberNotFound = "SpaceMember:000002";
     
     #endregion
 
