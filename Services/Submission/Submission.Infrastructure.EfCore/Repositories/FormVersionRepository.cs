@@ -47,4 +47,13 @@ public class FormVersionRepository : EfCoreRepository<FormVersion>, IFormVersion
             .Select(projection.GetProject())
             .ToListAsync();
     }
+
+    public Task<TOut?> GetLatestVersionByTokenAsync<TOut>(string token, IProjection<FormVersion, TOut> projection)
+    {
+        return GetQuery()
+            .Where(x => x.Form.PublicToken == token)
+            .OrderByDescending(x => x.Id)
+            .Select(projection.GetProject())
+            .FirstOrDefaultAsync();
+    }
 }
