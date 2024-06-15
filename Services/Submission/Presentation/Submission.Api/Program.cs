@@ -3,6 +3,7 @@ using BuildingBlocks.Application;
 using BuildingBlocks.Presentation;
 using Presentation;
 using Presentation.Extensions;
+using Submission.Api.Extensions;
 using Submission.Application;
 using Submission.Domain;
 using Submission.Infrastructure.EfCore;
@@ -14,6 +15,7 @@ builder.Configuration.AddSharedConfiguration();
 builder
     .AddCommonServices()
     .AddSharedServices()
+    .AddSettings()
     .AddApplicationAuth()
     .AddEfCore<SubmissionDbContext>()
     .AddAssemblyMarker(typeof(ApplicationAssemblyMarker)

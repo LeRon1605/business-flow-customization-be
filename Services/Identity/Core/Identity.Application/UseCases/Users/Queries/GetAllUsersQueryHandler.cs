@@ -9,7 +9,7 @@ using Identity.Domain.UserAggregate.Specifications;
 
 namespace Identity.Application.UseCases.Users.Queries;
 
-public class GetAllUsersQueryHandler: IQueryHandler<GetAllUsersQuery, PagedResultDto<UserBasicInfoDto>>
+public class GetAllUsersQueryHandler: IQueryHandler<GetAllUsersQuery, PagedResultDto<UserDto>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -21,15 +21,15 @@ public class GetAllUsersQueryHandler: IQueryHandler<GetAllUsersQuery, PagedResul
         _mapper = mapper;
     }
     
-    public async Task<PagedResultDto<UserBasicInfoDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResultDto<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
         var specification = GetSpecification(request);
         var users = await _userRepository.GetPagedListAsync(specification);
         var total = await _userRepository.GetCountAsync(specification);
-        return new PagedResultDto<UserBasicInfoDto>(
+        return new PagedResultDto<UserDto>(
             total,
             request.Size,
-            _mapper.Map<IEnumerable<UserBasicInfoDto>>(users));
+            _mapper.Map<IEnumerable<UserDto>>(users));
     }
     
     private IPagingAndSortingSpecification<ApplicationUser, string> GetSpecification(GetAllUsersQuery request)

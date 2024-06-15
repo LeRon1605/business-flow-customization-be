@@ -43,6 +43,9 @@ namespace Submission.Infrastructure.EfCore.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsShared")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -51,6 +54,12 @@ namespace Submission.Infrastructure.EfCore.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicLinkUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SpaceId")

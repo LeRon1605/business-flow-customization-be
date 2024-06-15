@@ -3,7 +3,7 @@ using Identity.Application.UseCases.Users.Dtos;
 
 namespace Identity.Application.UseCases.Users.Queries;
 
-public class GetUserInTenantByIdQuery : IQuery<UserDetailDto>
+public class GetUserInTenantByIdQuery : IQuery<UserDto>
 {
     public string Id { get; set; }
     

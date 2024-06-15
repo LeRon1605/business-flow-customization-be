@@ -1,7 +1,9 @@
 ﻿using Application.Dtos.Spaces;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Submission.Application.UseCases.Dtos;
+using Submission.Application.UseCases.Forms.Commands;
 using Submission.Application.UseCases.Forms.Queries;
 
 namespace Submission.Api.Controllers;
@@ -31,5 +33,14 @@ public class FormController : ControllerBase
     {
         var spaces = await _mediator.Send(new GetSpacesFormQuery(spaceIds));
         return Ok(spaces);
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("public-form/{token}")]
+    [ProducesResponseType(typeof(FormDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPublicForm(string token)
+    {
+        var form = await _mediator.Send(new GetPublicFormQuery(token));
+        return Ok(form);
     }
 }

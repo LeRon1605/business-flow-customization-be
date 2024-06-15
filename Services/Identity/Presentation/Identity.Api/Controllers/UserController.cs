@@ -53,7 +53,7 @@ public class UserController : ControllerBase
     
     [HttpGet]
     [HasPermission(AppPermission.Users.Management)]
-    [ProducesResponseType(typeof(PagedResultDto<UserBasicInfoDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResultDto<UserDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllUsersAsync([FromQuery] UserRequestDto dto)
     {
         var query = new GetAllUsersQuery(dto.Search, dto.Page, dto.Size, dto.Sorting);

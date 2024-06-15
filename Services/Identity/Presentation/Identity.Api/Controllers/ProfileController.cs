@@ -11,6 +11,7 @@ using Identity.Application.UseCases.Users.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserInfoDto = Application.Dtos.Identity.UserInfoDto;
 
 namespace Identity.Api.Controllers;
 

@@ -3,6 +3,7 @@ using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.FormAggregate.Repositories;
 
@@ -30,5 +31,19 @@ public class FormRepository : EfCoreRepository<Form>, IFormRepository
                 .Take(1))
             .Select(projection.GetProject())
             .ToListAsync();
+    }
+
+    public Task<Form?> FindBySpaceIdAsync(int spaceId)
+    {
+        return GetQueryable()
+            .Include(x => x.Versions)
+            .FirstOrDefaultAsync(x => x.SpaceId == spaceId);
+    }
+
+    public Task<Form?> FindByPublicTokenAsync(string token)
+    {
+        return GetQueryable()
+            .Include(x => x.Versions)
+            .FirstOrDefaultAsync(x => !x.PublicToken.IsNullOrEmpty() && x.PublicToken == token);
     }
 }

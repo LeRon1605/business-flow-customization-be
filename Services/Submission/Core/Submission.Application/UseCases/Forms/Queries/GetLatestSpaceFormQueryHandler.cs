@@ -5,11 +5,11 @@ using Submission.Domain.FormAggregate.Repositories;
 
 namespace Submission.Application.UseCases.Forms.Queries;
 
-public class GetLatestSpaceQueryHandler : IQueryHandler<GetLatestSpaceFormQuery, FormDto>
+public class GetLatestSpaceFormQueryHandler : IQueryHandler<GetLatestSpaceFormQuery, FormDto>
 {
     private readonly IFormVersionRepository _formVersionRepository;
     
-    public GetLatestSpaceQueryHandler(IFormVersionRepository formVersionRepository)
+    public GetLatestSpaceFormQueryHandler(IFormVersionRepository formVersionRepository)
     {
         _formVersionRepository = formVersionRepository;
     }

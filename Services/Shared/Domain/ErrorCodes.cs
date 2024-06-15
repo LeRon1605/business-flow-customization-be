@@ -13,6 +13,7 @@ public static class ErrorCodes
     #region SpaceMember
     
     public const string SpaceMemberAlreadyExisted = "SpaceMember:000001";
+    public const string SpaceMemberNotFound = "SpaceMember:000002";
     
     #endregion
 
@@ -42,9 +43,10 @@ public static class ErrorCodes
     public const string FormVersionNotFound = "Form:000004";
     public const string FormElementNotFound = "Form:000005";
     public const string BusinessFlowBlockFormNotFound = "Form:000006";
+    public const string FormAlreadyShared = "Form:000007";
 
     #endregion
-
+    
     #region SubmissionExecution
 
     public const string SubmissionHasAlreadyExecuted = "SubmissionExecution:000001";

@@ -11,8 +11,7 @@ public class UserMapper : MappingProfile
     public UserMapper()
     {
         CreateMap<ApplicationUser, IdentityUserDto>();
-        CreateMap<ApplicationUser, UserBasicInfoDto>();
-        CreateMap<ApplicationUser, UserDetailDto>();
-        CreateMap<UserBasicInfoDto, BasicUserInfoDto>();
+        CreateMap<ApplicationUser, UserDto>();
+        CreateMap<UserDto, BasicUserInfoDto>();
     }
 }

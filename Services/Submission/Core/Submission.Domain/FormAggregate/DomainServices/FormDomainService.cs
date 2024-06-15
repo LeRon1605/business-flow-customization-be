@@ -1,4 +1,5 @@
-﻿using Submission.Domain.FormAggregate.Entities;
+﻿using System.Text;
+using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.FormAggregate.Exceptions;
 using Submission.Domain.FormAggregate.Models;
 using Submission.Domain.FormAggregate.Repositories;
@@ -10,13 +11,13 @@ public class FormDomainService : IFormDomainService
 {
     private readonly IFormVersionRepository _formVersionRepository;
     private readonly IFormRepository _formRepository;
-    
+
     public FormDomainService(IFormVersionRepository formVersionRepository, IFormRepository formRepository)
     {
         _formVersionRepository = formVersionRepository;
         _formRepository = formRepository;
     }
-    
+
     public async Task<Form> CreateAsync(int spaceId, FormModel formModel)
     {
         var isExisted = await _formRepository.AnyAsync(new SpaceFormSpecification(spaceId, formModel.BusinessFlowBlockId));
@@ -24,24 +25,34 @@ public class FormDomainService : IFormDomainService
         {
             throw new SpaceFormAlreadyExistedException(spaceId);
         }
-        
+
         var form = new Form(spaceId, formModel.BusinessFlowBlockId, formModel.Name, formModel.CoverImageUrl);
         form.AddVersion(new FormVersion(formModel.Elements));
-        
+
         await _formRepository.InsertAsync(form);
-        
+
         return form;
     }
 
     public async Task<FormVersion> UpdateAsync(Form form, FormModel formModel)
     {
         form.Update(formModel.Name, formModel.CoverImageUrl);
-        
+
         var formVersion = new FormVersion(formModel.Elements);
         form.AddVersion(formVersion);
-        
+
         _formRepository.Update(form);
-        
+
         return formVersion;
+    }
+
+    public async Task<string> GeneratePublicLinkAsync(Form form, string baseUrl)
+    {
+        var token = Guid.NewGuid().ToString();
+        var link = $"{baseUrl}?token={token}";
+        form.GeneratePublicLink(link, token);
+        _formRepository.Update(form);
+
+        return link;
     }
 }

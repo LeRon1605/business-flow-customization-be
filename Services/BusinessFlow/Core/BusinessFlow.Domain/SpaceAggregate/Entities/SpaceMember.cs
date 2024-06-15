@@ -20,6 +20,11 @@ public record SpaceMember : ValueObject
         RoleId = (int)role;
     }
     
+    public void UpdateRole(Enums.SpaceRole role)
+    {
+        RoleId = (int)role;
+    }
+    
     private SpaceMember()
     {
         
