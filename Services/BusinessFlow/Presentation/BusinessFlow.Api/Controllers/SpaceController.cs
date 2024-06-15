@@ -89,14 +89,6 @@ public class SpaceController : ControllerBase
         return Ok();
     }
     
-    [HttpGet("{id:int}/space-members")]
-    [ProducesResponseType(typeof(PagedResultDto<SpaceMemberDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSpaceMembers([FromRoute] int id, [FromQuery] FilterAndPagingSpaceMemberRequestDto dto)
-    {
-        var result = await _mediator.Send(new GetAllMembersInSpaceQuery(id, dto.Page, dto.Size, dto.Sorting, dto.Search));
-        return Ok(result);
-    }
-    
     [HttpPost("{id:int}/space-member")]
     [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
     public async Task<IActionResult> AddSpaceMember([FromRoute] int id, [FromQuery] string userId)
@@ -112,4 +104,13 @@ public class SpaceController : ControllerBase
         await _mediator.Send(new UpdateRoleSpaceMemberCommand(spaceId, dto.Id, dto.Role.Id));
         return Ok();
     }
+    
+    [HttpGet("{id:int}/list-space-members")]
+    [ProducesResponseType(typeof(List<SpaceMemberDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpaceMembers([FromRoute] int id)
+    {
+        var result = await _mediator.Send(new GetListMemberInSpaceQuery(id));
+        return Ok(result);
+    }
+    
 }
