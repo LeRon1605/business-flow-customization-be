@@ -133,13 +133,15 @@ public partial class ApplicationUser : IdentityUser<string>
     public void RemoveFromTenant(int tenantId)
     {
         var tenant = Tenants.FirstOrDefault(x => x.TenantId == tenantId);
+        var role = Roles.FirstOrDefault(x => x.TenantId == tenantId);
 
-        if (tenant == null)
+        if (tenant == null || role == null)
         {
             throw new UserNotInTenantException(Id, tenantId);
         }
 
         Tenants.Remove(tenant);
+        Roles.Remove(role);
     }
 
     public string GetDefaultRole(int tenantId)
