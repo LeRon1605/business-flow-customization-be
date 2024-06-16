@@ -57,4 +57,13 @@ public class SubmissionController : ControllerBase
         var id = await _mediator.Send(new SubmitFormExternalCommand(dto));
         return Ok(SimpleIdResponse<int>.Create(id));
     }
+    
+    [HttpGet("tracking")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetSubmissionByTrackingToken([FromQuery] string token)
+    {
+        var submission = await _mediator.Send(new GetSubmissionByTrackingTokenQuery(token));
+        return Ok(submission);
+    }
+    
 }
