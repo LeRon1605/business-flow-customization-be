@@ -7,7 +7,7 @@ using Submission.Domain.SubmissionAggregate.DomainEvents;
 
 namespace Submission.Application.DomainEventHandlers;
 
-public class FormSubmissionTrackingEmailCreatedDomainEventHandler : IPersistedDomainEventHandler<FormSubmissionCreatedDomainEvent>
+public class FormSubmissionTrackingEmailCreatedDomainEventHandler : IPersistedDomainEventHandler<FormSubmissionTrackingEmailCreatedDomainEvent>
 {
     private readonly IEventPublisher _eventPublisher;
     private readonly PublicFormSetting _publicFormSetting;
@@ -19,7 +19,7 @@ public class FormSubmissionTrackingEmailCreatedDomainEventHandler : IPersistedDo
         _publicFormSetting = publicFormSetting;
     }
     
-    public async Task Handle(FormSubmissionCreatedDomainEvent @event, CancellationToken cancellationToken)
+    public async Task Handle(FormSubmissionTrackingEmailCreatedDomainEvent @event, CancellationToken cancellationToken)
     {
         await _eventPublisher.Publish(new EmailSenderIntegrationEvent(@event.FormSubmission.Name
                 , @event.FormSubmission.TrackingEmail!

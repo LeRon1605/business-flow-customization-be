@@ -8,5 +8,7 @@ public class SubmissionModel
     
     public string? TrackingToken { get; set; }
     
+    public string? TrackingEmail { get; set; }
+    
     public List<SubmissionFieldModel> Fields { get; set; } = null!;
 }

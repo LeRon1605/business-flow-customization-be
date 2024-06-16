@@ -42,7 +42,7 @@ public class SubmissionDomainService : ISubmissionDomainService
             , executionId
             , submissionModel.FormVersionId
             , businessFlow.BusinessFlowVersionId
-            , submissionModel.TrackingToken);
+            , submissionModel.TrackingEmail);
         
         var elementIds = submissionModel.Fields.Select(x => x.ElementId).ToList();
         var formElements = await GetElementsAsync(spaceId, submissionModel.FormVersionId, elementIds);

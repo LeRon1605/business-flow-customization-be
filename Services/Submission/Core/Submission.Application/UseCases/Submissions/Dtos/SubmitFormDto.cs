@@ -21,9 +21,11 @@ public class ExternalSubmitFormDto
 {
     [Required]
     public string Name { get; set; } = null!;
-    
-    [Required]
+
+    [Required] 
     public string Token { get; set; } = null!;
+    
+    public string? TrackingEmail { get; set; }
     
     [Required]
     public List<SubmissionFieldDto> Fields { get; set; } = null!;
