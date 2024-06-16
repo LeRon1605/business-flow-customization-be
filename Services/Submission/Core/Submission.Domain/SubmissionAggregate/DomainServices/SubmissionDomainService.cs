@@ -41,7 +41,8 @@ public class SubmissionDomainService : ISubmissionDomainService
         var submission = new FormSubmission(submissionModel.Name
             , executionId
             , submissionModel.FormVersionId
-            , businessFlow.BusinessFlowVersionId);
+            , businessFlow.BusinessFlowVersionId
+            , submissionModel.TrackingToken);
         
         var elementIds = submissionModel.Fields.Select(x => x.ElementId).ToList();
         var formElements = await GetElementsAsync(spaceId, submissionModel.FormVersionId, elementIds);
