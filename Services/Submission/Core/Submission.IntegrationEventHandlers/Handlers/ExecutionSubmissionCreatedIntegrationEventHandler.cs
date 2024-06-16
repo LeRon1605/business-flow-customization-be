@@ -12,6 +12,7 @@ using Submission.Domain.FormAggregate.Repositories;
 using Submission.Domain.SubmissionAggregate.DomainServices.Abstracts;
 using Submission.Domain.SubmissionAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Models;
+using Submission.Domain.SubmissionAggregate.Repositories;
 
 namespace Submission.IntegrationEvents.Handlers;
 
@@ -21,7 +22,7 @@ public class ExecutionSubmissionCreatedIntegrationEventHandler : IntegrationEven
     private readonly ISubmissionDomainService _submissionDomainService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEventPublisher _eventPublisher;
-    private readonly IRepository<FormSubmissionExecution> _formSubmissionExecutionRepository;
+    private readonly IFormSubmissionExecutionRepository _formSubmissionExecutionRepository;
     
     public ExecutionSubmissionCreatedIntegrationEventHandler(ICurrentUser currentUser
         , ILogger<IntegrationEventHandler<ExecutionSubmissionCreatedIntegrationEvent>> logger
@@ -29,7 +30,7 @@ public class ExecutionSubmissionCreatedIntegrationEventHandler : IntegrationEven
         , ISubmissionDomainService submissionDomainService
         , IUnitOfWork unitOfWork
         , IEventPublisher eventPublisher
-        , IRepository<FormSubmissionExecution> formSubmissionExecutionRepository) : base(currentUser, logger)
+        , IFormSubmissionExecutionRepository formSubmissionExecutionRepository) : base(currentUser, logger)
     {
         _formRepository = formRepository;
         _submissionDomainService = submissionDomainService;

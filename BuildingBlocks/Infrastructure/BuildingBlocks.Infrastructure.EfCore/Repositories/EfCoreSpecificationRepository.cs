@@ -105,6 +105,11 @@ public class EfCoreSpecificationRepository<TEntity, TKey> : ISpecificationReposi
         {
             queryable = queryable.Where(x => ((ITenantEntity<TKey>)x).TenantId == CurrentUser.TenantId);
         }
+
+        if (typeof(TEntity).IsAssignableTo(typeof(IHasSoftDelete)))
+        {
+            queryable = queryable.Where(x => ((IHasSoftDelete)x).IsDeleted == false);
+        }
         
         return queryable;
     }
