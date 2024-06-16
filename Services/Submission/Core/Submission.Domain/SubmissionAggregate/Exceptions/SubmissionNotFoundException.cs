@@ -10,4 +10,9 @@ public class SubmissionNotFoundException : ResourceNotFoundException
         : base(nameof(FormSubmission.Id), nameof(FormSubmission.Id), id.ToString(), ErrorCodes.SubmissionNotFound)
     {
     }
+    
+    public SubmissionNotFoundException(string trackingToken) 
+        : base(nameof(FormSubmission.TrackingToken), nameof(FormSubmission.TrackingToken), trackingToken, ErrorCodes.SubmissionNotFound)
+    {
+    }
 }

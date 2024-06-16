@@ -12,4 +12,6 @@ public interface IFormVersionRepository : IRepository<FormVersion>
     Task<TOut?> GetAsync<TOut>(Guid businessFlowBlockId, IProjection<FormVersion, TOut> projection);
 
     Task<List<TOut>> GetBySpaceAsync<TOut>(int spaceId, IProjection<FormVersion, TOut> projection);
+    
+    Task<TOut?> GetLatestVersionByTokenAsync<TOut>(string token, IProjection<FormVersion, TOut> projection);
 }

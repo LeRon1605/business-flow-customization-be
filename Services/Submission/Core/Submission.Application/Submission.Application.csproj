@@ -9,13 +9,15 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Application\Application.csproj" />
       <ProjectReference Include="..\Submission.Domain\Submission.Domain.csproj" />
+    </ItemGroup>
 
 
 
 
 
 
-
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     </ItemGroup>
 
 

@@ -15,6 +15,10 @@ public class FormSubmission : AuditableTenantAggregateRoot
     
     public int BusinessFlowVersionId { get; private set; }
     
+    public string? TrackingEmail { get; private set; }
+    
+    public string? TrackingToken { get; private set; }
+    
     public virtual FormVersion FormVersion { get; private set; } = null!;
     
     public virtual List<SubmissionNumberValue> NumberFields { get; private set; } = new();
@@ -27,15 +31,22 @@ public class FormSubmission : AuditableTenantAggregateRoot
 
     public virtual List<SubmissionAttachmentField> AttachmentFields { get; private set; } = new();
 
-    public FormSubmission(string name, int? executionId, int formVersionId, int businessFlowVersionId)
+    public FormSubmission(string name, int? executionId, int formVersionId, int businessFlowVersionId, string? trackingEmail)
     {
         Name = name;
         FormVersionId = formVersionId;
         BusinessFlowVersionId = businessFlowVersionId;
         ExecutionId = executionId;
+        TrackingEmail = trackingEmail;
         
         if (!executionId.HasValue)
             AddDomainEvent(new FormSubmissionCreatedDomainEvent(this));
+
+        if (!string.IsNullOrWhiteSpace(trackingEmail))
+        {
+            TrackingToken = Guid.NewGuid().ToString();
+            AddDomainEvent(new FormSubmissionTrackingEmailCreatedDomainEvent(this));   
+        }
     }
     
     public void AddField(ISubmissionField field)

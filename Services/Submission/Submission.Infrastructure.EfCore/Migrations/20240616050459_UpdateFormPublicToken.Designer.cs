@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Submission.Infrastructure.EfCore;
 
@@ -11,9 +12,11 @@ using Submission.Infrastructure.EfCore;
 namespace Submission.Infrastructure.EfCore.Migrations
 {
     [DbContext(typeof(SubmissionDbContext))]
-    partial class SubmissionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616050459_UpdateFormPublicToken")]
+    partial class UpdateFormPublicToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,12 +257,6 @@ namespace Submission.Infrastructure.EfCore.Migrations
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
-
-                    b.Property<string>("TrackingEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TrackingToken")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

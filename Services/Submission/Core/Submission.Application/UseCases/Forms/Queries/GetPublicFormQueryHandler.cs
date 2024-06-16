@@ -18,16 +18,10 @@ public class GetPublicFormQueryHandler : IQueryHandler<GetPublicFormQuery, FormD
     
     public async Task<FormDto> Handle(GetPublicFormQuery request, CancellationToken cancellationToken)
     {
-        var form = await _formRepository.FindByPublicTokenAsync(request.Token);
-        if (form == null)
-        {
-            throw new FormNotFoundException();
-        }
-        
-        var targetForm = await _formVersionRepository.GetLatestSpaceVersionAsync(form.SpaceId, new FormDto());
+        var targetForm = await _formVersionRepository.GetLatestVersionByTokenAsync(request.Token, new FormDto());
         if (targetForm == null)
         {
-            throw new SpaceFormNotFoundException(form.SpaceId);
+            throw new FormNotFoundException();
         }
         
         return targetForm;

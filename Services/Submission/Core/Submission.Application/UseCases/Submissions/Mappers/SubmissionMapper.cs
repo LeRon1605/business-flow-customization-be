@@ -11,6 +11,7 @@ public class SubmissionMapper : MappingProfile
     public SubmissionMapper()
     {
         CreateMap<SubmitFormDto, SubmissionModel>();
+        CreateMap<ExternalSubmitFormDto, SubmissionModel>();
         CreateMap<SubmissionFieldDto, SubmissionFieldModel>();
         CreateMap<BasicSubmissionDto, SubmissionNotificationDataDto>();
     }

@@ -6,5 +6,9 @@ public class SubmissionModel
     
     public int FormVersionId { get; set; }
     
+    public string? TrackingToken { get; set; }
+    
+    public string? TrackingEmail { get; set; }
+    
     public List<SubmissionFieldModel> Fields { get; set; } = null!;
 }

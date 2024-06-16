@@ -165,7 +165,10 @@ public class NotificationSenderService : INotificationSenderService
             
             case NotificationType.SubmissionComment:
             case NotificationType.SubmissionCommentMentioned:
-                return await GetSubmissionCommentAsync(data, type);
+                return await GetSubmissionCommentTemplateAsync(data, type);
+            
+            case NotificationType.MemberAddedToSpace:
+                return await GetMemberAddedToSpaceTemplateAsync(data);
         }
 
         return null;
@@ -262,7 +265,7 @@ public class NotificationSenderService : INotificationSenderService
         };
     }
     
-    private async Task<NotificationTemplateDto?> GetSubmissionCommentAsync(string data, NotificationType submissionCommentNotificationType)
+    private async Task<NotificationTemplateDto?> GetSubmissionCommentTemplateAsync(string data, NotificationType submissionCommentNotificationType)
     {
         var model = JsonConvert.DeserializeObject<NotificationSubmissionCommentModel>(data);
         if (model == null)
@@ -302,4 +305,40 @@ public class NotificationSenderService : INotificationSenderService
             }
         };
     } 
+    
+    private async Task<NotificationTemplateDto?> GetMemberAddedToSpaceTemplateAsync(string data)
+    {
+        var model = JsonConvert.DeserializeObject<NotificationMemberAddedToSpaceModel>(data);
+        if (model == null)
+            return null;
+        
+        var users = await _internalIdentityClient.GetIdentityNotificationDataAsync(new List<string>() { _currentUser.Id });
+        var user = users.FirstOrDefault();
+        if (user == null)
+            return null;
+        
+        var titleData = new Dictionary<string, string>
+        {
+            { "SpaceName", model.SpaceName }
+        };
+        
+        var contentData = new Dictionary<string, string>
+        {
+            { "UserFullName", user.FullName },
+            { "SpaceName", model.SpaceName }
+        };
+        
+        var title = _templateGenerator.GenerateNotificationTitle(NotificationType.MemberAddedToSpace, titleData);
+        var content = _templateGenerator.GenerateNotificationContent(NotificationType.MemberAddedToSpace, contentData);
+        
+        return new NotificationTemplateDto
+        {
+            Title = title,
+            Content = content,
+            MetaData = new Dictionary<string, object>()
+            {
+                { "SpaceId",  model.SpaceId.ToString() }
+            }
+        };
+    }
 }

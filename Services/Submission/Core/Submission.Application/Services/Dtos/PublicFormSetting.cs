@@ -2,5 +2,5 @@
 
 public class PublicFormSetting
 {
-    public string BaseUrl { get; set; } = null!;
+    public string TrackingUrl { get; set; } = null!;
 }
