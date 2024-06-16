@@ -5,5 +5,5 @@ namespace Submission.Domain.SubmissionAggregate.Repositories;
 
 public interface IFormSubmissionExecutionRepository : IRepository<FormSubmissionExecution>
 {
-    
+    Task<FormSubmissionExecution?> FindByFormSubmissionIdAsync(int formSubmissionId);
 }
