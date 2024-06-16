@@ -2,6 +2,7 @@
 using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using Submission.Domain.SubmissionAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Repositories;
@@ -18,7 +19,7 @@ public class FormSubmissionRepository : EfCoreRepository<FormSubmission>, IFormS
     {
         return DbSet
             .Where(_ => _.TrackingToken == trackingToken)
-            .Select(projection.GetProject())
+            .Select(projection.GetProject().Expand())
             .FirstOrDefaultAsync();
     }
 }
