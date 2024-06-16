@@ -10,12 +10,18 @@ public class FormVersionDto : IProjection<FormVersion, FormVersionDto>
     
     public DateTime CreatedAt { get; set; }
     
+    public int SpaceId { get; set; }
+    
+    public int TenantId { get; set; }
+    
     public Expression<Func<FormVersion, FormVersionDto>> GetProject()
     {
         return x => new FormVersionDto()
         {
             Id = x.Id,
-            CreatedAt = x.Created
+            CreatedAt = x.Created,
+            SpaceId = x.Form.SpaceId,
+            TenantId = x.Form.TenantId
         };
     }
 }

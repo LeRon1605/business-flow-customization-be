@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using BuildingBlocks.Application.Dtos;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Submission.Application.UseCases.Submissions.Commands;
 using Submission.Application.UseCases.Submissions.Dtos;
@@ -46,5 +48,13 @@ public class SubmissionController : ControllerBase
     {
         var result = await _mediator.Send(new GetSubmissionDataQuery(submissionIds));
         return Ok(result);
+    }
+    
+    [HttpPost("external-submit")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ExternalSubmit([FromBody] ExternalSubmitFormDto dto)
+    {
+        var id = await _mediator.Send(new SubmitFormExternalCommand(dto));
+        return Ok(SimpleIdResponse<int>.Create(id));
     }
 }
