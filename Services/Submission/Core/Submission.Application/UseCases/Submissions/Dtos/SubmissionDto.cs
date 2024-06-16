@@ -11,6 +11,8 @@ public class SubmissionDto : IProjection<FormSubmission, SubmissionDto>
 {
     public int Id { get; set; }
     
+    public string? TrackingEmail { get; set; }
+    
     public string Name { get; set; } = null!;
 
     public string CreatedBy { get; set; } = null!;
@@ -39,6 +41,7 @@ public class SubmissionDto : IProjection<FormSubmission, SubmissionDto>
         {
             Id = x.Id,
             Name = x.Name,
+            TrackingEmail = x.TrackingEmail,
             CreatedBy = x.CreatedBy!,
             CreatedAt = x.Created,
             UpdatedBy = x.LastModifiedBy,
