@@ -113,4 +113,19 @@ public class SpaceController : ControllerBase
         return Ok(result);
     }
     
+    [HttpDelete("{spaceId:int}/space-member/{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteMemberInSpace([FromRoute] int spaceId, [FromRoute] string userId)
+    {
+        await _mediator.Send(new DeleteMemberInSpaceCommand(spaceId, userId));
+        return Ok();
+    }
+    
+    [HttpDelete("{spaceId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteSpace([FromRoute] int spaceId)
+    {
+        await _mediator.Send(new DeleteSpaceCommand(spaceId));
+        return Ok();
+    }
 }

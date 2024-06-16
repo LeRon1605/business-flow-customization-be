@@ -5,7 +5,7 @@ using BusinessFlow.Domain.SpaceAggregate.Entities;
 
 namespace BusinessFlow.Application.UseCases.Spaces.Dtos;
 
-public class SpaceQueryDto : SpaceDto, IProjection<Space, SpaceDto>
+public class SpaceQueryDto : SpaceDto, IProjection<Space, int, SpaceDto>
 {
     public Expression<Func<Space, SpaceDto>> GetProject()
     {

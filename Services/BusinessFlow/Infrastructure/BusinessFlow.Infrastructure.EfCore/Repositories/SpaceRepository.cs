@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessFlow.Infrastructure.EfCore.Repositories;
 
-public class SpaceRepository : EfCoreRepository<Space>, ISpaceRepository
+public class SpaceRepository : EfCoreRepository<Space, int>, ISpaceRepository
 {
     public SpaceRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {

@@ -5,7 +5,7 @@ using BusinessFlow.Domain.SpaceAggregate.Exceptions;
 
 namespace BusinessFlow.Domain.SpaceAggregate.Entities;
 
-public class Space : AuditableTenantAggregateRoot
+public class Space : FullAuditableTenantAggregateRoot
 {
     public string Name { get; private set; }
     
@@ -49,16 +49,29 @@ public class Space : AuditableTenantAggregateRoot
 
     public void UpdateRoleSpaceMember(string userId, int role)
     {
-        var existedMember = Members.FirstOrDefault(x => x.UserId == userId);
-        if (existedMember == null)
+        var existingMember = Members.FirstOrDefault(x => x.UserId == userId);
+        if (existingMember == null)
         {
             throw new SpaceMemberNotFoundException(userId);
         }
 
-        var spaceRole = (Enums.SpaceRole)role;
-        existedMember.UpdateRole(spaceRole);
-    }
+        Members.Remove(existingMember);
 
+        var newMember = new SpaceMember(userId, (Enums.SpaceRole)role);
+        Members.Add(newMember);
+    }
+    
+    public void RemoveMember(string userId)
+    {
+        var existingMember = Members.FirstOrDefault(x => x.UserId == userId);
+        if (existingMember == null)
+        {
+            throw new SpaceMemberNotFoundException(userId);
+        }
+
+        Members.Remove(existingMember);
+    }
+    
     private Space()
     {
         

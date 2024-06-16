@@ -4,7 +4,7 @@ using BusinessFlow.Domain.SpaceAggregate.Entities;
 
 namespace BusinessFlow.Domain.SpaceAggregate.Specifications;
 
-public class SpaceByMemberSpecification : Specification<Space>
+public class SpaceByMemberSpecification : Specification<Space, int>
 {
     private readonly string _memberId;
     

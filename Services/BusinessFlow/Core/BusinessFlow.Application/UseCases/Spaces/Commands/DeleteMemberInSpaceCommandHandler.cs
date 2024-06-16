@@ -6,25 +6,26 @@ using BusinessFlow.Domain.SpaceAggregate.Repositories;
 
 namespace BusinessFlow.Application.UseCases.Spaces.Commands;
 
-public class UpdateRoleSpaceMemberCommandHandler : ICommandHandler<UpdateRoleSpaceMemberCommand>
+public class DeleteMemberInSpaceCommandHandler: ICommandHandler<DeleteMemberInSpaceCommand>
 {
     private readonly ISpaceRepository _spaceRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    public UpdateRoleSpaceMemberCommandHandler(ISpaceRepository spaceRepository, IUnitOfWork unitOfWork)
+    public DeleteMemberInSpaceCommandHandler(ISpaceRepository spaceRepository, IUnitOfWork unitOfWork)
     {
         _spaceRepository = spaceRepository;
         _unitOfWork = unitOfWork;
     }
     
-    public async Task Handle(UpdateRoleSpaceMemberCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteMemberInSpaceCommand request, CancellationToken cancellationToken)
     {
         var space = await _spaceRepository.FindByIdAsync(request.SpaceId, $"{nameof(Space.Members)}.{nameof(SpaceMember.Role)}");
         if (space == null)
         {
             throw new SpaceNotFoundException(request.SpaceId);
         }
-        space.UpdateRoleSpaceMember(request.UserId, request.RoleId);
+        
+        space.RemoveMember(request.UserId);
         await _unitOfWork.CommitAsync();
     }
 }

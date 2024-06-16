@@ -3,7 +3,7 @@ using BusinessFlow.Domain.SpaceAggregate.Entities;
 
 namespace BusinessFlow.Domain.SpaceAggregate.Repositories;
 
-public interface ISpaceRepository : IRepository<Space>
+public interface ISpaceRepository : IRepository<Space, int>
 {
     Task<Space?> GetByBlockAsync(Guid blockId);
 }
