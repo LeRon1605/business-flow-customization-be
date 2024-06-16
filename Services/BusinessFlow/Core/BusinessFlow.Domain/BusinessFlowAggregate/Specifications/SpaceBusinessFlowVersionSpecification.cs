@@ -4,7 +4,7 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Specifications;
 
-public class SpaceBusinessFlowVersionSpecification : Specification<BusinessFlowVersion>
+public class SpaceBusinessFlowVersionSpecification : Specification<BusinessFlowVersion, int>
 {
     private readonly int _spaceId;
     

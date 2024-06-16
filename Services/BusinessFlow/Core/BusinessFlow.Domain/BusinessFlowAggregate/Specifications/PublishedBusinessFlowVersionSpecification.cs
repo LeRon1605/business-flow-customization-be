@@ -5,7 +5,7 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Enums;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Specifications;
 
-public class PublishedBusinessFlowVersionSpecification : Specification<BusinessFlowVersion>
+public class PublishedBusinessFlowVersionSpecification : Specification<BusinessFlowVersion, int>
 {
     public override Expression<Func<BusinessFlowVersion, bool>> ToExpression()
     {

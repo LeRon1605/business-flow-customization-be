@@ -4,7 +4,7 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Specifications;
 
-public class BusinessFlowByIdSpecification : Specification<BusinessFlowVersion>
+public class BusinessFlowByIdSpecification : Specification<BusinessFlowVersion, int>
 {
     private readonly int _id;
     

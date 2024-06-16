@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessFlow.Infrastructure.EfCore.Repositories;
 
-public class BusinessFlowVersionRepository : EfCoreRepository<BusinessFlowVersion>, IBusinessFlowVersionRepository
+public class BusinessFlowVersionRepository : EfCoreRepository<BusinessFlowVersion, int>, IBusinessFlowVersionRepository
 {
     public BusinessFlowVersionRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {

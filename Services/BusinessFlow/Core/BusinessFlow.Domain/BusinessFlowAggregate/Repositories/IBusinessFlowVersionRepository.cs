@@ -3,7 +3,7 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
 
-public interface IBusinessFlowVersionRepository : IRepository<BusinessFlowVersion>
+public interface IBusinessFlowVersionRepository : IRepository<BusinessFlowVersion, int>
 {
     Task<TOut?> GetLatestPublishedBusinessFlowAsync<TOut>(int spaceId, IProjection<BusinessFlowVersion, int, TOut> projection);
 }

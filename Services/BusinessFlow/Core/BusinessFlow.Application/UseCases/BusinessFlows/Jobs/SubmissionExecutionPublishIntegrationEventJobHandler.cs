@@ -31,7 +31,7 @@ public class SubmissionExecutionPublishIntegrationEventJobHandler : IBackGroundJ
     
     public async Task Handle(SubmissionExecutionPublishIntegrationEventJob notification, CancellationToken cancellationToken)
     {
-        var submissionExecution = await _submissionExecutionRepository.FindByIdAsync(notification.SubmissionExecutionId, nameof(SubmissionExecution.PersonInCharges));
+        var submissionExecution = await _submissionExecutionRepository.FindByIdAsync(notification.SubmissionExecutionId, $"{nameof(SubmissionExecution.PersonInCharges)}, {nameof(SubmissionExecution.BusinessFlowBlock)}");
         if (submissionExecution == null)
         {
             return;
@@ -43,13 +43,10 @@ public class SubmissionExecutionPublishIntegrationEventJobHandler : IBackGroundJ
     
     private async Task PublishIntegrationEventAsync(SubmissionExecution submissionExecution)
     {
-        var isHasForm = await _businessFlowBlockRepository.IsHasFormAsync(submissionExecution.BusinessFlowBlockId);
-        if (!isHasForm)
-        {
-            return;
-        }
-        
         await _eventPublisher.Publish(new ExecutionSubmissionCreatedIntegrationEvent(submissionExecution.Id
+            , submissionExecution.SubmissionId
+            , submissionExecution.BusinessFlowBlock.Name
+            , submissionExecution.Created
             , submissionExecution.BusinessFlowBlockId));
     }
     

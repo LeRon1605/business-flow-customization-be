@@ -23,6 +23,8 @@ public class SubmissionDto : IProjection<FormSubmission, SubmissionDto>
     
     public DateTime? UpdatedAt { get; set; }
     
+    public FormSubmissionExecutionDto? Execution { get; set; } 
+    
     [JsonIgnore]
     public SubmissionFieldValueQueryModel FieldValues { get; set; } = null!;
     
@@ -46,7 +48,22 @@ public class SubmissionDto : IProjection<FormSubmission, SubmissionDto>
             CreatedAt = x.Created,
             UpdatedBy = x.LastModifiedBy,
             UpdatedAt = x.LastModified,
+            Execution = x.Execution == null ? null : new FormSubmissionExecutionDto()
+            {
+                Id = x.Execution.Id,
+                Name = x.Execution.Name,
+                CreatedAt = x.Execution.CreatedAt
+            },
             FieldValues = new SubmissionFieldValueQueryModel().GetProject().Invoke(x)
         };
     }
+}
+
+public class FormSubmissionExecutionDto
+{
+    public int Id { get; set; }
+    
+    public string Name { get; set; } = null!;
+    
+    public DateTime CreatedAt { get; set; }
 }

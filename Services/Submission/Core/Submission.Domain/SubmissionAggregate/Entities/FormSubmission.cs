@@ -21,6 +21,8 @@ public class FormSubmission : AuditableTenantAggregateRoot
     
     public virtual FormVersion FormVersion { get; private set; } = null!;
     
+    public virtual FormSubmissionExecution? Execution { get; private set; }
+    
     public virtual List<SubmissionNumberValue> NumberFields { get; private set; } = new();
 
     public virtual List<SubmissionTextValue> TextFields { get; private set; } = new();

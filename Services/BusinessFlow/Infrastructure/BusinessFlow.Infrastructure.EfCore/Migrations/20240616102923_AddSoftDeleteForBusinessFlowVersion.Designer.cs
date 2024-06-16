@@ -4,6 +4,7 @@ using BusinessFlow.Infrastructure.EfCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessFlow.Infrastructure.EfCore.Migrations
 {
     [DbContext(typeof(BusinessFlowDbContext))]
-    partial class BusinessFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616102923_AddSoftDeleteForBusinessFlowVersion")]
+    partial class AddSoftDeleteForBusinessFlowVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

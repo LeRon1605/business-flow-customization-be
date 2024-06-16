@@ -4,7 +4,7 @@ using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
 namespace BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 
-public class BusinessFlowVersionDto : IProjection<BusinessFlowVersion, BusinessFlowVersionDto>
+public class BusinessFlowVersionDto : IProjection<BusinessFlowVersion, int, BusinessFlowVersionDto>
 {
     public int Id { get; set; }
     

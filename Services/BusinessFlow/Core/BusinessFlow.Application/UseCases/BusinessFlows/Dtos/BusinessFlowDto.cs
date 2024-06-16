@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace BusinessFlow.Application.UseCases.BusinessFlows.Dtos;
 
-public class BusinessFlowDto : IProjection<BusinessFlowVersion, BusinessFlowDto>
+public class BusinessFlowDto : IProjection<BusinessFlowVersion, int, BusinessFlowDto>
 {
     public int Id { get; set; }
     

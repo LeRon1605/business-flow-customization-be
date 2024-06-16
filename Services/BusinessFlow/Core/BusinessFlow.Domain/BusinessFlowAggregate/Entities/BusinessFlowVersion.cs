@@ -7,7 +7,7 @@ using BusinessFlow.Domain.SpaceAggregate.Entities;
 
 namespace BusinessFlow.Domain.BusinessFlowAggregate.Entities;
 
-public class BusinessFlowVersion : AuditableTenantAggregateRoot
+public class BusinessFlowVersion : FullAuditableTenantAggregateRoot
 {
     public int SpaceId { get; private set; }
 
