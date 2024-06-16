@@ -51,7 +51,7 @@ public class FormVersionRepository : EfCoreRepository<FormVersion>, IFormVersion
     public Task<TOut?> GetLatestVersionByTokenAsync<TOut>(string token, IProjection<FormVersion, TOut> projection)
     {
         return DbSet
-            .Where(x => x.Form.PublicToken == token)
+            .Where(x => x.Form.PublicToken == token || x.Submissions.Any(s => s.TrackingToken == token))
             .OrderByDescending(x => x.Id)
             .Select(projection.GetProject())
             .FirstOrDefaultAsync();
