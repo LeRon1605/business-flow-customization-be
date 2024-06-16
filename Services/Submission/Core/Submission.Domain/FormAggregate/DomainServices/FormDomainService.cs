@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Submission.Domain.FormAggregate.Entities;
+﻿using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.FormAggregate.Exceptions;
 using Submission.Domain.FormAggregate.Models;
 using Submission.Domain.FormAggregate.Repositories;
@@ -44,15 +43,5 @@ public class FormDomainService : IFormDomainService
         _formRepository.Update(form);
 
         return formVersion;
-    }
-
-    public async Task<string> GeneratePublicLinkAsync(Form form, string baseUrl)
-    {
-        var token = Guid.NewGuid().ToString();
-        var link = $"{baseUrl}?token={token}";
-        form.GeneratePublicLink(link, token);
-        _formRepository.Update(form);
-
-        return link;
     }
 }
