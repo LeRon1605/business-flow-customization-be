@@ -31,7 +31,7 @@ public class SubmissionExecutionPublishIntegrationEventJobHandler : IBackGroundJ
     
     public async Task Handle(SubmissionExecutionPublishIntegrationEventJob notification, CancellationToken cancellationToken)
     {
-        var submissionExecution = await _submissionExecutionRepository.FindByIdAsync(notification.SubmissionExecutionId, $"{nameof(SubmissionExecution.PersonInCharges)}, {nameof(SubmissionExecution.BusinessFlowBlock)}");
+        var submissionExecution = await _submissionExecutionRepository.FindByIdAsync(notification.SubmissionExecutionId, $"{nameof(SubmissionExecution.PersonInCharges)},{nameof(SubmissionExecution.BusinessFlowBlock)}");
         if (submissionExecution == null)
         {
             return;
