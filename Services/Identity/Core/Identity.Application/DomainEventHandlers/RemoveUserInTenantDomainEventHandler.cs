@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.Domain.Events;
 using BuildingBlocks.EventBus.Abstracts;
 using Identity.Domain.TenantAggregate.DomainEvents;
+using IntegrationEvents.Identity;
 
 namespace Identity.Application.DomainEventHandlers;
 
@@ -15,6 +16,7 @@ public class RemoveUserInTenantDomainEventHandler : IDomainEventHandler<RemoveUs
 
     public Task Handle(RemoveUserInTenantDomainEvent notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var integrationEvent = new RemoveUserInTenantIntegrationEvent(notification.UserId);
+        return _eventPublisher.Publish(integrationEvent, cancellationToken);
     }
 }
