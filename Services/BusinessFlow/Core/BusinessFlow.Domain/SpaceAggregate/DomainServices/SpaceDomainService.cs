@@ -38,9 +38,9 @@ public class SpaceDomainService : ISpaceDomainService
         return space;
     }
 
-    public async Task RemoveUserInSpaceAsync(string userId, int tenantId)
+    public async Task RemoveUserInSpaceAsync(string userId)
     {
-        var spaces =  await _spaceRepository.FilterAsync(new SpaceByTenantAndMemberSpecification(userId, tenantId));
+        var spaces =  await _spaceRepository.FilterAsync(new SpaceByTenantAndMemberSpecification(userId));
         if (spaces == null)
         {
             throw new DataException("Space not found");

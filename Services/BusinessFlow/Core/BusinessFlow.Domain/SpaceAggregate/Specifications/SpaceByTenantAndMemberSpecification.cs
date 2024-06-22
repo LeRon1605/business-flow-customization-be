@@ -7,16 +7,14 @@ namespace BusinessFlow.Domain.SpaceAggregate.Specifications;
 public class SpaceByTenantAndMemberSpecification : Specification<Space, int>
 {
     private readonly string _memberId;
-    private readonly int _tenantId;
     
-    public SpaceByTenantAndMemberSpecification(string memberId, int tenantId)
+    public SpaceByTenantAndMemberSpecification(string memberId)
     {
         _memberId = memberId;
-        _tenantId = tenantId;
     }
     
     public override Expression<Func<Space, bool>> ToExpression()
     {
-        return x => x.Members.Any(m => m.UserId == _memberId) && x.TenantId == _tenantId;
+        return x => x.Members.Any(m => m.UserId == _memberId);
     }
 }

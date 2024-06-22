@@ -11,6 +11,7 @@ public class SpaceRepository : EfCoreRepository<Space, int>, ISpaceRepository
 {
     public SpaceRepository(DbContextFactory dbContextFactory, ICurrentUser currentUser) : base(dbContextFactory, currentUser)
     {
+        AddInclude(x => x.Members);
         AddInclude(x => x.BusinessFlowVersions);
     }
     

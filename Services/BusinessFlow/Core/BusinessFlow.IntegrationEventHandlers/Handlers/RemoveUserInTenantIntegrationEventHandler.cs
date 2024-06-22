@@ -10,7 +10,6 @@ namespace BusinessFlow.IntegrationEventHandler.Handlers;
 public class RemoveUserInTenantIntegrationEventHandler : IntegrationEventHandler<RemoveUserInTenantIntegrationEvent>
 {
     private readonly ISpaceDomainService _spaceDomainService;
-    private readonly ICurrentUser _currentUser;
     private readonly IUnitOfWork _unitOfWork;
     
     public RemoveUserInTenantIntegrationEventHandler(ICurrentUser currentUser
@@ -18,14 +17,13 @@ public class RemoveUserInTenantIntegrationEventHandler : IntegrationEventHandler
         , ISpaceDomainService spaceDomainService
         , IUnitOfWork unitOfWork) : base(currentUser, logger)
     {
-        _currentUser = currentUser;
         _spaceDomainService = spaceDomainService;
         _unitOfWork = unitOfWork;
     }
 
     public override async Task HandleAsync(RemoveUserInTenantIntegrationEvent @event)
     {
-        await _spaceDomainService.RemoveUserInSpaceAsync(@event.DeletedUserId, _currentUser.TenantId);
+        await _spaceDomainService.RemoveUserInSpaceAsync(@event.DeletedUserId);
         await _unitOfWork.CommitAsync();
     }
 }   
