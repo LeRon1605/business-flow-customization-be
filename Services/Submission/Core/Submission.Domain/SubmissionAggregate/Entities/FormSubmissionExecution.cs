@@ -10,14 +10,21 @@ public class FormSubmissionExecution : AggregateRoot
     
     public int FormSubmissionId { get; private set; }
     
+    public Guid BusinessFlowBlockId { get; private set; }
+    
     public virtual FormSubmission FormSubmission { get; private set; }
     
-    public FormSubmissionExecution(int id, string name, DateTime createdAt, int formSubmissionId)
+    public FormSubmissionExecution(int id
+        , string name
+        , DateTime createdAt
+        , int formSubmissionId
+        , Guid businessFlowBlockId)
     {
         Id = id;
         Name = name;
         FormSubmissionId = formSubmissionId;
         CreatedAt = createdAt;
+        BusinessFlowBlockId = businessFlowBlockId;
     }
     
     public void Update(string name, DateTime createdAt)

@@ -75,7 +75,12 @@ public class ExecutionSubmissionCreatedIntegrationEventHandler : IntegrationEven
         if (existedExecutionSubmission != null)
             _formSubmissionExecutionRepository.Delete(existedExecutionSubmission);
         
-        var executionSubmission = new FormSubmissionExecution(@event.ExecutionId, @event.Name, @event.CreatedAt, @event.SubmitId);
+        var executionSubmission = new FormSubmissionExecution(@event.ExecutionId
+            , @event.Name
+            , @event.CreatedAt
+            , @event.SubmitId
+            , @event.BusinessFlowBlockId);
+        
         await _formSubmissionExecutionRepository.InsertAsync(executionSubmission);
         await _unitOfWork.CommitAsync();
     }

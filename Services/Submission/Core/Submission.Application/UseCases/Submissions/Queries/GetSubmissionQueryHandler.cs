@@ -109,12 +109,12 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
         
         var executionIds = filterFields
             .Where(x => x.Type == SubmissionFilterFieldType.ExecutionResult)
-            .SelectMany(x => JsonConvert.DeserializeObject<List<int>>(x.Value))
+            .SelectMany(x => JsonConvert.DeserializeObject<List<Guid>>(x.Value))
             .ToList();
         if (!executionIds.Any())
             return specification;
         
-        return new SubmissionByExecutionSpecification(executionIds);
+        return new SubmissionByExecutionBlockSpecification(executionIds);
     }
     
     private ISpecification<FormSubmission, int> GetSystemFieldSpecification(List<SubmissionFilterFieldDto> filterFields)
