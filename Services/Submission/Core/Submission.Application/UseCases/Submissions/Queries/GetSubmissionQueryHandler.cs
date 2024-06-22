@@ -1,14 +1,17 @@
 ﻿using BuildingBlocks.Application.Cqrs;
 using BuildingBlocks.Application.Dtos;
 using BuildingBlocks.Domain.Repositories;
+using BuildingBlocks.Domain.Specifications;
 using BuildingBlocks.Domain.Specifications.Interfaces;
 using BuildingBlocks.Kernel.Models;
 using Domain.Enums;
+using MassTransit;
 using Newtonsoft.Json;
 using Submission.Application.UseCases.Submissions.Dtos;
 using Submission.Application.UseCases.Submissions.Enums;
 using Submission.Domain.FormAggregate.Entities;
 using Submission.Domain.SubmissionAggregate.Entities;
+using Submission.Domain.SubmissionAggregate.Enums;
 using Submission.Domain.SubmissionAggregate.Specifications;
 
 namespace Submission.Application.UseCases.Submissions.Queries;
@@ -42,46 +45,143 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
 
         if (request.FilterFields?.Any() is true)
         {
-            var elementFilterFields = request.FilterFields
-                .Where(x => x.Type == SubmissionFilterFieldType.RecordElement)
-                .Select(x => JsonConvert.DeserializeObject<SubmissionRecordElementFilterFieldDto>(x.Value))
-                .ToList();
-            var elementIds = elementFilterFields.Select(x => x.ElementId).ToList();
-            
-            var elements = await _elementRepository.FindByIncludedIdsAsync(elementIds);
-            foreach (var element in elements)
-            {
-                var filterField = elementFilterFields.FirstOrDefault(x => x.ElementId == element.Id);
-                if (filterField is null)
-                    continue;
+            specification = specification.And(await GetElementFilterSpecificationAsync(request.FilterFields))
+                .And(GetExecutionResultSpecification(request.FilterFields));
+        }
+        
+        return specification;
+    }
 
-                switch (element.Type)
+    private async Task<ISpecification<FormSubmission, int>> GetElementFilterSpecificationAsync(List<SubmissionFilterFieldDto> filterFields)
+    {
+        var specification = EmptySpecification<FormSubmission, int>.Instance;
+        
+        var elementFilterFields = filterFields
+            .Where(x => x.Type == SubmissionFilterFieldType.RecordElement)
+            .Select(x => JsonConvert.DeserializeObject<SubmissionRecordElementFilterFieldDto>(x.Value))
+            .ToList();
+
+        if (!elementFilterFields.Any())
+            return specification;
+        
+        var elementIds = elementFilterFields.Select(x => x.ElementId).ToList();
+        var elements = await _elementRepository.FindByIncludedIdsAsync(elementIds);
+        
+        foreach (var element in elements)
+        {
+            var filterField = elementFilterFields.FirstOrDefault(x => x.ElementId == element.Id);
+            if (filterField is null)
+                continue;
+
+            switch (element.Type)
+            {
+                case FormElementType.Text:
+                    var textValue = filterField.Value;
+                    specification = specification.And(new SubmissionTextFieldSpecification(element.Id, textValue));
+                    break;
+                    
+                case FormElementType.SingleOption:
+                case FormElementType.MultiOption:
+                    var optionIds = JsonConvert.DeserializeObject<int[]>(filterField.Value);
+                    if (optionIds is null)
+                        continue;
+                        
+                    specification = specification.And(new SubmissionOptionFieldSpecification(element.Id, optionIds));
+                    break;
+                    
+                case FormElementType.Date:
+                    var dateRanges = JsonConvert.DeserializeObject<List<TimeRange>>(filterField.Value);
+                    if (dateRanges is null)
+                        continue;
+                        
+                    specification = specification.And(new SubmissionDateFieldSpecification(element.Id, dateRanges));
+                    break;
+            }
+        }
+
+        return specification;
+    }
+
+    private ISpecification<FormSubmission, int> GetExecutionResultSpecification(List<SubmissionFilterFieldDto> filterFields)
+    {
+        var specification = EmptySpecification<FormSubmission, int>.Instance;
+        
+        var executionIds = filterFields
+            .Where(x => x.Type == SubmissionFilterFieldType.ExecutionResult)
+            .SelectMany(x => JsonConvert.DeserializeObject<List<int>>(x.Value))
+            .ToList();
+        if (!executionIds.Any())
+            return specification;
+        
+        return new SubmissionByExecutionSpecification(executionIds);
+    }
+    
+    private ISpecification<FormSubmission, int> GetSystemFieldSpecification(List<SubmissionFilterFieldDto> filterFields)
+    {
+        var specification = EmptySpecification<FormSubmission, int>.Instance;
+        
+        var systemFields = filterFields
+            .Where(x => x.IsSystemField)
+            .ToList();
+        if (!systemFields.Any())
+            return specification;
+        
+        foreach (var systemField in systemFields)
+        {
+            switch (systemField.Type)
+            {
+                case SubmissionFilterFieldType.DataSource:
                 {
-                    case FormElementType.Text:
-                        var textValue = filterField.Value;
-                        specification = specification.And(new SubmissionTextFieldSpecification(element.Id, textValue));
-                        break;
+                    var dataSourceIds = JsonConvert.DeserializeObject<List<SubmissionDataSource>>(systemField.Value);
+                    if (dataSourceIds is null)
+                        continue;
                     
-                    case FormElementType.SingleOption:
-                    case FormElementType.MultiOption:
-                        var optionIds = JsonConvert.DeserializeObject<int[]>(filterField.Value);
-                        if (optionIds is null)
-                            continue;
+                    specification = specification.And(new SubmissionByDataSourceSpecification(dataSourceIds));
+                    break;
+                }
+
+                case SubmissionFilterFieldType.CreatedAt:
+                {
+                    var timeRange = JsonConvert.DeserializeObject<List<TimeRange>>(systemField.Value);
+                    if (timeRange is null)
+                        continue;
                         
-                        specification = specification.And(new SubmissionOptionFieldSpecification(element.Id, optionIds));
-                        break;
+                    specification = specification.And(new SubmissionByCreatedAtSpecification(timeRange));
+                    break;   
+                }
+
+                case SubmissionFilterFieldType.CreatedBy:
+                {
+                    var creatorIds = JsonConvert.DeserializeObject<List<string>>(systemField.Value);
+                    if (creatorIds is null)
+                        continue;
                     
-                    case FormElementType.Date:
-                        var dateRanges = JsonConvert.DeserializeObject<List<TimeRange>>(filterField.Value);
-                        if (dateRanges is null)
-                            continue;
+                    specification = specification.And(new SubmissionByCreatorSpecification(creatorIds));
+                    break;
+                }
+
+                case SubmissionFilterFieldType.UpdatedBy:
+                {
+                    var updaterIds = JsonConvert.DeserializeObject<List<string>>(systemField.Value);
+                    if (updaterIds is null)
+                        continue;
+                    
+                    specification = specification.And(new SubmissionByCreatorSpecification(updaterIds));
+                    break;
+                }
+
+                case SubmissionFilterFieldType.UpdatedAt:
+                {
+                    var timeRange = JsonConvert.DeserializeObject<List<TimeRange>>(systemField.Value);
+                    if (timeRange is null)
+                        continue;
                         
-                        specification = specification.And(new SubmissionDateFieldSpecification(element.Id, dateRanges));
-                        break;
+                    specification = specification.And(new SubmissionByUpdatedAtSpecification(timeRange));
+                    break;   
                 }
             }
         }
-        
+
         return specification;
     }
 }

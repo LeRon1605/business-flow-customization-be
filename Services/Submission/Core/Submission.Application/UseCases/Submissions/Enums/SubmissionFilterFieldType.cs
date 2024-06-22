@@ -2,5 +2,11 @@
 
 public enum SubmissionFilterFieldType
 {
-    RecordElement
+    RecordElement,
+    ExecutionResult,
+    CreatedAt,
+    CreatedBy,
+    UpdatedBy,
+    UpdatedAt,
+    DataSource
 }

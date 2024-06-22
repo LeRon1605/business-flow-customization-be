@@ -6,15 +6,20 @@ namespace Submission.Domain.SubmissionAggregate.Specifications;
 
 public class SubmissionByExecutionSpecification : Specification<FormSubmission>
 {
-    private readonly int _executionId;
+    private readonly List<int> _executionIds;
     
     public SubmissionByExecutionSpecification(int executionId)
     {
-        _executionId = executionId;
+        _executionIds = new List<int>() { executionId };
+    }
+    
+    public SubmissionByExecutionSpecification(List<int> executionIds)
+    {
+        _executionIds = executionIds;
     }
     
     public override Expression<Func<FormSubmission, bool>> ToExpression()
     {
-        return x => x.ExecutionId.HasValue && x.ExecutionId == _executionId;
+        return x => x.ExecutionId.HasValue && _executionIds.Contains(x.ExecutionId.Value);
     }
 }

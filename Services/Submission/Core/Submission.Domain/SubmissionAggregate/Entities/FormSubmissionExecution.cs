@@ -17,7 +17,7 @@ public class FormSubmissionExecution : AggregateRoot
         Id = id;
         Name = name;
         FormSubmissionId = formSubmissionId;
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = createdAt;
     }
     
     public void Update(string name, DateTime createdAt)

@@ -17,6 +17,12 @@ public class SubmissionFilterFieldDto
     public SubmissionFilterFieldType Type { get; set; }
     
     public string Value { get; set; } = null!;
+
+    public bool IsSystemField => Type is SubmissionFilterFieldType.CreatedAt
+        or SubmissionFilterFieldType.CreatedBy
+        or SubmissionFilterFieldType.UpdatedBy
+        or SubmissionFilterFieldType.UpdatedAt
+        or SubmissionFilterFieldType.DataSource;
 }
 
 public class SubmissionRecordElementFilterFieldDto
