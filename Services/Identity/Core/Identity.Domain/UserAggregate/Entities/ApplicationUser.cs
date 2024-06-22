@@ -4,6 +4,7 @@ using BuildingBlocks.Domain.Models.Interfaces;
 using Domain;
 using Domain.Identities;
 using Domain.Roles;
+using Identity.Domain.TenantAggregate.DomainEvents;
 using Identity.Domain.UserAggregate.DomainEvents;
 using Identity.Domain.UserAggregate.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -129,7 +130,7 @@ public partial class ApplicationUser : IdentityUser<string>
 
         // tenant.Update(fullName, avatarUrl);
     }
-    
+
     public void RemoveFromTenant(int tenantId)
     {
         var tenant = Tenants.FirstOrDefault(x => x.TenantId == tenantId);
@@ -142,6 +143,7 @@ public partial class ApplicationUser : IdentityUser<string>
 
         Tenants.Remove(tenant);
         Roles.Remove(role);
+        AddDomainEvent(new RemoveUserInTenantDomainEvent(Id));
     }
 
     public string GetDefaultRole(int tenantId)

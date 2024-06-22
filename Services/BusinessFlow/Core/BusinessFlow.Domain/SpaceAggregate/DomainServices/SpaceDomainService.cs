@@ -1,4 +1,5 @@
-﻿using BusinessFlow.Domain.SpaceAggregate.Entities;
+﻿using System.Data;
+using BusinessFlow.Domain.SpaceAggregate.Entities;
 using BusinessFlow.Domain.SpaceAggregate.Exceptions;
 using BusinessFlow.Domain.SpaceAggregate.Repositories;
 using BusinessFlow.Domain.SpaceAggregate.Specifications;
@@ -35,6 +36,20 @@ public class SpaceDomainService : ISpaceDomainService
         space.UpdateSpaceBasicInfo(name, description, color);
         _spaceRepository.Update(space);
         return space;
+    }
+
+    public async Task RemoveUserInSpaceAsync(string userId, int tenantId)
+    {
+        var spaces =  await _spaceRepository.FilterAsync(new SpaceByTenantAndMemberSpecification(userId, tenantId));
+        if (spaces == null)
+        {
+            throw new DataException("Space not found");
+        }
+
+        foreach (var s in spaces)
+        {
+            s.RemoveMember(userId);
+        }
     }
 
     private async Task ValidateDuplicateNameAsync(string name)
