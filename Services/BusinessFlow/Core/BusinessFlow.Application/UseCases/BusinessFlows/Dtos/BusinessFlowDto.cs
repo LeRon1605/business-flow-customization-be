@@ -121,3 +121,24 @@ public class BusinessFlowBlockTaskDto
     
     public double Index { get; set; }
 }
+
+public class BusinessFlowBlockOutComeDto : BasicBusinessFlowBlockDto, IProjection<BusinessFlowBlock, Guid, BusinessFlowBlockOutComeDto>
+{
+    public List<BusinessFlowOutComeDto> OutComes { get; set; } = new();
+    
+    public Expression<Func<BusinessFlowBlock, BusinessFlowBlockOutComeDto>> GetProject()
+    {
+        return x => new BusinessFlowBlockOutComeDto()
+        {
+            Id = x.Id,
+            Name = x.Name,
+            Type = x.Type,
+            OutComes = x.OutComes.Select(o => new BusinessFlowOutComeDto()
+            {
+                Id = o.Id,
+                Name = o.Name,
+                Color = o.Color
+            }).ToList()
+        };
+    }
+}

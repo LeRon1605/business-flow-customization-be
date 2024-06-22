@@ -84,7 +84,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                 case FormElementType.SingleOption:
                 case FormElementType.MultiOption:
                     var optionIds = JsonConvert.DeserializeObject<int[]>(filterField.Value);
-                    if (optionIds is null)
+                    if (optionIds is null || !optionIds.Any())
                         continue;
                         
                     specification = specification.And(new SubmissionOptionFieldSpecification(element.Id, optionIds));
@@ -92,7 +92,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                     
                 case FormElementType.Date:
                     var dateRanges = JsonConvert.DeserializeObject<List<TimeRange>>(filterField.Value);
-                    if (dateRanges is null)
+                    if (dateRanges is null || !dateRanges.Any())
                         continue;
                         
                     specification = specification.And(new SubmissionDateFieldSpecification(element.Id, dateRanges));
@@ -134,7 +134,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                 case SubmissionFilterFieldType.DataSource:
                 {
                     var dataSourceIds = JsonConvert.DeserializeObject<List<SubmissionDataSource>>(systemField.Value);
-                    if (dataSourceIds is null)
+                    if (dataSourceIds is null || !dataSourceIds.Any())
                         continue;
                     
                     specification = specification.And(new SubmissionByDataSourceSpecification(dataSourceIds));
@@ -144,7 +144,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                 case SubmissionFilterFieldType.CreatedAt:
                 {
                     var timeRange = JsonConvert.DeserializeObject<List<TimeRange>>(systemField.Value);
-                    if (timeRange is null)
+                    if (timeRange is null || !timeRange.Any())
                         continue;
                         
                     specification = specification.And(new SubmissionByCreatedAtSpecification(timeRange));
@@ -154,7 +154,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                 case SubmissionFilterFieldType.CreatedBy:
                 {
                     var creatorIds = JsonConvert.DeserializeObject<List<string>>(systemField.Value);
-                    if (creatorIds is null)
+                    if (creatorIds is null || !creatorIds.Any())
                         continue;
                     
                     specification = specification.And(new SubmissionByCreatorSpecification(creatorIds));
@@ -164,7 +164,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                 case SubmissionFilterFieldType.UpdatedBy:
                 {
                     var updaterIds = JsonConvert.DeserializeObject<List<string>>(systemField.Value);
-                    if (updaterIds is null)
+                    if (updaterIds is null || !updaterIds.Any())
                         continue;
                     
                     specification = specification.And(new SubmissionByCreatorSpecification(updaterIds));
@@ -174,7 +174,7 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
                 case SubmissionFilterFieldType.UpdatedAt:
                 {
                     var timeRange = JsonConvert.DeserializeObject<List<TimeRange>>(systemField.Value);
-                    if (timeRange is null)
+                    if (timeRange is null || !timeRange.Any())
                         continue;
                         
                     specification = specification.And(new SubmissionByUpdatedAtSpecification(timeRange));

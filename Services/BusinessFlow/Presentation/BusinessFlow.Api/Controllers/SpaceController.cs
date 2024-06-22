@@ -80,7 +80,16 @@ public class SpaceController : ControllerBase
         var businessFlowId = await _mediator.Send(new UpdateSpaceBusinessFlowCommand(id, dto.Blocks, dto.Branches));
         return Ok(SimpleIdResponse<int>.Create(businessFlowId));
     }
-    
+
+    [HttpGet("{id:int}/business-flows/out-comes")]
+    [ProducesResponseType(typeof(List<BusinessFlowBlockOutComeDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpaceBusinessFlowOutComes([FromRoute] int id)
+    {
+        var result = await _mediator.Send(new GetLatestSpaceBusinessFlowOutComeQuery(id));
+        return Ok(result);
+    }
+
+
     [HttpPut("{id:int}/space-basic-info")]
     [ProducesResponseType(typeof(SimpleIdResponse<int>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateSpaceBasicInfo([FromRoute] int id, [FromBody] UpdateSpaceBasicInfoRequestDto dto)

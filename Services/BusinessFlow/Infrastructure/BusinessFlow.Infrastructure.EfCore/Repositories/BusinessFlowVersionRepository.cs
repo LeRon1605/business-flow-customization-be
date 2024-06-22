@@ -26,4 +26,16 @@ public class BusinessFlowVersionRepository : EfCoreRepository<BusinessFlowVersio
             .Select(projection.GetProject().Expand())
             .FirstOrDefaultAsync();
     }
+
+    public Task<List<TOut>> GetLatestPublishedBusinessFlowAsync<TOut>(int spaceId, IProjection<BusinessFlowBlock, Guid, TOut> projection)
+    {
+        var specification = new SpaceBusinessFlowVersionSpecification(spaceId)
+            .And(new PublishedBusinessFlowVersionSpecification());
+
+        return GetQueryable()
+            .Where(specification.ToExpression())
+            .SelectMany(x => x.Blocks)
+            .Select(projection.GetProject().Expand())
+            .ToListAsync();
+    }
 }
