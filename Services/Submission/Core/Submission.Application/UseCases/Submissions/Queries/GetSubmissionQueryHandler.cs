@@ -46,7 +46,8 @@ public class GetSubmissionQueryHandler : IQueryHandler<GetSubmissionQuery, Paged
         if (request.FilterFields?.Any() is true)
         {
             specification = specification.And(await GetElementFilterSpecificationAsync(request.FilterFields))
-                .And(GetExecutionResultSpecification(request.FilterFields));
+                .And(GetExecutionResultSpecification(request.FilterFields))
+                .And(GetSystemFieldSpecification(request.FilterFields));
         }
         
         return specification;
