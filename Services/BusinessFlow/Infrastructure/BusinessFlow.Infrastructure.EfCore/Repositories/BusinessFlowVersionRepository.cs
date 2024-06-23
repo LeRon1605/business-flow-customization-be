@@ -34,6 +34,8 @@ public class BusinessFlowVersionRepository : EfCoreRepository<BusinessFlowVersio
 
         return GetQueryable()
             .Where(specification.ToExpression())
+            .OrderByDescending(x => x.Id)
+            .Take(1)
             .SelectMany(x => x.Blocks)
             .Select(projection.GetProject().Expand())
             .ToListAsync();
