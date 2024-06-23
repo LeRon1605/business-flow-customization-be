@@ -123,6 +123,10 @@ public class BusinessFlowValidationDomainService : IBusinessFlowValidationDomain
                 ErrorMessages = new List<string>()
             };
             
+            var isHasPersonInCharge = functionBlock.PersonInChargeIds.Any();
+            if (!isHasPersonInCharge)
+                validation.ErrorMessages.Add("Khối chức năng phải có ít nhất một người phụ trách.");
+            
             var isHasOutCome = functionBlock.OutComes.Any();
             if (!isHasOutCome)
                 validation.ErrorMessages.Add("Khối chức năng phải có ít nhất một kết quả.");
