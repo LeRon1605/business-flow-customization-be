@@ -27,6 +27,14 @@ public class SubmissionController : ControllerBase
         return Ok();
     }
     
+    [HttpDelete("{submissionId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Delete(int submissionId)
+    {
+        await _mediator.Send(new DeleteSubmitFormCommand(submissionId));
+        return Ok();
+    }
+    
     [HttpPut("{submissionId:int}/fields")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateField(int submissionId, [FromBody] UpdateSubmitFormFieldDto dto)

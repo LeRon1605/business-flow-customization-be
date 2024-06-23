@@ -84,6 +84,17 @@ public class SubmissionDomainService : ISubmissionDomainService
         _submissionRepository.Update(submission);
     }
 
+    public async Task DeleteAsync(int submissionId)
+    {
+        var submission = await _submissionRepository.FindByIdAsync(submissionId);
+        if (submission == null)
+        {
+            throw new SubmissionNotFoundException(submissionId);
+        }
+        
+        _submissionRepository.Delete(submission);
+    }
+
     private async Task<List<FormElement>> GetElementsAsync(int spaceId, int versionId, List<int> elementIds)
     {
         var specification = new FormElementBySpaceSpecification(spaceId)

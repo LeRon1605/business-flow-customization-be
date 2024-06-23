@@ -9,4 +9,6 @@ public interface ISubmissionDomainService : IDomainService
     Task<FormSubmission> CreateAsync(int spaceId, int? executionId, SubmissionModel submission);
     
     Task UpdateAsync(int submissionId, SubmissionFieldModel fieldModel);
+    
+    Task DeleteAsync(int submissionId);
 }
