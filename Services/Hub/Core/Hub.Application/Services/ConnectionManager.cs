@@ -5,7 +5,12 @@ namespace Hub.Application.Services;
 
 public class ConnectionManager : IConnectionManager
 {
-    private readonly List<UserConnection> _connections = new();
+    private readonly List<UserConnection> _connections;
+    
+    public ConnectionManager()
+    {
+        _connections = new();
+    }
     
     public void AddConnection(string connectionId, string userId, int tenantId)
     {
