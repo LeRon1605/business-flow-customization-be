@@ -9,5 +9,9 @@ public class SpaceRoleEntityConfiguration : IEntityTypeConfiguration<SpaceRole>
     public void Configure(EntityTypeBuilder<SpaceRole> builder)
     {
         builder.HasKey(x => x.Id);
+
+        builder.HasMany(r => r.Permissions)
+            .WithOne(p => p.Role)
+            .HasForeignKey(p => p.RoleId);
     }
 }

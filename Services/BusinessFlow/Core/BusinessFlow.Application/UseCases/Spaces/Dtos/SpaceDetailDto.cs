@@ -13,6 +13,7 @@ public class SpaceDetailDto : IProjection<Space, int, SpaceDetailDto>
     public string Color { get; set; } = null!;
     public int LatestPublishedBusinessFlowId { get; set; }
     public List<SpaceMemberDto> Members { get; set; } = null!;
+    public List<string> UserPermissions { get; set; } = null!;
     
     public Expression<Func<Space, SpaceDetailDto>> GetProject()
     {
@@ -35,7 +36,7 @@ public class SpaceDetailDto : IProjection<Space, int, SpaceDetailDto>
                     Id = m.Role.Id,
                     Name = m.Role.Name
                 }
-            }).ToList()
+            }).ToList(),
         };
     }
 }
