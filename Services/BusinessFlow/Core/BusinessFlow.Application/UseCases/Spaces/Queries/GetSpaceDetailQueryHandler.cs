@@ -33,7 +33,7 @@ public class GetSpaceDetailQueryHandler : IQueryHandler<GetSpaceDetailQuery, Spa
         var permissions = await _spacePermissionRepository.FilterAsync(new SpacePermissionSpecification(role));
         var userPermissions = permissions.Select(p => p.Name).ToList();
 
-        space.UserPermissions = userPermissions;
+        space.Permissions = userPermissions;
         
         return space;
     }
