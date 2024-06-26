@@ -3,6 +3,7 @@ using BuildingBlocks.Domain.Repositories;
 using BuildingBlocks.Infrastructure.EfCore;
 using BuildingBlocks.Infrastructure.EfCore.Repositories;
 using BusinessFlow.Domain.BusinessFlowAggregate.Entities;
+using BusinessFlow.Domain.BusinessFlowAggregate.Enums;
 using BusinessFlow.Domain.BusinessFlowAggregate.Repositories;
 using BusinessFlow.Domain.BusinessFlowAggregate.Specifications;
 using LinqKit;
@@ -37,6 +38,7 @@ public class BusinessFlowVersionRepository : EfCoreRepository<BusinessFlowVersio
             .OrderByDescending(x => x.Id)
             .Take(1)
             .SelectMany(x => x.Blocks)
+            .Where(x => x.Type != BusinessFlowBlockType.Start)
             .Select(projection.GetProject().Expand())
             .ToListAsync();
     }
