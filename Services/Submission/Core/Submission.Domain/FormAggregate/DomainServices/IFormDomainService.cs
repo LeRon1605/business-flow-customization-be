@@ -9,4 +9,5 @@ public interface IFormDomainService : IDomainService
     Task<Form> CreateAsync(int spaceId, FormModel formModel);
 
     Task<FormVersion> UpdateAsync(Form form, FormModel formModel);
+    Task PublishAsync(Form form, bool status);
 }

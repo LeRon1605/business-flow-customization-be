@@ -44,4 +44,10 @@ public class FormDomainService : IFormDomainService
 
         return formVersion;
     }
+
+    public async Task PublishAsync(Form form, bool status)
+    {
+        form.Publish(status);
+        _formRepository.Update(form);
+    }
 }

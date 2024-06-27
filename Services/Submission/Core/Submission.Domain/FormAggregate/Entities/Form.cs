@@ -24,6 +24,7 @@ public class Form : AuditableTenantAggregateRoot
         BusinessFlowBlockId = businessFlowBlockId;
         Name = name;
         CoverImageUrl = coverImageUrl;
+        IsShared = false;
         PublicToken = Guid.NewGuid().ToString();
     }
     
@@ -36,6 +37,11 @@ public class Form : AuditableTenantAggregateRoot
     {
         Name = name;
         CoverImageUrl = coverImageUrl;
+    }
+
+    public void Publish(bool status)
+    {
+        IsShared = status;
     }
     
     private Form()

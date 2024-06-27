@@ -106,7 +106,15 @@ public class SpaceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GeneratePublicLink(int spaceId)
     {
-        var link = await _mediator.Send(new GenerateFormPublicLinkCommand(spaceId));
-        return Ok(link);
+        var formPublish = await _mediator.Send(new GenerateFormPublicLinkCommand(spaceId));
+        return Ok(formPublish);
+    }
+    
+    [HttpPut("{spaceId:int}/publish-form")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> PublishForm(int spaceId, [FromBody] bool status)
+    {
+        await _mediator.Send(new PublishFormCommand(spaceId, status));
+        return Ok();
     }
 }

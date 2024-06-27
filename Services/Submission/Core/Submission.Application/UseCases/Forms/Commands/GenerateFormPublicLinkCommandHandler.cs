@@ -1,10 +1,11 @@
 ﻿using BuildingBlocks.Application.Cqrs;
+using Submission.Application.UseCases.Dtos;
 using Submission.Domain.FormAggregate.Exceptions;
 using Submission.Domain.FormAggregate.Repositories;
 
 namespace Submission.Application.UseCases.Forms.Commands;
 
-public class GenerateFormPublicLinkCommandHandler : ICommandHandler<GenerateFormPublicLinkCommand, string>
+public class GenerateFormPublicLinkCommandHandler : ICommandHandler<GenerateFormPublicLinkCommand, FormPublishDto>
 {
     private readonly IFormRepository _formRepository;
     
@@ -13,7 +14,7 @@ public class GenerateFormPublicLinkCommandHandler : ICommandHandler<GenerateForm
         _formRepository = formRepository;
     }
     
-    public async Task<string> Handle(GenerateFormPublicLinkCommand request, CancellationToken cancellationToken)
+    public async Task<FormPublishDto> Handle(GenerateFormPublicLinkCommand request, CancellationToken cancellationToken)
     {
         var form = await _formRepository.FindBySpaceIdAsync(request.SpaceId);
         if (form == null)
@@ -21,6 +22,8 @@ public class GenerateFormPublicLinkCommandHandler : ICommandHandler<GenerateForm
             throw new SpaceFormNotFoundException(request.SpaceId);
         }
 
-        return form.PublicToken;
+        var formPublish = new FormPublishDto(form.IsShared, form.PublicToken);
+
+        return formPublish;
     }
 }
