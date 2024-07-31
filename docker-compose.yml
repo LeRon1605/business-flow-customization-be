@@ -113,6 +113,7 @@
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Admin123
+      - MSSQL_AGENT_ENABLED=True
     restart: always
     volumes:
       - dbdata:/var/opt/mssql

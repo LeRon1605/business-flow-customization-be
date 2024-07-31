@@ -11,6 +11,7 @@
       <ProjectReference Include="..\..\..\Shared\Presentation\Presentation.csproj" />
       <ProjectReference Include="..\..\Core\Submission.Application\Submission.Application.csproj" />
       <ProjectReference Include="..\..\Core\Submission.IntegrationEventHandlers\Submission.IntegrationEventHandlers.csproj" />
+      <ProjectReference Include="..\..\Submission.Infrastructure.Cdc\Submission.Infrastructure.Cdc.csproj" />
       <ProjectReference Include="..\..\Submission.Infrastructure.EfCore\Submission.Infrastructure.EfCore.csproj" />
     </ItemGroup>
 

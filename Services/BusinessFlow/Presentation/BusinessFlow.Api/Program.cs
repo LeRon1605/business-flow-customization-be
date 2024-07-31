@@ -1,8 +1,10 @@
 using Application;
 using BuildingBlocks.Application;
+using BuildingBlocks.Infrastructure.Cdc;
 using BuildingBlocks.Presentation;
 using BusinessFlow.Application;
 using BusinessFlow.Domain;
+using BusinessFlow.Infrastructure.Cdc;
 using BusinessFlow.Infrastructure.EfCore;
 using BusinessFlow.IntegrationEventHandler;
 using Presentation;
@@ -21,7 +23,11 @@ builder
         , typeof(SharedApplicationAssemblyMarker)
         , typeof(IntegrationEventAssemblyMarker)
         , typeof(SharedPresentationAssemblyMarker)
-        , typeof(DomainAssemblyMarker));
+        , typeof(DomainAssemblyMarker)
+        , typeof(CdcInfrastructureAssemblyMarker));
+
+builder.Services
+    .AddCdcService(builder.Configuration);
 
 var app = builder.Build();
 

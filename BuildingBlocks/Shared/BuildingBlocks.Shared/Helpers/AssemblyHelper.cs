@@ -9,7 +9,8 @@ public static class AssemblyHelper
         { "Identity.Api", "Identity" },
         { "Hub.Api", "Hub" },
         { "BusinessFlow.Api", "BusinessFlow" },
-        { "Submission.Api", "Submission" }
+        { "Submission.Api", "Submission" },
+        { "Search.Api", "Search" }
     };
     
     public static Assembly[] GetReferencedAssembliesByType(params Type[] type)

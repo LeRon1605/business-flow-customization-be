@@ -1,11 +1,13 @@
 using Application;
 using BuildingBlocks.Application;
+using BuildingBlocks.Infrastructure.Cdc;
 using BuildingBlocks.Presentation;
 using Presentation;
 using Presentation.Extensions;
 using Submission.Api.Extensions;
 using Submission.Application;
 using Submission.Domain;
+using Submission.Infrastructure.Cdc;
 using Submission.Infrastructure.EfCore;
 using Submission.IntegrationEvents;
 
@@ -23,7 +25,11 @@ builder
         , typeof(SharedApplicationAssemblyMarker)
         , typeof(IntegrationEventAssemblyMarker)
         , typeof(SharedPresentationAssemblyMarker)
-        , typeof(DomainAssemblyMarker));
+        , typeof(DomainAssemblyMarker)
+        , typeof(CdcInfrastructureAssemblyMarker));
+
+builder.Services
+    .AddCdcService(builder.Configuration);
 
 var app = builder.Build();
 

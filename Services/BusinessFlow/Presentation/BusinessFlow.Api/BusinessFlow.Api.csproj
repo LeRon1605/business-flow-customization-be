@@ -12,6 +12,7 @@
       <ProjectReference Include="..\..\..\Shared\Presentation\Presentation.csproj" />
       <ProjectReference Include="..\..\Core\BusinessFlow.Application\BusinessFlow.Application.csproj" />
       <ProjectReference Include="..\..\Core\BusinessFlow.IntegrationEventHandlers\BusinessFlow.IntegrationEventHandlers.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\BusinessFlow.Infrastructure.Cdc\BusinessFlow.Infrastructure.Cdc.csproj" />
       <ProjectReference Include="..\..\Infrastructure\BusinessFlow.Infrastructure.EfCore\BusinessFlow.Infrastructure.EfCore.csproj" />
     </ItemGroup>
 
