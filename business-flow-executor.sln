@@ -141,7 +141,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{7AA84D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{74AD364E-E806-4A0C-8E6C-5767AE64BA42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Search.Api", "Services\Search.Api\Search.Api.csproj", "{67678776-9556-47E0-872E-53AC42F3377C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Search.Api", "Services\Search\Presentation\Search.Api\Search.Api.csproj", "{67678776-9556-47E0-872E-53AC42F3377C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{EDD1D153-5583-413E-9A25-D7D09D1F2450}"
 EndProject
