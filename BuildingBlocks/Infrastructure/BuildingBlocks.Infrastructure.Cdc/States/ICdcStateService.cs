@@ -8,5 +8,11 @@ public interface ICdcStateService : IScopedService
 {
     Task<CaptureTableStateModel?> GetLastProcessedLsnAsync(string name, CancellationToken cancellationToken);
 
-    Task SaveLastProcessedLsnAsync(string name, BigInteger lastLsn, CancellationToken cancellationToken);
+    Task SaveLastProcessedLsnAsync(string name
+        , BigInteger lastLsn
+        , CancellationToken cancellationToken);
+    
+    Task UpdateLastProcessedLsnAsync(Guid id
+        , BigInteger lastLsn
+        , CancellationToken cancellationToken);
 }

@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.Application.MailSender;
-using BuildingBlocks.Application.MailSender.Interfaces;
 using BuildingBlocks.Shared.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

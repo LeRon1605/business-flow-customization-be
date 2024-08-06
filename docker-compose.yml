@@ -153,6 +153,19 @@
       MONGO_INITDB_ROOT_PASSWORD: Admin123
     volumes:
       - mongodata:/data/db
+
+  elastic-search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.2
+    ports:
+      - 9200:9200
+      - 9300:9300
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=changeme
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
       
 volumes: 
   seqdata:
@@ -160,4 +173,5 @@ volumes:
   mqdata:
   redisdata:
   mongodata:
+  esdata:
     

@@ -8,6 +8,10 @@ public class FormSubmissionIndexMapper : IIndexMapperProvider<FormSubmissionSear
 {
     public Func<TypeMappingDescriptor<FormSubmissionSearchModel>, ITypeMapping> GetMapping()
     {
-        return x => x.AutoMap();
+        return x => x.Properties(
+            p => p.Text(s => s.Name(n => n.Name))
+                .Number(s => s.Name(n => n.TenantId).Type(NumberType.Integer))
+                .Keyword(s => s.Name(n => n.CreatedBy))
+        );
     }
 }

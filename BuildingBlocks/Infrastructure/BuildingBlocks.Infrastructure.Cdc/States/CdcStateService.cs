@@ -26,9 +26,19 @@ public class CdcStateService : ICdcStateService
     
     public async Task SaveLastProcessedLsnAsync(string name, BigInteger lastLsn, CancellationToken cancellationToken)
     {
-        await Collection.ReplaceOneAsync(x => x.Name == name
-            , new CaptureTableStateModel() { Id = Guid.NewGuid().ToString(), Name = name, LastProcessedLsn = lastLsn }
-            , new ReplaceOptions { IsUpsert = true }
-            , cancellationToken);
+        var isExisted = await Collection.AsQueryable()
+            .AnyAsync(x => x.Name == name, cancellationToken);
+        if (isExisted)
+            return;
+        
+        var state = new CaptureTableStateModel() { Id = Guid.NewGuid(), Name = name, LastProcessedLsn = lastLsn };
+        await Collection.InsertOneAsync(state, cancellationToken);
+    }
+
+    public Task UpdateLastProcessedLsnAsync(Guid id, BigInteger lastLsn, CancellationToken cancellationToken)
+    {
+        return Collection.UpdateOneAsync(x => x.Id == id
+            , Builders<CaptureTableStateModel>.Update.Set(x => x.LastProcessedLsn, lastLsn)
+            , cancellationToken: cancellationToken);
     }
 }

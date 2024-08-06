@@ -8,7 +8,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Application\Application.csproj" />
+
     </ItemGroup>
+
 
 
 

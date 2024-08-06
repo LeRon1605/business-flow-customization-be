@@ -12,14 +12,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\Infrastructure\BuildingBlocks.Infrastructure.ElasticSearch\BuildingBlocks.Infrastructure.ElasticSearch.csproj" />
+      <ProjectReference Include="..\..\..\Shared\Presentation\Presentation.csproj" />
+      <ProjectReference Include="..\..\Core\Search.IntegrationEventHandlers\Search.IntegrationEventHandlers.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\Search.Infrastructure.ElasticSearch\Search.Infrastructure.ElasticSearch.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Search\Core\Search.Application\Search.Application.csproj" />
-      <ProjectReference Include="..\Search\Core\Search.IntegrationEventHandlers\Search.IntegrationEventHandlers.csproj" />
-      <ProjectReference Include="..\Search\Infrastructure\Search.Infrastructure.ElasticSearch\Search.Infrastructure.ElasticSearch.csproj" />
-      <ProjectReference Include="..\Shared\Presentation\Presentation.csproj" />
-    </ItemGroup>
 
 </Project>

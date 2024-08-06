@@ -1,7 +1,6 @@
-﻿using BuildingBlocks.Application.MailSender.Interfaces;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
-namespace BuildingBlocks.Application.MailSender;
+namespace BuildingBlocks.Infrastructure.Mail;
 
 public class EmailTemplateGenerator : IEmailTemplateGenerator
 {

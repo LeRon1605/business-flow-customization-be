@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using AutoMapper;
 using BuildingBlocks.EventBus.Abstracts;
 using BuildingBlocks.EventBus.Enums;
 using BuildingBlocks.Infrastructure.Cdc.Attributes;
@@ -26,6 +25,7 @@ public class CdcTrackingService : BackgroundService
     private readonly IServiceProvider _serviceProvider;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
     private readonly ICdcStateService _cdcStateService;
+    private CaptureTableStateModel? _state;
     private BigInteger _lowLsn = BigInteger.Zero;
 
     public CdcTrackingService(IConfiguration configuration
@@ -48,9 +48,9 @@ public class CdcTrackingService : BackgroundService
         _hostApplicationLifetime.ApplicationStopping.Register(OnStopping);
         
         var tables = CaptureTableModelExtensions.GetCdcTables();
-        var state = await _cdcStateService.GetLastProcessedLsnAsync(AssemblyHelper.GetServiceName(), cancellationToken);
+        _state = await _cdcStateService.GetLastProcessedLsnAsync(AssemblyHelper.GetServiceName(), cancellationToken);
         
-        _lowLsn = state?.LastProcessedLsn ?? await GetStartLsn();
+        _lowLsn = _state?.LastProcessedLsn ?? await GetStartLsn();
 
         while (true)
         {
@@ -95,7 +95,11 @@ public class CdcTrackingService : BackgroundService
     private void OnStopping()
     {
         _logger.LogInformation("CDC tracking service is stopping at {LowLsn}.", _lowLsn);
-        _cdcStateService.SaveLastProcessedLsnAsync(AssemblyHelper.GetServiceName(), _lowLsn, CancellationToken.None).Wait();
+        
+        if (_state == null)
+            _cdcStateService.SaveLastProcessedLsnAsync(AssemblyHelper.GetServiceName(), _lowLsn, CancellationToken.None).Wait();
+        else
+            _cdcStateService.UpdateLastProcessedLsnAsync(_state.Id, _lowLsn, CancellationToken.None).Wait();
     }
     
     private async Task<BigInteger> GetStartLsn()

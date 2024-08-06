@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.Application.MailSender.Interfaces;
+﻿namespace BuildingBlocks.Infrastructure.Mail;
 
 public interface IEmailTemplateGenerator
 {
